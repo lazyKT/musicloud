@@ -4,6 +4,7 @@ import { PublicNav } from './PublicNav';
 import { AdminNav } from './AdminNav';
 import { UesrNav } from './UserNav';
 import Cookies from 'js-cookie';
+import '../../App.css';
 
 export const Nav = () => {
 
@@ -20,7 +21,7 @@ export const Nav = () => {
     });
 
     return(
-        <nav>
+        <nav className="navigation">
             {
                 Auth.auth ? 
                 (

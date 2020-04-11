@@ -20,13 +20,19 @@ export const styles = {
         margin: "0px 10px"
     },
     headerDiv: {
-        minWidth: "700px"
+        minWidth: "800px"
+    },
+    rowSelect:{
+        margin: "0px 20px",
+        height: "30px",
+        width: "60px",
+        borderRadius: "5px",
     },
     searchInput: {
         position: "relative",
-        margin: "0px 10%",
-        top: "10px",
-        width: "45%"
+        margin: "0px 5%",
+        top: "15px",
+        width: "40%"
     },
     addBtn: {
         float: "right",
@@ -52,5 +58,10 @@ export const styles = {
         position: "relative",
         top: "7px",
         left: "3px"
+    },
+    pagination: {
+        margin: "auto",
+        width: "fit-content",
+        marginTop: "10px"
     }
 }

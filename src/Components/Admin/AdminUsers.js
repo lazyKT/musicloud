@@ -3,17 +3,14 @@ import { withRouter } from 'react-router-dom';
 import { useFetchUsers } from './CustomHooks/useFetchUsers';
 import Cookies from 'js-cookie';
 import AdminTable from './AdminTable';
-import Button from '@material-ui/core/Button';
-import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
-import CancelIcon from '@material-ui/icons/Cancel';
 import Paper from '@material-ui/core/Paper';
 import CloseIcon from '@material-ui/icons/Close';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
+import { PaginationOpr } from './Utils/PaginationOpr';
 import { AddUser } from './AddUser';
 import { DeleteOpr, CreateOpr, UpdateOpr } from './CrudFunctions/Users';
 import { styles } from './Styles/Users';
+import { SearchRows } from './Utils/SearchRows';
+import { ExpiredToken } from '.././Errors/ExpiredToken';
 
 const header = [
     {
@@ -47,8 +44,15 @@ const AdminUsers = () => {
     const [ adding, setAdding ] = useState(false);
     const [ sortingOrder, setSortingOrder ] = useState(true);
     const [ sortingColumn, setSortingColumn ] = useState(null);
+    const [ rowsPerPage, setRowsPerPage ] = useState(5);
+    const [ currentPage, setCurrentPage ] = useState(1);
 
     const { data, loaded } = useFetchUsers(token);
+
+    // Pagination Functions
+    let lastindexofRow = currentPage * rowsPerPage;
+    let firstindexofRow = lastindexofRow - rowsPerPage;
+    let currentRows = showUsers.slice(firstindexofRow, lastindexofRow);
 
     const getCookies = () => {
         const user = Cookies.get("user");
@@ -80,6 +84,7 @@ const AdminUsers = () => {
                 setShowUsers(showUsers.concat(response.data));
                 setHeaderMsg("New User Created!!");
                 setHeaderType('success');
+                currentRows = showUsers.slice(firstindexofRow, lastindexofRow);
             }else{
                 setHeaderMsg(response.data.msg);
                 setHeaderType('fail');
@@ -130,6 +135,7 @@ const AdminUsers = () => {
                     setShowUsers(showUsers.filter((row,i) => i != index));
                     setHeaderMsg(resp.data.msg+" ID: " + userToDelete.id + ", Username : " + userToDelete.username);
                     setHeaderType('success');
+                    currentRows = showUsers.slice(firstindexofRow, lastindexofRow);
                 }else{
                     setHeaderMsg(resp.data.msg);
                     setHeaderType('fail');
@@ -188,12 +194,20 @@ const AdminUsers = () => {
         setShowUsers(searchUser(keyword));
     }
 
+    const handlePaginate = (event, value) => {
+        setCurrentPage(value);
+    }
+
+    const handleRowsPerPage = (event) => {
+        console.log(event.target.value);
+        setRowsPerPage(event.target.value);
+        currentRows = showUsers.slice(firstindexofRow, lastindexofRow);
+    }
+
     return(
         <>
             <div style={styles.headerDiv}>
-                <div>
-                    {/* { sortingOrder }
-                    { JSON.stringify(showUsers) } */}
+                { loaded && <div>
                     { headerMsg && showHeaderMsg ?
                     <Paper style={styles.headerMsg}>
                         <span style={headerType === 'success' ? styles.headerTypeSuccess : styles.headerTypeError}>
@@ -202,37 +216,27 @@ const AdminUsers = () => {
                         <CloseIcon fontSize="small" onClick={handleShowHeaderMsg}/>
                     </Paper> : null}
                     <h3 style={styles.header}>Users Table</h3>
-                    <TextField
-                        style={styles.searchInput} placeholder="Search"
-                        name="search" value={searchResult} onChange={handleSearch}
-                        InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                            <SearchIcon />
-                            </InputAdornment>
-                        ),
-                        }}
+                    <SearchRows handleRowsPerPage={handleRowsPerPage}
+                    rowsPerPage={rowsPerPage} handleSearch={ handleSearch } 
+                    searchResult={ searchResult }
+                    adding ={adding} addUser={addUser} 
                     />
-                    { !adding ?
-                    <Button style={styles.addBtn} variant="contained"
-                    startIcon={<AddCircleOutlinedIcon />}
-                    onClick={addUser}>
-                        Add User
-                    </Button> :
-                    <Button style={styles.cancelBtn} variant="contained"
-                        startIcon={<CancelIcon />}
-                        onClick={addUser}>
-                            Cancel
-                    </Button>}
-                </div>
+                </div>}
                 <div style={ adding ? styles.container : {display: "none"}}>
                     <AddUser addUser={createUser}/>
                 </div>
-                { !loaded ? "Loading Data...." : 
-                    <AdminTable data={ showUsers } header={header}
+                {/* Display Table */}
+                { !loaded ? (<ExpiredToken/>) : 
+                    <AdminTable data={ currentRows } header={header}
                     handleEdit={handleEdit} handleDelete={handleDelete} cancelOperation={handleCancel}
                     handleChange={handleChange} handleSave={handleSave} editID={editID} 
                     handleSort={sortingData} sortOrder={sortingOrder} sortingColumn= {sortingColumn}/> }
+                { loaded ? <PaginationOpr 
+                rowsPerPage={rowsPerPage}
+                totalRows = {showUsers.length}
+                handlePaginate = { handlePaginate }
+                currentPage = { currentPage }
+                /> : null}
             </div>
         </>
     );

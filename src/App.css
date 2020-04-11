@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-nav {
+.navigation {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -11,7 +11,7 @@ nav {
   color: white;
 }
 
-nav ul{
+.navigation ul{
   display: flex;
   width: 20%;
   justify-content: space-around;
@@ -19,7 +19,7 @@ nav ul{
   list-style: none;
 }
 
-nav li{
+.navigation li{
   text-decoration: none;
   display: inline-block;
   font-size: large;
