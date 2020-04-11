@@ -71,14 +71,11 @@ const AdminUsers = () => {
 
     const addUser = (newUser) => {
         setAdding(!adding);
-        console.log("Add Button Clicked!!!");
-        console.log(newUser);
     }
 
     const createUser = (newUser) => {
         setAdding(!adding);
         CreateOpr(newUser).then(response => {
-            console.log(response);
             if(response.status === 201){
                 setShowUsers(showUsers.concat(response.data));
                 setHeaderMsg("New User Created!!");
@@ -126,7 +123,6 @@ const AdminUsers = () => {
         if (window.confirm(
             'Are you sure you wish to delete this user? ID : ' + userToDelete.id + ", Username : " + userToDelete.username
             )){
-            console.log("Deleting " + userToDelete.username);
             // Resolving Promise from DeleteOpr********
             DeleteOpr(token, index, showUsers)
             .then(resp => {
@@ -171,18 +167,14 @@ const AdminUsers = () => {
 
     const sortingData = ColumnName => {
         let order = sortingOrder ? 'asc' : 'desc';
-        console.log("Sorting " + ColumnName);
         setSortingColumn(ColumnName);
         setShowUsers(showUsers.sort(sorting(ColumnName, order)));
-        console.log(showUsers.sort(sorting(ColumnName, order)));
         setSortingOrder(!sortingOrder);
     }
 
 
     const searchUser = (keyword) => {
         let arr = data.users;
-        console.log(arr);
-        console.log(arr.filter((row,i) => (arr[i].username).includes(keyword)));
         return arr.filter((row,i) => 
         (arr[i].username).includes(keyword) || 
         (arr[i].email).includes(keyword)
@@ -193,8 +185,6 @@ const AdminUsers = () => {
     const handleSearch = event => {
         setSearchResult(event.target.value);
         let keyword = event.target.value;
-        console.log(keyword);
-        console.log(searchUser(keyword));
         setShowUsers(searchUser(keyword));
     }
 
