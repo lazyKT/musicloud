@@ -2,37 +2,215 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+nav {
   display: flex;
-  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 10px;
+  background-color: #000;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+nav ul{
+  display: flex;
+  width: 20%;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+nav li{
+  text-decoration: none;
+  display: inline-block;
+  font-size: large;
+  width: 200px;
+  color: antiquewhite;
 }
+
+/* Admin Console Side Bar */
+
+.menu-icon{
+  height: 30px;
+}
+
+.side-nav-container {
+  display: flex;
+  height: 100%;
+}
+
+.side-nav-container button{
+  background: gray;
+  border: none;
+  padding: 10px 5px;
+  display: block;
+}
+
+.side-nav-container button:hover{
+  cursor: pointer;
+  background-color: #cccccc;
+}
+
+.side-nav-container .btn-expand{
+  padding: 10px 60px;
+}
+
+.side-nav-container .nav-elements{
+  margin: 10px 10px;
+}
+
+.side-bar{
+  width: 150px;
+  background: gray;
+  color: white;
+}
+
+.side-bar ul{
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
+
+.side-bar li{
+  text-decoration: none;
+  display: inline-block;
+  font-size: large;
+  width: 200px;
+  color: antiquewhite;
+}
+
+.side-bar a{
+  padding: 10px 5px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+}
+
+.side-bar a:hover{
+  cursor: pointer;
+  color: aquamarine;
+  background-color: #000;
+}
+
+
+
+/* Authentication Forms */
+
+.authForm{
+  width: 20%;
+  margin: auto;
+}
+
+.authForm input{
+  padding: 5px 10px;
+  width: 175px;
+  margin: 5px 5px;
+  border: 0.2px solid;
+  border-radius: 5px;
+  height: 20px;
+}
+
+.authForm button{
+  background: black;
+  color: white;
+  height: 35px;
+  width: 175px;
+  border: 1px solid;
+  border-radius: 10px;
+  margin: 5px 15px
+}
+
+.authForm button:hover{
+  color: antiquewhite;
+}
+
+.authForm span{
+  color: red;
+  font-size: 12px;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.authForm .registerBtn{
+  background: none;
+  color: gray;
+}
+
+.authForm .registerBtn:hover{
+  color: #000;
+}
+
+.authForm .errorResponse{
+  margin: 10px;
+  height: 20px;
+  padding: 5px 15px;
+  background: firebrick;
+  border: 0.1px solid;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+  width: 170px;
+}
+
+
+
+/* Update User Account */
+
+.updateField{
+  margin: 20px 20px;
+  border-top: 0.1px solid grey;
+}
+
+.updateField .editbutton{
+  width: fit-content;
+  float: right;
+  height: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 0.2px solid;
+  border-radius: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.updateField .editbutton:hover{
+  border: 1px solid;
+}
+
+.updateField .savebutton{
+  float: right;
+  color: green;
+  background: white;
+  width: 100px;
+  height: 30px;
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+.updateField input{
+  width: 100px;
+  height: 30px;
+  background: lightgray;
+  border: lightgray;
+  border-radius: 5px;
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.authBtn{
+  width: 75px;
+  height: 30px;
+  font-size: 15px;
+  background: #000;
+  color: #fff;
+  border: 0.2px solid;
+  border-radius: 5px;
+}
+
+.authBtn:hover{
+  color: antiquewhite;
+  border: 1px solid;
+}
+
+
