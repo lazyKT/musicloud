@@ -142,6 +142,7 @@ const AdminGenres = () => {
         let order = state.desc ? 'desc' : 'asc';
         let sorted = data.sort(Sorting(ColumnName, order));
         setGenres(sorted.slice(0,sorted.length));  // I dont know what it does....
+        // Somebody help me to explain ???? Please!!!!!!
     }
 
     useEffect(() => {
