@@ -24,19 +24,17 @@ function Home(props){
     })
   };
 
-  const performLogin = () => {
-    //save login state
+  const setCookies = () => {
     Auth.setAuth(true);
     Cookies.set("user","login");
-  }
-
-  const setCookies = () => {
     Cookies.set("tokens",loginUser);
   }
 
   useEffect(() => {
-    setCookies();
-  })
+    console.log(loginUser);
+    if(loginUser)
+      setCookies();
+  },[loginUser])
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -45,10 +43,15 @@ function Home(props){
       .then( response => {
         const data = response.data;
         setLoginUser(data);
-        performLogin()
+        //performLogin()
       }).catch(error => {
-        Promise.reject(error.response);
-        setError(error.response.data.msg);
+        if (error.response) {
+          Promise.reject(error.response);
+          setError(error.response.data.msg);
+        } else {
+          console.log("No Response");
+          setError("Failed to connect with Server!!");
+        }
       })
   }
   

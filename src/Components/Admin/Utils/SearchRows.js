@@ -6,13 +6,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import { styles } from '../Styles/Users';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 export function SearchRows ( props ) {
-    const { adding, addUser, handleSearch, searchResult, handleRowsPerPage, rowsPerPage } = props;
+    const { adding, addData, handleSearch, searchResult, handleRowsPerPage, rowsPerPage } = props;
 
     return (
         <>
@@ -38,12 +34,12 @@ export function SearchRows ( props ) {
             { !adding ?
             <Button style={styles.addBtn} variant="contained"
             startIcon={<AddCircleOutlinedIcon />}
-            onClick={addUser}>
-                Add User
+            onClick={addData}>
+                Add
             </Button> :
             <Button style={styles.cancelBtn} variant="contained"
                 startIcon={<CancelIcon />}
-                onClick={addUser}>
+                onClick={addData}>
                     Cancel
             </Button>}
         </>

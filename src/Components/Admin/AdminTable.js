@@ -62,7 +62,7 @@ const AdminTable = ({ data, header, editID,handleEdit, handleDelete,
                             <TableCell key={`thc-${key}`}>
                                 <div onClick={() => handleSort(payload.prop)}>
                                     {payload.name}
-                                    { sortingColumn == payload.prop ?
+                                    { sortingColumn === payload.prop ?
                                     (!sortOrder ? (<ArrowDropDownOutlinedIcon style={styles.sortingArrow}/>) 
                                     : (<ArrowDropUpOutlinedIcon style={styles.sortingArrow}/>)) : null}
                                 </div>

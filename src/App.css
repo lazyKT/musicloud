@@ -143,7 +143,7 @@
 
 .authForm .errorResponse{
   margin: 10px;
-  height: 20px;
+  height: max-content;
   padding: 5px 15px;
   background: firebrick;
   border: 0.1px solid;

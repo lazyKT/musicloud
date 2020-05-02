@@ -64,16 +64,18 @@ const AdminUsers = () => {
 
     useEffect(() => {
         getCookies();
-    })
+    },[])
 
     useEffect(() => {
         if(data && loaded){
+            console.log(loaded, showUsers);
             setUsers(data.users);
             setShowUsers(data.users);
         }
     },[loaded,data])
 
-    const addUser = (newUser) => {
+    const addUser = _ => {
+        console.log("Add User!!")
         setAdding(!adding);
     }
 
@@ -219,7 +221,7 @@ const AdminUsers = () => {
                     <SearchRows handleRowsPerPage={handleRowsPerPage}
                     rowsPerPage={rowsPerPage} handleSearch={ handleSearch } 
                     searchResult={ searchResult }
-                    adding ={adding} addUser={addUser} 
+                    adding ={adding} addData={addUser} 
                     />
                 </div>}
                 <div style={ adding ? styles.container : {display: "none"}}>

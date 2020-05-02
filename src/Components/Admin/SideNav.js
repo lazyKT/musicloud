@@ -30,6 +30,7 @@ const SideNav = () => {
                         <Link to='/dashboard'>Home</Link>
                         <Link to='/dashboard/admin/Users'>Users</Link>
                         <Link to='/dashboard/admin/Songs'>Songs</Link>
+                        <Link to='/dashboard/admin/Genres'>Genres</Link>
                     </div>    
                 }
             </div>
