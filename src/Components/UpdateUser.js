@@ -5,6 +5,8 @@ import '../App.css';
 
 const UpdateUser = props => {
 
+    const { update, onClick, cancelHandler, inputValue } = props;
+
     const valid_icon = {
         width: "15px",
         marginRight: "10px",
@@ -29,15 +31,16 @@ const UpdateUser = props => {
     return(
         <div className="updateField">
             <h4>Username</h4>
-            { !props.update ? <span style={usernameLabel}>{ props.value }</span> :
+            { !update ? <span style={usernameLabel}>{ inputValue }</span> :
                 <input value={ props.value } onChange={props.onChange} />
             }
-            { props.update && props.hasError && <img src={Error} alt="Credit to Flaticon" style={valid_icon} />}
-            { !props.hasError && props.update ? <img src={Tick} alt="Credit to Flaticon" style={valid_icon}/>:null}
-            <button className="editbutton" onClick={ props.onClick }>
-                { props.update ? "CANCEL" : "EDIT USERNAME" }
+            { update && props.hasError && <img src={Error} alt="Credit to Flaticon" style={valid_icon} />}
+            { !props.hasError && update ? <img src={Tick} alt="Credit to Flaticon" style={valid_icon}/>:null}
+            <button className="editbutton" 
+                onClick={ update ?  cancelHandler : onClick }>
+                { update ? "CANCEL" : "EDIT USERNAME" }
             </button>
-            { props.update && 
+            { update && 
                 <button disabled={!props.isInputChanged || props.hasError} 
                 className="savebutton"
                 style={ !props.isInputChanged || props.hasError ? saveDisable : null }
@@ -45,7 +48,7 @@ const UpdateUser = props => {
                     SAVE
                 </button>
             }
-            { props.update && props.hasError && 
+            { update && props.hasError && 
                 <span style={error}>
                     Username should have at least 4 charactors!
                 </span>}

@@ -1,95 +1,138 @@
-import React,{ useState,useEffect } from 'react';
-import { useFetchUser } from './useFetchUser';
+import React,{ useState,useEffect, useReducer } from 'react';
 import UpdateUser from './UpdateUser';
-import axios from 'axios';
 import '../App.css'
+import { useCookies } from './Hooks/useCookies';
+import { EditOpr } from './Admin/CrudFunctions/Data';
+import Cookies from 'js-cookie';
 
-const UserDetails = (props) => {
-
-  const [ username, setUsername ] = useState('');
-  const [ preUpdateVal, setPreUpdateVal ] = useState('');
-  const [ finishupdate, setFinishupdate ] = useState(false);
-  const [ update, setUpdate ] = useState(false);
-  const [ submit, setSubmit ] = useState(false);
-  const [ error, setError ] = useState(false);
-  const [ email, setEmail ] = useState('');
-
-  const { data, loading } = useFetchUser(props.id,props.token);
-  
-  useEffect(() => {
-    if(!loading){
-      setUsername(data.username);
-      setPreUpdateVal(data.username);
-      setEmail(data.email);
-    }
-  },[data])
-
-  useEffect(() => {
-    if(finishupdate)
-      alert("Username Updated!!!");
-    console.log(username);
-  },[finishupdate])
-
-  const updateUsername = (id,token,updatedUsername) => {
-    axios.put(`http://127.0.0.1:8000/user/${id}`,{username:updatedUsername, email:data.email},
-      { headers: {"Authorization" : `Bearer ${token}`}})
-      .then(resp => {
-        console.log(resp.status);
-        if (resp.status === 200){
-          setFinishupdate(!finishupdate);
-          setUsername(updatedUsername);
-          setPreUpdateVal(updatedUsername);
-        }
-      })
+function init (){
+  return {
+    user: {},
+    loaded: false,
+    edit: false,
+    error: false,
+    updateVal : "",
+    readySumit : false
   }
+}
+
+function reducer (state, action) {
+
+  switch (action.type) {
+    case 'userDetails':
+      return {
+        ...state,
+        user: action.user, 
+        loaded: true
+      };
+    case 'editClick':
+      return {
+        ...state,
+        edit: !state.edit
+      }
+    case 'setError':
+      return { ...state, error: true }
+    case 'removeError':
+      return {...state, error:false}
+    case 'updateValue':
+      return {...state, updateVal: state.user.username}
+    case 'updateOnChange':
+      return {...state, updateVal: action.value}
+    case 'validSumitBtn':
+      return {...state, readySumit: true}
+    case 'save':
+      console.log(state.updateVal);
+      return {...state, updateVal: state.updateVal}
+    default:
+      throw new Error();
+  }
+}
+
+
+const UserDetails = () => {
+
+  const [ finishupdate, setFinishupdate ] = useState(0);
+  const [ error, setError ] = useState(false);
+
+  const { cookies, login } = useCookies();
+  const [ state, dispatch ] = useReducer(reducer, init); 
+
+  useEffect(() => {
+    console.log("Cookies Effect!!!");
+    if (cookies && login) {
+      console.log(cookies.username)
+      dispatch({type: "userDetails", user: cookies});
+      dispatch({type: 'updateValue'});
+    }
+  },[cookies, setFinishupdate]);
 
   const onChangeListender = event =>{
     console.log(error);
-    if((event.target.value).length < 4){
-      setError(true);
-    }else{
-      setError(false);
-    }
+    if((event.target.value).length < 4)
+      dispatch({ type: 'setError' });
+    else
+      dispatch({ type: 'removeError' });
 
-    if(event.target.value === preUpdateVal){
-      setSubmit(false);
-    }else{
-      setSubmit(true);
-    }
+    if(event.target.value != state.user.username)
+      dispatch({type: "validSumitBtn"})
 
-    setUsername(event.target.value);
+    dispatch({type: 'updateOnChange', value: event.target.value});
   }
 
-  const saveHandler = event => {
+  const setCookies = userObj => {
+    Cookies.set("tokens", userObj);
+    console.log("New Cookies Set!!");
+  }
+
+  const saveHandler = async event => {
     event.preventDefault();
-    setUpdate(!update);
-    setSubmit(false);
-    updateUsername(props.id,props.token,username);
+    console.log("Save Button Clicked!!!")
+    let updateData = { username: state.updateVal, email: state.user.email};
+    const res = await EditOpr(state.user.access_token, state.user.id,updateData);
+    if (res.status === 200) {
+      console.log("Updated!!!");
+      dispatch({ type: 'editClick' });
+      dispatch({ type: 'save' });
+      const { id, access_token, refresh_token, email, role, uuid, profile_pic, created_on } = state.user;
+      let newCookies = {id, access_token, refresh_token, email, role, uuid, profile_pic, created_on, 
+        username: state.updateVal}
+      setCookies(newCookies);
+      setFinishupdate(prevState => prevState+1);
+    }
   }
 
   const editHandler = event => {
     event.preventDefault();
-    setUpdate(!update);
-    setError(false);
-    setSubmit(false);
-    if(update)
-      setUsername(data.username);
+    dispatch({ type: 'editClick' });
+    //dispatch({ type: 'updateValue' });
+  }
+
+  const cancelHandler = event => {
+    event.preventDefault();
+    dispatch({ type: 'editClick' });
+    dispatch({ type: 'updateValue' });
   }
 
   return(
       <>
-        <div>
+        {state.loaded ? state.updateVal : "nothing"}
+        <div id="userDetails">
           <h3>User Details</h3>
-          { loading ? "Token Expired.." :
-            <UpdateUser onChange={ onChangeListender } afterUpdate={ finishupdate }
-                update={update}  value={username} isInputChanged={ submit } hasError={ error }
-                onClick={ editHandler } saveOnClick={ saveHandler }/>
+          { state.loaded ? 
+            (<UpdateUser onChange={ onChangeListender } afterUpdate={ finishupdate }
+                update={state.edit}  inputValue={state.user.username} value={state.updateVal} 
+                isInputChanged={ state.readySumit }
+                hasError={ state.error } onClick={ editHandler } saveOnClick={ saveHandler }
+                cancelHandler={cancelHandler}/>)
+              : "loading..."
           }
           <div className="updateField">
+              <h4>User ID</h4>
+              {  state.loaded ? <span>{state.user.uuid}</span> : "Loading"  }
+          </div>
+          <div className="updateField">
               <h4>Email Address</h4>
-              {
-                loading ? "Unable to load.." : <span>{email}</span>
-              }
+              {  state.loaded ? <span>{state.user.email}</span> : "Loading"  }
           </div>
         </div>
       </>

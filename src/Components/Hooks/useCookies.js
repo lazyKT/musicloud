@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 
 export function useCookies() {
     const [ state, setState ] = useState({cookies: null, login: false})
-    
+    const user = Cookies.get("user");
+    const load = Cookies.get("tokens");
+
     useEffect(() => {
-        const user = Cookies.get("user");
-        const load = Cookies.get("tokens");
         
         if(user && load) {
             let cookies = JSON.parse(load);
@@ -16,8 +16,8 @@ export function useCookies() {
                 login: true
             })
         }
-    },[])
+    },[load])
 
-    //console.log("state",state);
+    // console.log("state",state);
     return state;
 }
