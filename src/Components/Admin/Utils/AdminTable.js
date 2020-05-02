@@ -10,7 +10,8 @@ import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { TextField } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import ArrowDropDownOutlinedIcon from '@material-ui/icons/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@material-ui/icons/ArrowDropUpOutlined';
 import { styles } from '../Styles/TableStyles';
 
 
@@ -50,7 +51,7 @@ const row = (payload, key, header,
 
 export function AdminTable (props) {
 
-    const { data, header, editID, 
+    const { data, header, editID, sortedColumn, sorting,
         handleEdit, handleDelete, handleCancel, handleChange, handleSave, handleSort } = props;
 
     return (
@@ -64,6 +65,10 @@ export function AdminTable (props) {
                                 <TableCell  style={styles.tableHeadRow} key={`thc-${key}`}
                                     onClick={() => handleSort(payload.prop)} >
                                     { payload.name }
+                                    { sortedColumn === payload.prop ? 
+                                        (sorting ? <ArrowDropDownOutlinedIcon/> 
+                                            : <ArrowDropUpOutlinedIcon/>)
+                                    : null}
                                 </TableCell>
                             )
                         }

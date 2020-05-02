@@ -15,10 +15,22 @@ const headers = [
     }
 ]
 
+function init() {
+    return {
+        msg: null,
+        type: null,
+        display: false,
+        sortColumn: "",
+        desc: false
+    }
+}
+
 function reducer(state, action) {
     switch (action.type) {
         case 'set': 
             return {msg: action.msg, type: action.code, display: true}
+        case 'sort':
+            return {sortColumn: action.column, desc: action.order}
         default:
             throw new Error();
     }
@@ -40,7 +52,8 @@ const AdminGenres = () => {
 
     const { data, loaded } = useFetchGenres(token, url);
 
-    const [ header, dispatch ] = useReducer(reducer, {msg: null, type: null, display: false});
+    const [ state, dispatch ] = useReducer(reducer, init);
+    
 
     let lastIndexofPage = paginate.currentPage * paginate.rowsPage;
     let firstIndexofPage = lastIndexofPage - paginate.rowsPage;
@@ -51,19 +64,17 @@ const AdminGenres = () => {
     }
 
     const setHeader = m => {
-        console.log("header", m);
         dispatch({
                 type: 'set', 
-                msg: m.status === 201 ? (m.data.msg + " is Added") : "Error",
+                msg: m.status === 201 ? (m.data.name + " is Added") : "Error",
                 code: m.status === 201 ? "success" : "error"
             });
         if( m.status === 201)
-            setGenres(genres.concat({name: m.data.msg}));
+            setGenres(genres.concat(m.data));
         setAdding(!adding);
     }
 
     const handleEdit = idx => {
-        console.log("Editing ",idx);
         setEditID(idx);
     }
 
@@ -72,18 +83,17 @@ const AdminGenres = () => {
     }
 
     const handleSave = idx => {
-        console.log("Save!!!!", idx);
         // API doesn't have edit func for genres >.< Ops____
         setEditID(-1);
     }
 
     const handleDelete = async idx => { 
-        const deleteIdx = firstIndexofPage + idx;
-       
+        let deleteIdx = ((paginate.currentPage-1) * paginate.rowsPage) + idx;
+
         if (window.confirm(
             'Are you sure you wish to delete this genre?')){
             // Resolving Promise from DeleteOpr********
-            let res = await DeleteOpr(token, currentRows[idx].id);
+            let res = await DeleteOpr(token, genres[deleteIdx].id);
             if (res.status === 200)
                 setGenres(genres.filter((data, i) => 
                     i != deleteIdx
@@ -119,15 +129,19 @@ const AdminGenres = () => {
 
     const handleSearch = event => {
         setSearchKeyWord(event.target.value);
-        setGenres(searchGenre(event.target.value))
+        setGenres(searchGenre(event.target.value));
+        setPaginate({currentPage:1, rowsPage: paginate.rowsPage})
     }
 
     const handleSort = ColumnName => {
-        let sorted = data.sort(Sorting(ColumnName));
-        setGenres(sorted);
-        console.log(genres);
-        console.log("Indexs",firstIndexofPage, lastIndexofPage);
-        currentRows = genres.slice(firstIndexofPage, lastIndexofPage);
+        dispatch({
+            type: 'sort',
+            column: ColumnName,
+            order: !state.desc
+        });
+        let order = state.desc ? 'desc' : 'asc';
+        let sorted = data.sort(Sorting(ColumnName, order));
+        setGenres(sorted.slice(0,sorted.length));  // I dont know what it does....
     }
 
     useEffect(() => {
@@ -136,23 +150,16 @@ const AdminGenres = () => {
     },[cookies])
 
     useEffect(() => {
-        console.log("Data Fetched Effects");
-        console.log(data, loaded);
         if (data && loaded)
             setGenres(data);
     }, [loaded], [data]);
-
-    useEffect(() => {
-        console.log("Genre Changed");
-    },[genres])
-
 
     return (
         <>
             <div style={styles.headerDiv}>
                 <div>
-                    <HeadersDiv title="Genres Table" headermsg={header.msg} headertype={header.type} 
-                        display={header.display} adding={adding} handleRowsPerPage={handleRowsPerPage}
+                    <HeadersDiv title="Genres Table" headermsg={state.msg} headertype={state.type} 
+                        display={state.display} adding={adding} handleRowsPerPage={handleRowsPerPage}
                         addData={addGenre} handleSearch={handleSearch} searchKeyword={searchKeyword}
                         setHeader={setHeader} token={token}/>
                 </div>
@@ -160,6 +167,7 @@ const AdminGenres = () => {
                     (<AdminTable data={currentRows} header={headers} editID={editID}
                         handleEdit={handleEdit} handleDelete={handleDelete} handleCancel={handleCancel}
                         handleChange={handleChange} handleSave={handleSave} handleSort={handleSort}
+                        sorting={state.desc} sortedColumn={state.sortColumn}
                     />)
                 : "Loading...."}
                 { login && loaded ? 
