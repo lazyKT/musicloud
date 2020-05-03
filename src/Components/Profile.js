@@ -3,6 +3,33 @@ import { withRouter } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { userContext } from '../Contexts/userContext';
 import UserDetails from './UserDetails';
+import '../App.css';
+
+const styles = {
+    mainDiv: {
+        width: "100%",
+        display: "flex",
+    },
+    sideDiv: {
+        height: "50%",
+        width: "160px",
+        position: "fixed",
+        zIndex: "1",
+        fontSize: "large",
+        overflowX: "hidden",
+        padding: "20px"
+    },
+    sideItemsList: {
+        listStyle: "none"
+    },
+    sideItems: {
+        margin: "10px 0px",
+        color: "gray"
+    },
+    setting: {
+        marginLeft: "25%"
+    }
+}
 
 const Profile = (props) => {
 
@@ -19,9 +46,6 @@ const Profile = (props) => {
             Auth.setAuth(false);
             props.history.push('/');
         }
-    },[])
-
-    useEffect(() => {
         const user = JSON.parse(Cookies.get("tokens"));
         setUserID(user.id);
         setAccessToken(user.access_token);
@@ -29,7 +53,20 @@ const Profile = (props) => {
 
     return(
         <>
-            <UserDetails id={userID} token={accessToken}/>
+            <div style={styles.mainDiv} className="mainDiv">
+                <div style={styles.sideDiv}>
+                    Side Navigation
+                    <ul style={styles.sideItemsList}>
+                        <li style={styles.sideItems}>Account</li>
+                        <li style={styles.sideItems}>Notifications</li>
+                        <li style={styles.sideItems}>Connection</li>
+                        <li style={styles.sideItems}>Security</li>
+                    </ul>
+                </div>
+                <div style={styles.setting}>
+                    <UserDetails id={userID} token={accessToken}/>
+                </div>
+            </div>
         </>
     );
 }

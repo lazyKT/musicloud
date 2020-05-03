@@ -9,6 +9,7 @@
   min-height: 10px;
   background-color: #000;
   color: white;
+  position: fixed;
 }
 
 .navigation ul{
@@ -93,6 +94,11 @@
   background-color: #000;
 }
 
+
+/* Main Div below Top Nav */
+.mainDiv {
+  padding: 60px 20px;
+}
 
 
 /* Authentication Forms */
