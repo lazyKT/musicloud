@@ -9,7 +9,7 @@
   min-height: 10px;
   background-color: #000;
   color: white;
-  position: fixed;
+  width: 100%;
 }
 
 .navigation ul{
@@ -97,7 +97,7 @@
 
 /* Main Div below Top Nav */
 .mainDiv {
-  padding: 60px 20px;
+  height: fit-content;
 }
 
 

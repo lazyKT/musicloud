@@ -8,7 +8,7 @@ import '../App.css';
 const styles = {
     mainDiv: {
         width: "100%",
-        display: "flex",
+        display: "flex"
     },
     sideDiv: {
         height: "50%",
@@ -27,44 +27,76 @@ const styles = {
         color: "gray"
     },
     setting: {
-        marginLeft: "25%"
+        marginLeft: "25%",
+    },
+    subSetting:{
+        paddingTop: "20px"
+    },
+    subSettingOnScroll: {
+        paddingTop: "60px",
     }
-}
+} 
+
 
 const Profile = (props) => {
 
     const Auth = useContext(userContext);
     const login = Cookies.get("user");
 
-    const [ userID, setUserID ] = useState('');
-    const [ accessToken, setAccessToken ] = useState('');
-
-    //const [ data, loading ] = useFetchUser(1,token.access_token);
+    const [ scrolling, setScrolling ] = useState(false);
+    const [ scrollColumn, setScrollColumn ] = useState(null);
     
     useEffect(()=>{
         if(!login){
             Auth.setAuth(false);
             props.history.push('/');
         }
-        const user = JSON.parse(Cookies.get("tokens"));
-        setUserID(user.id);
-        setAccessToken(user.access_token);
     },[])
+
+    const onScrollFunc = id => {
+        console.log("On Scroll Clicked!!", id);
+        let element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView();
+            //setScrolling(true);
+            setScrollColumn(id);
+        }         
+    }
 
     return(
         <>
             <div style={styles.mainDiv} className="mainDiv">
                 <div style={styles.sideDiv}>
-                    Side Navigation
+                    <h3>Side Navigation</h3>
                     <ul style={styles.sideItemsList}>
-                        <li style={styles.sideItems}>Account</li>
-                        <li style={styles.sideItems}>Notifications</li>
-                        <li style={styles.sideItems}>Connection</li>
-                        <li style={styles.sideItems}>Security</li>
+                        <li style={styles.sideItems}>
+                            <a onClick={() => onScrollFunc("user")}>User Details</a>
+                        </li>
+                        <li style={styles.sideItems}>
+                            <a onClick={() => onScrollFunc("noti")}>Notifications</a>
+                        </li>
+                        <li style={styles.sideItems}>
+                            <a onClick={() => onScrollFunc("con")}>Connection</a>
+                        </li>
+                        <li style={styles.sideItems}>
+                            <a onClick={() => onScrollFunc("sec")}>Security</a>
+                        </li>
                     </ul>
                 </div>
                 <div style={styles.setting}>
-                    <UserDetails id={userID} token={accessToken}/>
+                    <div id="user" style={ styles.subSetting}>
+                        <UserDetails/>
+                    </div>
+                    <div id="noti" style={ styles.subSetting}>
+                        <h3>Notifications</h3>
+                    </div>
+                    <div id="con" style={ scrollColumn === "con" ?
+                            (scrolling ? styles.subSettingOnScroll : null) : null}>
+                        <h3>Connection</h3>
+                    </div>
+                    <div id="sec">
+                        <h3>Security</h3>
+                    </div>
                 </div>
             </div>
         </>
