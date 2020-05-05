@@ -8,7 +8,8 @@ import '../App.css';
 const styles = {
     mainDiv: {
         width: "100%",
-        display: "flex"
+        display: "flex",
+        paddingTop: "60px"
     },
     sideDiv: {
         height: "50%",
@@ -17,7 +18,7 @@ const styles = {
         zIndex: "1",
         fontSize: "large",
         overflowX: "hidden",
-        padding: "20px"
+        padding: "10px"
     },
     sideItemsList: {
         listStyle: "none"
@@ -30,10 +31,13 @@ const styles = {
         marginLeft: "25%",
     },
     subSetting:{
-        paddingTop: "20px"
+        paddingTop: "10px"
     },
     subSettingOnScroll: {
-        paddingTop: "60px",
+        paddingTop: "40px",
+    },
+    sideHeader: {
+        display: "contents"
     }
 } 
 
@@ -58,7 +62,7 @@ const Profile = (props) => {
         let element = document.getElementById(id);
         if (element) {
             element.scrollIntoView();
-            //setScrolling(true);
+            setScrolling(true);
             setScrollColumn(id);
         }         
     }
@@ -66,36 +70,42 @@ const Profile = (props) => {
     return(
         <>
             <div style={styles.mainDiv} className="mainDiv">
-                <div style={styles.sideDiv}>
-                    <h3>Side Navigation</h3>
-                    <ul style={styles.sideItemsList}>
-                        <li style={styles.sideItems}>
-                            <a onClick={() => onScrollFunc("user")}>User Details</a>
-                        </li>
-                        <li style={styles.sideItems}>
-                            <a onClick={() => onScrollFunc("noti")}>Notifications</a>
-                        </li>
-                        <li style={styles.sideItems}>
-                            <a onClick={() => onScrollFunc("con")}>Connection</a>
-                        </li>
-                        <li style={styles.sideItems}>
-                            <a onClick={() => onScrollFunc("sec")}>Security</a>
-                        </li>
-                    </ul>
+                <div>
+                    <div style={styles.sideDiv}>
+                        <p style={ scrolling ? styles.sideHeader : null}>Side Navigation</p>
+                        <ul style={styles.sideItemsList}>
+                            <li style={styles.sideItems}>
+                                <a onClick={() => onScrollFunc("user")}>User Details</a>
+                            </li>
+                            <li style={styles.sideItems}>
+                                <a onClick={() => onScrollFunc("noti")}>Notifications</a>
+                            </li>
+                            <li style={styles.sideItems}>
+                                <a onClick={() => onScrollFunc("con")}>Connection</a>
+                            </li>
+                            <li style={styles.sideItems}>
+                                <a onClick={() => onScrollFunc("sec")}>Security</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div style={styles.setting}>
-                    <div id="user" style={ styles.subSetting}>
-                        <UserDetails/>
+                    <div>
+                        <div id="user" style={ styles.subSetting}>
+                            <UserDetails/>
+                        </div>
                     </div>
                     <div id="noti" style={ styles.subSetting}>
                         <h3>Notifications</h3>
+                        <div style={{height: "400px"}}></div>
                     </div>
-                    <div id="con" style={ scrollColumn === "con" ?
-                            (scrolling ? styles.subSettingOnScroll : null) : null}>
+                    <div id="con" style={ styles.subSetting}>
                         <h3>Connection</h3>
+                        <div style={{height: "400px"}}></div>
                     </div>
                     <div id="sec">
                         <h3>Security</h3>
+                        <div style={{height: "400px"}}></div>
                     </div>
                 </div>
             </div>

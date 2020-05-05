@@ -10,6 +10,7 @@
   background-color: #000;
   color: white;
   width: 100%;
+  position: fixed;
 }
 
 .navigation ul{
@@ -159,6 +160,14 @@
   width: 170px;
 }
 
+
+/* Profile Page */
+
+.profile-pic{
+  width: 100px;
+  height: 100px;
+  margin: 20px;
+}
 
 
 /* Update User Account */

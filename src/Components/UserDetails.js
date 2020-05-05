@@ -1,9 +1,32 @@
-import React,{ useState,useEffect, useReducer } from 'react';
+import React,{ useEffect, useReducer } from 'react';
 import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
 import { EditOpr } from './Admin/CrudFunctions/Data';
 import Cookies from 'js-cookie';
+import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
+
+// material ui styles
+
+const useStyles = makeStyles( theme => ({
+  profilePicDiv:{
+    width: "100%",
+    display: "flex",
+    margin: "20px"
+  },
+  large: {
+    width: theme.spacing(9),
+    height: theme.spacing(9),
+    margin: "auto",
+    zIndex: "-1"
+  },
+  uploadBtn: {
+    margin: "auto"
+  }
+}))
 
 function init (){
   return {
@@ -49,6 +72,8 @@ function reducer (state, action) {
 
 
 const UserDetails = () => {
+
+  const classes = useStyles(); // material ui styles class
 
   const { cookies, login } = useCookies();
   const [ state, dispatch ] = useReducer(reducer, init); 
@@ -118,6 +143,18 @@ const UserDetails = () => {
       <>
         <div id="userDetails">
           <h3>User Details</h3>
+          { state.loaded ?
+              (<>
+                <div className={classes.profilePicDiv}>
+                  <Avatar alt="Remy Sharp" className={classes.large}>OP</Avatar>
+                  <Button className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
+                     Upload   
+                  </Button>
+                </div>
+              </>
+              )
+              : null
+          }
           { state.loaded ? 
             (<UpdateUser onChange={ onChangeListender } update={state.edit} value={state.updateVal} 
               isInputChanged={ state.readySumit } hasError={ state.error } onClick={ editHandler }
