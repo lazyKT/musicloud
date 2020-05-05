@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { userContext } from '../Contexts/userContext';
 import UserDetails from './UserDetails';
 import '../App.css';
+import { Security } from './Profile/Secuirty';
 
 const styles = {
     mainDiv: {
@@ -29,6 +30,7 @@ const styles = {
     },
     setting: {
         marginLeft: "25%",
+        width: "70%"
     },
     subSetting:{
         paddingTop: "10px"
@@ -105,7 +107,7 @@ const Profile = (props) => {
                     </div>
                     <div id="sec">
                         <h3>Security</h3>
-                        <div style={{height: "400px"}}></div>
+                        <Security/>
                     </div>
                 </div>
             </div>

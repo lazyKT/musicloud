@@ -229,3 +229,41 @@
 }
 
 
+/* Security Field from Profile */
+.secDiv{
+  margin-bottom: 20px;
+}
+
+.secDiv .subDiv{
+  margin: 30px 20px;
+  border-top: solid 0.2px lightgray;
+}
+
+.secDiv a{
+  color: gray;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.secDiv .changePwdDiv{
+  display: flex;
+  width: 80%;
+}
+
+.secDiv .changePwdBtn{
+  background: darksalmon;
+}
+
+/* Change Password Form */
+.cpf{
+  display: flex;
+}
+
+.cpf-txt{
+  margin: 0px 10px;
+}
+
+.cpf-cancel {
+  height: 50px;
+  margin: auto;
+}

@@ -15,7 +15,6 @@ const useStyles = makeStyles( theme => ({
   profilePicDiv:{
     width: "100%",
     display: "flex",
-    margin: "20px"
   },
   large: {
     width: theme.spacing(9),
