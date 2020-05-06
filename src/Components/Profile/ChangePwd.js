@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { tokenRefresh, changePwd } from './Utils/ChangePassword';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -8,15 +9,19 @@ import '../../App.css';
 
 function init(){
     return ({
+        currentPwd: null,
         pwd1: null,
         pwd2: '',
         validpwd1: false,
+        validpwd2: false,
         submit: false
     })
 }
 
 function reducer(state, action) {
     switch(action.type) {
+        case ('current'):
+            return {...state, currentPwd: action.pwd}
         case ('pwd1'):
             return {...state, pwd1: action.pwd1}
         case ('pwd2'):
@@ -24,7 +29,7 @@ function reducer(state, action) {
         case ('validate'):
             return {...state, validpwd1: action.valid}
         case ('submit'):
-            return {...state, submit: true};
+            return {...state, submit: true, validpwd2: true};
         case ('no-submit'):
             return {...state, submit: false};
         default:
@@ -41,9 +46,17 @@ function validate(pwd) {
 
 export function ChangePwd(props) {
 
-    const { changePwdClick } = props;
+    const { changePwdClick, cookies } = props;
+    const { id, access_token, refresh_token } = cookies;
 
     const [ state, dispatch ] = useReducer(reducer, init);
+
+    const onChangeCurrentPwd = (event) => {
+        const {value} = event.target;
+        if (!value)
+            dispatch({type: 'no-submit'});
+        dispatch({type: 'current', pwd: value})
+    }
 
     const onChangePwd1 = (event) => {
         // set textfield color to red until it passes the validation
@@ -68,8 +81,11 @@ export function ChangePwd(props) {
 
     const onSubmitClick = event => {
         event.preventDefault();
-        if (state.submit)
+        if (state.submit) {
             console.log("Change Password!!!");
+            tokenRefresh(state.currentPwd, refresh_token);
+            changePwd(access_token, id, state.pwd1)
+        }
         else
             console.log("error",state.submit);
     }
@@ -89,7 +105,17 @@ export function ChangePwd(props) {
                     type="password"
                     autoComplete="current-password"
                     variant="outlined"
-                    size="small"/>
+                    size="small"
+                    defaultValue={state.currentPwd}
+                    InputProps={{
+                        endAdornment: 
+                        <InputAdornment position="end">
+                            {state.currentPwd ?  
+                            <CheckIcon style={{ color: "green" }}/> : <CloseIcon color="secondary"/>
+                             }
+                        </InputAdornment>,
+                    }}
+                    onChange={onChangeCurrentPwd}/>
                 </div>
                 <div className="textField">
                     <TextField id="standard-password-input" label="New Password"
@@ -116,7 +142,7 @@ export function ChangePwd(props) {
                         endAdornment: 
                         <InputAdornment position="end">
                             {state.pwd2 ?  
-                            (state.submit ? 
+                            (state.validpwd2 ? 
                             (<CheckIcon style={{ color: "green" }}/>) : (<CloseIcon color="secondary"/>))
                              : ''
                              }

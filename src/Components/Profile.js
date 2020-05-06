@@ -27,14 +27,17 @@ const Profile = (props) => {
 
     const Auth = useContext(userContext);
     const login = Cookies.get("user");
+    const user = Cookies.get("tokens");
     const [ showModal, setShowModal ] = useState(false);
+    const [ cookies, setCookies ] = useState({});
     
     useEffect(()=>{
         if(!login){
             Auth.setAuth(false);
             props.history.push('/');
         }
-    },[])
+        setCookies(user);
+    },[user])
 
     const changePwdClick = () => {
         console.log("Change Password Button Clicked!!!");
@@ -64,7 +67,7 @@ const Profile = (props) => {
                 { showModal ? 
                 (<div className="bg-modal">
                     <div className="form">
-                        <ChangePwd changePwdClick={changePwdClick}/>
+                        <ChangePwd changePwdClick={changePwdClick} cookies={cookies}/>
                     </div>
                 </div>) : null}
             </div>
