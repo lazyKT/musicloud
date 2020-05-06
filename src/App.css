@@ -104,8 +104,70 @@
 
 /* Authentication Forms */
 
+.container{
+  height: 100%;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container .innerDiv{
+  width: 35%;
+  height: fit-content;
+  border: solid 0.2px lightgray;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.innerDiv input{
+  display: block;
+  width: 95%;
+  height: 25px;
+  padding: 5px;
+  border-radius: 5px;
+  border: solid gray;
+}
+
+.innerDiv button{
+ background-color: #000;
+ color: #fff;
+ width: 45%;
+ margin: 10px 5px;
+ height: 40px;
+ border-radius: 10px;
+ border: solid;
+}
+
+.innerDiv button:hover{
+  background-color: darkgray;
+}
+
+.innerDiv .errorResponse{
+  margin: 10px;
+  height: max-content;
+  padding: 5px 15px;
+  background: firebrick;
+  border: 0.1px solid;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+  width: 170px;
+}
+
+.registerTitle{
+  margin: 10px auto;
+  width: fit-content;
+  font-size: 20px;
+  font-family: monospace;
+}
+
 .authForm{
-  width: 20%;
+  width: fit-content;
   margin: auto;
 }
 
@@ -146,18 +208,6 @@
 
 .authForm .registerBtn:hover{
   color: #000;
-}
-
-.authForm .errorResponse{
-  margin: 10px;
-  height: max-content;
-  padding: 5px 15px;
-  background: firebrick;
-  border: 0.1px solid;
-  border-radius: 5px;
-  color: white;
-  font-size: 13px;
-  width: 170px;
 }
 
 

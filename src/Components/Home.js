@@ -56,22 +56,27 @@ function Home(props){
   }
   
   return(
-    <>
-        <form className="authForm" onSubmit={handleSubmit}>
-            <input value={ user.username } name="username" 
-                placeholder="Username" onChange={handleChange} required/><br/>
-            <input value={ user.password } type="password" name="password" 
-                placeholder="Password" onChange={handleChange} required/><br/>
-            <button type="submit">Login</button>
-            <button className="registerBtn" onClick={handleRegister}>
-              Register
-            </button>
-            { error ? 
-              <div className="errorResponse">
-                { error }
-              </div>:null}
-        </form>
-    </>
+    <div className="mainDiv">
+      <div className="container">
+        <div className="innerDiv">
+          <form onSubmit={handleSubmit}>
+              <h4 className="registerTitle">Login</h4>
+              <input value={ user.username } name="username" 
+                  placeholder="Username" onChange={handleChange} required/><br/>
+              <input value={ user.password } type="password" name="password" 
+                  placeholder="Password" onChange={handleChange} required/><br/>
+              <button type="submit">Login</button>
+              <button className="registerBtn" onClick={handleRegister}>
+                Register
+              </button>
+              { error ? 
+                <div className="errorResponse">
+                  { error }
+                </div>:null}
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -144,52 +144,54 @@ const Register = props => {
 
     return(
         <>
-            <h4>register</h4>
-            <form className="authForm" onSubmit={onSubmitHandler}>
-                <input value={ username } name="username" 
-                    placeholder="Username" onChange={usernameHandler} required/>
-                { usernameerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                { !usernameerror && username ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                { usernameerror && <span style={{color:'red'}}>Username should have at least 4 charactors!!</span>}    
-                <br/>
+            <div className="mainDiv">
+            <h4 className="registerTitle">Registeration</h4>
+                <form className="authForm" onSubmit={onSubmitHandler}>
+                    <input value={ username } name="username" 
+                        placeholder="Username" onChange={usernameHandler} required/>
+                    { usernameerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
+                    { !usernameerror && username ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
+                    { usernameerror && <span style={{color:'red'}}>Username should have at least 4 charactors!!</span>}    
+                    <br/>
 
-                <input value={ email } name="email" 
-                    placeholder="Email" onChange={emailHandler} required/>
-                { emailerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                { !emailerror && email ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                { emailerror && <span style={{color:'red'}}>Invalid Email</span>}    
-                <br/>
+                    <input value={ email } name="email" 
+                        placeholder="Email" onChange={emailHandler} required/>
+                    { emailerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
+                    { !emailerror && email ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
+                    { emailerror && <span style={{color:'red'}}>Invalid Email</span>}    
+                    <br/>
 
-                <input value={ password1 } name="password1" type="password"
-                    placeholder="Password" onChange={passwordHandler1} required/>
-                { pwderror && <img style={valid_icon} src={Error} alt="Credit to Flaticon"/> } 
-                { !pwderror && password1 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/> : null} 
-                { pwderror && 
-                    <span style={{color:'red'}}>
-                        Password should have at least 8 charactors, 1 uppercase letter, 1 lowercase and 1 digit.
-                    </span>}    
-                <br/>
+                    <input value={ password1 } name="password1" type="password"
+                        placeholder="Password" onChange={passwordHandler1} required/>
+                    { pwderror && <img style={valid_icon} src={Error} alt="Credit to Flaticon"/> } 
+                    { !pwderror && password1 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/> : null} 
+                    { pwderror && 
+                        <span style={{color:'red'}}>
+                            Password should have at least 8 charactors, 1 uppercase letter, 1 lowercase and 1 digit.
+                        </span>}    
+                    <br/>
 
-                <input value={ password2 } name="password2" type="password"
-                    placeholder="Re-enter Password" onChange={passwordHandler2} required/>
-                { pwderror2 && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                { !pwderror2 && password2 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                { pwderror2 && 
-                    <span style={{color:'red'}}>
-                        Password Doesn't Match!!!
-                    </span>}    
-                <br/>
+                    <input value={ password2 } name="password2" type="password"
+                        placeholder="Re-enter Password" onChange={passwordHandler2} required/>
+                    { pwderror2 && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
+                    { !pwderror2 && password2 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
+                    { pwderror2 && 
+                        <span style={{color:'red'}}>
+                            Password Doesn't Match!!!
+                        </span>}    
+                    <br/>
 
-                <button disabled={!ready} type="submit" style={ready?null:Register_btn_disable}>
-                    Register
-                </button>
-                {
-                    httperror ? 
-                    <div>
-                        { httperror }
-                    </div> : null
-                }
-            </form>
+                    <button disabled={!ready} type="submit" style={ready?null:Register_btn_disable}>
+                        Register
+                    </button>
+                    {
+                        httperror ? 
+                        <div>
+                            { httperror }
+                        </div> : null
+                    }
+                </form>
+            </div>
         </>
     );
 } 
