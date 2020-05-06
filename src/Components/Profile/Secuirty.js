@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import Button from '@material-ui/core/Button';
 import '../../App.css';
 import { ChangePwd } from './ChangePwd';
+import { withRouter } from 'react-router-dom';
 
 
 function init() {
@@ -23,13 +24,13 @@ function reducer(state, action) {
 }
 
 
-export function Security() {
+function Security(props) {
+
+    console.log(props);
+
+    const { changePwdClick } = props;
 
     const [ state, dispatch ] = useReducer(reducer, init);
-
-    const changePwdClick = () => {
-        dispatch({type: 'change'});
-    };
 
     const cancelPwdClick = () => {
         dispatch({type: 'cancel'});
@@ -38,6 +39,7 @@ export function Security() {
     return (
         <>
             <div className="secDiv">
+                <h3>Security</h3>
                 <div className="subDiv">
                     <h4>Change Password</h4>
                     <div className="changePwdDiv">
@@ -66,3 +68,5 @@ export function Security() {
         </>
     );
 }
+
+export default withRouter(Security);

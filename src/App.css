@@ -98,7 +98,7 @@
 
 /* Main Div below Top Nav */
 .mainDiv {
-  height: fit-content;
+  padding-top: 80px;
 }
 
 
@@ -229,6 +229,30 @@
 }
 
 
+/* Profile Page */
+.sideDiv{
+  height: 50%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  font-size: large;
+  overflow-x: hidden;
+  padding: 10px;
+  display: inline;
+  font-size: larger;
+  padding: 20px;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.sideDiv a{
+  text-decoration: none;
+  display: block;
+  color: gray;
+  padding: 20px;
+}
+
+
 /* Security Field from Profile */
 .secDiv{
   margin-bottom: 20px;
@@ -265,5 +289,53 @@
 
 .cpf-cancel {
   height: 50px;
+  margin: auto;
+}
+
+/* bg-modal */
+.bg-modal{
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: rgb(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-modal .form{
+  width: 50%;
+  height: 60%;
+  background-color: #fff;
+}
+
+.form form{
+  padding: 10px;
+}
+
+.form .title{
+  display: block;
+  margin: 10px auto;
+  width: 35%;
+}
+
+.form .textField{
+  width: 50%;
+  display: block;
+  margin: 15px auto;
+}
+
+.form Button{
+  width: 50%;
+  display: block;
+  margin: 10px auto;
+}
+
+.pwd-desc{
+  font-size: xx-small;
+  color: crimson;
+  width: 50%;
   margin: auto;
 }
