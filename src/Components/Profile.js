@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import { Notifications } from './Profile/Notifications';
 import { Connect } from './Profile/Connect';
 import { ChangePwd } from './Profile/ChangePwd';
+import { Button } from '@material-ui/core';
 
 const styles = {
     mainDiv: {
@@ -30,6 +31,7 @@ const Profile = (props) => {
     const user = Cookies.get("tokens");
     const [ showModal, setShowModal ] = useState(false);
     const [ cookies, setCookies ] = useState({});
+    const [ logout, setLogout ] = useState(false);
     
     useEffect(()=>{
         if(!login){
@@ -43,6 +45,11 @@ const Profile = (props) => {
         console.log("Change Password Button Clicked!!!");
         setShowModal(!showModal);
     }
+
+    const logoutClick = () => {
+        console.log("Logout!!!");
+    }
+
 
     return(
 
@@ -66,10 +73,17 @@ const Profile = (props) => {
                 </div>
                 { showModal ? 
                 (<div className="bg-modal">
-                    <div className="form">
-                        <ChangePwd changePwdClick={changePwdClick} cookies={cookies}/>
-                    </div>
+                    <ChangePwd changePwdClick={changePwdClick} cookies={cookies}/>
                 </div>) : null}
+                { logout && 
+                (<div className="bg-modal-logout">
+                    <div>
+                        <p><b>You have successfully changed your password!</b></p>
+                        <p>Click <b>Ok</b> to logout and log in back. :D</p>
+                        <Button onClick={logoutClick}>OKAY</Button>
+                    </div>
+                </div>)
+                }
             </div>
         </Router>
     );

@@ -389,3 +389,37 @@
   width: 50%;
   margin: auto;
 }
+
+.bg-modal-logout{
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: rgb(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  padding-top: 10%;
+}
+
+.bg-modal-logout div{
+  width: 45%;
+  height: 30%;
+  background-color: indianred;
+  color: white;
+  padding: 15px;
+  font-size: 18px;
+}
+
+.bg-modal-logout Button{
+  background: beige;
+  display: block;
+  float: right;
+  margin-top: 20px;
+  color: indianred;
+  font-weight: bold;
+}
+
+.bg-modal-logout Button:hover{
+  background: bisque;
+}

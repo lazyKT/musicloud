@@ -96,7 +96,7 @@ const AdminGenres = () => {
             let res = await DeleteOpr(token, genres[deleteIdx].id);
             if (res.status === 200)
                 setGenres(genres.filter((data, i) => 
-                    i != deleteIdx
+                    i !== deleteIdx
                 ))
             dispatch({
                 type: 'set',
@@ -108,7 +108,7 @@ const AdminGenres = () => {
 
     const handleChange = (event, Field, idx) => {
         setGenres(genres.map(
-            (genre, i) => (i == idx) ? {...genre,[Field] : event.target.value} : genre
+            (genre, i) => (i === idx) ? {...genre,[Field] : event.target.value} : genre
             ))
     }
 

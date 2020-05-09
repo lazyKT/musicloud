@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useContext } from 'react';
 import { tokenRefresh, changePwd } from './Utils/ChangePassword';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -6,6 +6,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckIcon from '@material-ui/icons/Check';
 import '../../App.css';
+import { userContext } from '../../Contexts/userContext';
+import Cookies from 'js-cookie';
+
 
 function init(){
     return ({
@@ -14,7 +17,8 @@ function init(){
         pwd2: '',
         validpwd1: false,
         validpwd2: false,
-        submit: false
+        submit: false,
+        logout: false
     })
 }
 
@@ -32,6 +36,8 @@ function reducer(state, action) {
             return {...state, submit: true, validpwd2: true};
         case ('no-submit'):
             return {...state, submit: false};
+        case ('logout'):
+            return {...state, logout: true};
         default:
             throw new Error();
     }
@@ -47,9 +53,10 @@ function validate(pwd) {
 export function ChangePwd(props) {
 
     const { changePwdClick, cookies } = props;
-    const { id, access_token, refresh_token } = cookies;
+    const { id, refresh_token } = cookies;
 
     const [ state, dispatch ] = useReducer(reducer, init);
+    const Auth = useContext(userContext);
 
     const onChangeCurrentPwd = (event) => {
         const {value} = event.target;
@@ -59,17 +66,12 @@ export function ChangePwd(props) {
     }
 
     const onChangePwd1 = (event) => {
-        // set textfield color to red until it passes the validation
-        // set textfield to green after it passed the validation
         const { value } = event.target;
         dispatch({type: 'pwd1', pwd1: value});
-        console.log(validate(value));
         dispatch({type: 'validate', valid: validate(value)})
     }
 
     const onChangePwd2 = event => {
-        // compare this with pwd1
-        // if pwd1 and pwd2 are the same, show the change button
         const { value } = event.target;
         dispatch({type: 'pwd2', pwd2: event.target.value})
         if(state.pwd1 === value && state.validpwd1) {
@@ -84,80 +86,95 @@ export function ChangePwd(props) {
         if (state.submit) {
             const authToken = await tokenRefresh(state.currentPwd, refresh_token);
             const res = await changePwd(authToken, id, state.pwd1);
-            console.log(res);
+            res.status === 200 ? dispatch({type:'logout'}) : console.log("error");
         }
         else
             console.log("error",state.submit);
     }
 
+    const logoutUser = () => {
+        Auth.setAuth(false);
+        Cookies.remove("user");
+        Cookies.remove("tokens");
+    }
+
 
     return (
         <>
-            <form>
-                <h4 className="title">Change Password</h4>
-                <p className="pwd-desc"> 
-                Remember: Your new password must be at least 8 charactors, must include at least 1 uppercase and 1 number.
-                </p>
-                <div className="textField">
-                    <TextField
-                    id="standard-password-input"
-                    label="Current Password"
-                    type="password"
-                    autoComplete="current-password"
-                    variant="outlined"
-                    size="small"
-                    defaultValue={state.currentPwd}
-                    InputProps={{
-                        endAdornment: 
-                        <InputAdornment position="end">
-                            {state.currentPwd ?  
-                            <CheckIcon style={{ color: "green" }}/> : <CloseIcon color="secondary"/>
-                             }
-                        </InputAdornment>,
-                    }}
-                    onChange={onChangeCurrentPwd}/>
+            <div className="form">
+                <form>
+                    <h4 className="title">Change Password</h4>
+                    <p className="pwd-desc"> 
+                    Remember: Your new password must be at least 8 charactors, must include at least 1 uppercase and 1 number.
+                    </p>
+                    <div className="textField">
+                        <TextField
+                        id="standard-password-input"
+                        label="Current Password"
+                        type="password"
+                        autoComplete="current-password"
+                        variant="outlined"
+                        size="small"
+                        defaultValue={state.currentPwd}
+                        InputProps={{
+                            endAdornment: 
+                            <InputAdornment position="end">
+                                {state.currentPwd ?  
+                                <CheckIcon style={{ color: "green" }}/> : <CloseIcon color="secondary"/>
+                                }
+                            </InputAdornment>,
+                        }}
+                        onChange={onChangeCurrentPwd}/>
+                    </div>
+                    <div className="textField">
+                        <TextField id="standard-password-input" label="New Password"
+                        type="password" autoComplete="current-password" variant="outlined" size="small"
+                        defaultValue={state.pwd1} 
+                        InputProps={{
+                            endAdornment: 
+                            <InputAdornment position="end">
+                                {state.pwd1 ?  
+                                (state.validpwd1 ? 
+                                (<CheckIcon style={{ color: "green" }}/>) : (<CloseIcon color="secondary"/>))
+                                : ''
+                                }
+                            </InputAdornment>,
+                        }}
+                        onChange={onChangePwd1}
+                        />
+                    </div>
+                    <div className="textField">
+                        <TextField id="standard-password-input" label="New Password"
+                        type="password" autoComplete="current-password" variant="outlined" size="small"
+                        defaultValue={state.pwd2}
+                        InputProps={{
+                            endAdornment: 
+                            <InputAdornment position="end">
+                                {state.pwd2 ?  
+                                (state.validpwd2 ? 
+                                (<CheckIcon style={{ color: "green" }}/>) : (<CloseIcon color="secondary"/>))
+                                : ''
+                                }
+                            </InputAdornment>,
+                        }}
+                        onChange={onChangePwd2}/>
+                    </div>
+                    <Button onClick={changePwdClick} variant="contained" color="primary">
+                        Cancel
+                    </Button>
+                    <Button variant="contained" color="secondary" 
+                        disabled={!state.submit} onClick={onSubmitClick}>
+                        Submit
+                    </Button>
+                </form>
+            </div>
+            { state.logout && (<div className="bg-modal-logout">
+                <div>
+                    <p><b>You have successfully changed your password!</b></p>
+                    <p>Click <b>Ok</b> to logout and log in back. :D</p>
+                    <Button onClick={logoutUser}>OKAY</Button>
                 </div>
-                <div className="textField">
-                    <TextField id="standard-password-input" label="New Password"
-                    type="password" autoComplete="current-password" variant="outlined" size="small"
-                    defaultValue={state.pwd1} 
-                    InputProps={{
-                        endAdornment: 
-                        <InputAdornment position="end">
-                            {state.pwd1 ?  
-                            (state.validpwd1 ? 
-                            (<CheckIcon style={{ color: "green" }}/>) : (<CloseIcon color="secondary"/>))
-                             : ''
-                             }
-                        </InputAdornment>,
-                    }}
-                    onChange={onChangePwd1}
-                    />
-                </div>
-                <div className="textField">
-                    <TextField id="standard-password-input" label="New Password"
-                    type="password" autoComplete="current-password" variant="outlined" size="small"
-                    defaultValue={state.pwd2}
-                    InputProps={{
-                        endAdornment: 
-                        <InputAdornment position="end">
-                            {state.pwd2 ?  
-                            (state.validpwd2 ? 
-                            (<CheckIcon style={{ color: "green" }}/>) : (<CloseIcon color="secondary"/>))
-                             : ''
-                             }
-                        </InputAdornment>,
-                    }}
-                    onChange={onChangePwd2}/>
-                </div>
-                <Button onClick={changePwdClick} variant="contained" color="primary">
-                    Cancel
-                </Button>
-                <Button variant="contained" color="secondary" 
-                    disabled={!state.submit} onClick={onSubmitClick}>
-                    Submit
-                </Button>
-            </form>
+            </div>)}
         </>
     );
 }

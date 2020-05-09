@@ -13,7 +13,6 @@ export function HeadersDiv ( props ) {
     const postData = async (m) => {
 
         let res = await PostOpr(token, m);
-        console.log("Post Data");
         setHeader(res);
     }
 

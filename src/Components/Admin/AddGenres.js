@@ -4,35 +4,6 @@ import { genres } from './Styles/addForm';
 import TextField from '@material-ui/core/TextField';
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 
-const styles = {
-    container:{
-        margin: "10px 0px"
-    },
-    header: {
-        display: "inline-block"
-    },
-    addBtn: {
-        float: "right",
-        display: "flex",
-        padding: "10px 20px",
-        background: "crimson",
-        color: "white"
-    },
-    input: {
-        marginLeft: "10px"
-    },
-    switch: {
-        margin: "10px 10px"
-    },
-    cancelBtn: {
-        float: "right",
-        display: "flex",
-        padding: "10px 20px",
-        background: "deepskyblue",
-        color: "white"
-    }
-}
-
 export function AddGenres ( props ) {
 
     const { postData } = props;

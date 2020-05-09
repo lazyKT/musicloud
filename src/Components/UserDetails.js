@@ -92,7 +92,7 @@ const UserDetails = () => {
     else
       dispatch({ type: 'removeError' });
 
-    if(event.target.value != state.user.username)
+    if(event.target.value !== state.user.username)
       dispatch({type: "validSumitBtn"})
 
     dispatch({type: 'updateOnChange', value: event.target.value});
