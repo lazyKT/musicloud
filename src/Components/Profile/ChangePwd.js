@@ -79,12 +79,12 @@ export function ChangePwd(props) {
         }
     }   
 
-    const onSubmitClick = event => {
+    const onSubmitClick = async (event) => {
         event.preventDefault();
         if (state.submit) {
-            console.log("Change Password!!!");
-            tokenRefresh(state.currentPwd, refresh_token);
-            changePwd(access_token, id, state.pwd1)
+            const authToken = await tokenRefresh(state.currentPwd, refresh_token);
+            const res = await changePwd(authToken, id, state.pwd1);
+            console.log(res);
         }
         else
             console.log("error",state.submit);

@@ -36,7 +36,7 @@ const Profile = (props) => {
             Auth.setAuth(false);
             props.history.push('/');
         }
-        setCookies(user);
+        setCookies(JSON.parse(user));
     },[user])
 
     const changePwdClick = () => {
