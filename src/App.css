@@ -29,6 +29,22 @@
   color: antiquewhite;
 }
 
+.navigation .img-container{
+  height: 40px;
+}
+
+.navigation img{
+  width: 45px;
+  height: 60%;
+  position: absolute;
+  border-radius: 50%;
+  border: solid;
+  float: right;
+  margin: auto 10px;
+}
+
+
+
 /* Admin Console Side Bar */
 
 .menu-icon{

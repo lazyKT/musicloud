@@ -1,4 +1,4 @@
-import React,{ useEffect, useReducer } from 'react';
+import React,{ useEffect, useReducer, useState } from 'react';
 import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
@@ -8,6 +8,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import { getAvatar } from './Admin/CrudFunctions/Users';
 
 // material ui styles
 
@@ -145,7 +146,8 @@ const UserDetails = () => {
           { state.loaded ?
               (<>
                 <div className={classes.profilePicDiv}>
-                  <Avatar alt="Remy Sharp" className={classes.large}>OP</Avatar>
+                  <Avatar alt={state.user.username} className={classes.large} 
+                    src={`http://127.0.0.1:8000/static/images/avatars/user_1.png`}/>
                   <Button className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
                      Upload   
                   </Button>

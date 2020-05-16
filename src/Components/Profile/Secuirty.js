@@ -40,6 +40,9 @@ function Security(props) {
         <>
             <div className="secDiv">
                 <h3>Security</h3>
+                <div>
+                    <h6>Last Update on 15/05/2020</h6>
+                </div>
                 <div className="subDiv">
                     <h4>Change Password</h4>
                     <div className="changePwdDiv">
