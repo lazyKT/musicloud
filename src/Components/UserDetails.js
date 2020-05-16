@@ -31,6 +31,7 @@ const useStyles = makeStyles( theme => ({
 function init (){
   return {
     user: {},
+    avatar: null,
     loaded: false,
     edit: false,
     error: false,
@@ -45,6 +46,8 @@ function init (){
 function reducer (state, action) {
 
   switch (action.type) {
+    case 'setAvatar':
+      return {...state,avatar: `user_${action.id}.png`}
     case 'userDetails':
       return {...state, user: action.user, loaded: true };
     case 'editClick':
@@ -82,6 +85,7 @@ const UserDetails = () => {
     console.log("Cookies Effect!!!");
     if (cookies && login) {
       console.log(cookies.username)
+      dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
     }
