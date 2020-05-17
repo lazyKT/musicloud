@@ -50,6 +50,16 @@ const Profile = (props) => {
         console.log("Logout!!!");
     }
 
+    const choosefile = event => {
+        let filename = event.target.files[0];
+        let reader = new FileReader();
+        let img = document.getElementById("preview");
+
+        reader.addEventListener('load', event => {
+            img.src = event.target.result;
+        });
+        reader.readAsDataURL(filename);
+    }
 
     return(
 
@@ -84,6 +94,14 @@ const Profile = (props) => {
                     </div>
                 </div>)
                 }
+                {/* <div className="bg-modal">
+                    <div className="upload-avatar">
+                        <form>
+                            <input onChange={choosefile} id="input" type="file"/>
+                            <img id="preview"/>
+                        </form>
+                    </div>
+                </div> */}
             </div>
         </Router>
     );

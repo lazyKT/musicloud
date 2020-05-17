@@ -79,12 +79,28 @@ const UserDetails = () => {
   const classes = useStyles(); // material ui styles class
 
   const { cookies, login } = useCookies();
+
   const [ state, dispatch ] = useReducer(reducer, init); 
+  //const [ blob, setBlob ] = useState(null);
+
+  const fetchAvatar = async (token, id) => {
+    const response = await getAvatar(token, id);
+    console.log(response instanceof Blob);
+    console.log(response);
+    let avatar = document.getElementById("avatar");
+    
+    let reader = new FileReader();
+    reader.addEventListener('load', event =>{
+      avatar.src = event.target.result;
+    });
+    reader.readAsDataURL(response);
+  }
 
   useEffect(() => {
     console.log("Cookies Effect!!!");
     if (cookies && login) {
       console.log(cookies.username)
+      fetchAvatar(cookies.access_token, cookies.id);
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
@@ -150,8 +166,10 @@ const UserDetails = () => {
           { state.loaded ?
               (<>
                 <div className={classes.profilePicDiv}>
-                  <Avatar alt={state.user.username} className={classes.large} 
-                    src={`http://127.0.0.1:8000/static/images/avatars/user_1.png`}/>
+                  <p id="test"></p>
+                  <div className="pp-container">
+                    <img id="avatar" className="profile-pic"/>
+                  </div>
                   <Button className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
                      Upload   
                   </Button>

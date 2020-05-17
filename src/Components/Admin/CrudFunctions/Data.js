@@ -3,8 +3,10 @@ import axios from 'axios';
 export const PostOpr = async (accessToken, newData) => {
 
     try {
+        console.log(accessToken);
         const response = await axios.post(`http://127.0.0.1:8000/genres`, newData,
         { headers: { "Authorization": `Bearer ${accessToken}` } });
+        console.log(response);
         return response;
     } catch (error) {
         console.log(error);
@@ -31,6 +33,7 @@ export const EditOpr = async (accessToken, id,updateData) => {
     try {
         const response = await axios.put(`http://127.0.0.1:8000/user/${id}`,
         updateData, { headers: { "Authorization": `Bearer ${accessToken}` }});
+        console.log(response);
         return response;
     } catch (error) {
         console.log(error);

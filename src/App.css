@@ -228,11 +228,16 @@
 
 
 /* Profile Page */
+.pp-container {
+  padding: 5px;
+  border-top: solid 1px coral;
+  border-radius: 50%;
+  margin: auto;
+}
 
 .profile-pic{
-  width: 100px;
-  height: 100px;
-  margin: 20px;
+  height: 150px;
+  border-radius: 50%;
 }
 
 
@@ -438,4 +443,10 @@
 
 .bg-modal-logout Button:hover{
   background: bisque;
+}
+
+.upload-avatar{
+  width: 40vh;
+  height: 40vh;
+  background-color: #fff;
 }
