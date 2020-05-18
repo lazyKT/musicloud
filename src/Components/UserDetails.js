@@ -2,13 +2,11 @@ import React,{ useEffect, useReducer, useState } from 'react';
 import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
-import { EditOpr } from './Admin/CrudFunctions/Data';
+import { EditOpr, getAvatar } from './Admin/CrudFunctions/Data';
 import Cookies from 'js-cookie';
-import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import { getAvatar } from './Admin/CrudFunctions/Users';
 
 // material ui styles
 
@@ -74,38 +72,24 @@ function reducer (state, action) {
 }
 
 
-const UserDetails = () => {
+const UserDetails = ({uploadAvatar, updatedImg}) => {
 
   const classes = useStyles(); // material ui styles class
 
   const { cookies, login } = useCookies();
 
   const [ state, dispatch ] = useReducer(reducer, init); 
-  //const [ blob, setBlob ] = useState(null);
-
-  const fetchAvatar = async (token, id) => {
-    const response = await getAvatar(token, id);
-    console.log(response instanceof Blob);
-    console.log(response);
-    let avatar = document.getElementById("avatar");
-    
-    let reader = new FileReader();
-    reader.addEventListener('load', event =>{
-      avatar.src = event.target.result;
-    });
-    reader.readAsDataURL(response);
-  }
+  const [ avatar, setAvatar ] = useState("");
 
   useEffect(() => {
-    console.log("Cookies Effect!!!");
     if (cookies && login) {
-      console.log(cookies.username)
-      fetchAvatar(cookies.access_token, cookies.id);
+      //fetchAvatar(cookies.access_token, cookies.id);
+      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}?` + new Date().getTime())
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
     }
-  },[cookies]);
+  },[cookies, updatedImg]);
 
   const onChangeListender = event =>{
     if((event.target.value).length < 4)
@@ -168,9 +152,10 @@ const UserDetails = () => {
                 <div className={classes.profilePicDiv}>
                   <p id="test"></p>
                   <div className="pp-container">
-                    <img id="avatar" className="profile-pic"/>
+                    <img id="avatar" className="profile-pic" src={avatar}/>
                   </div>
-                  <Button className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
+                  <Button onClick={uploadAvatar} 
+                    className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
                      Upload   
                   </Button>
                 </div>

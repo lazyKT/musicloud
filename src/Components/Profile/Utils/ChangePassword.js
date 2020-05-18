@@ -14,7 +14,7 @@ export const tokenRefresh = async (pwd, refreshToken) => {
 export const changePwd = async (authToken, id, newPwd) => {
 
     try {
-        const response = await axios.put(`http://127.0.0.1:8000/changepwd/${id}`, {new_pwd: newPwd},
+        const response = await axios.put(`http://127.0.0.1:8000/changepwd/${id}`, {password: newPwd},
         { headers: { "Authorization": `Bearer ${authToken}` } });
         return response;
     } catch (error) {

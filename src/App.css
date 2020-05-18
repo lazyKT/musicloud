@@ -237,6 +237,7 @@
 
 .profile-pic{
   height: 150px;
+  width: 150px;
   border-radius: 50%;
 }
 
@@ -449,4 +450,36 @@
   width: 40vh;
   height: 40vh;
   background-color: #fff;
+}
+
+.upload-avatar .file-input{
+  display: block;
+  margin: 10px auto;
+}
+
+.upload-avatar img{
+  display: block;
+  height: 30vh;
+  width: 35vh;
+  margin: 10px auto;
+}
+
+.upload-avatar .btn-div{
+  float: right;
+  margin: auto 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-div input{
+  background-color: coral;
+  padding: auto 5px;
+  border: coral solid;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.btn-div input:hover{
+  background-color: chocolate;
+  border: chocolate solid;
 }

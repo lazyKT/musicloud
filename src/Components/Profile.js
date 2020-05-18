@@ -10,6 +10,7 @@ import { Notifications } from './Profile/Notifications';
 import { Connect } from './Profile/Connect';
 import { ChangePwd } from './Profile/ChangePwd';
 import { Button } from '@material-ui/core';
+import { uploadAvatarOpr, logoutOpr } from '../Components/Admin/CrudFunctions/Data';
 
 const styles = {
     mainDiv: {
@@ -32,6 +33,9 @@ const Profile = (props) => {
     const [ showModal, setShowModal ] = useState(false);
     const [ cookies, setCookies ] = useState({});
     const [ logout, setLogout ] = useState(false);
+    const [ img, setImg] = useState(null);
+    const [ updatedImg, setUpdatedImg] = useState(null);
+    const [ showUpload, setShowUpload ] = useState(false);
     
     useEffect(()=>{
         if(!login){
@@ -46,16 +50,36 @@ const Profile = (props) => {
         setShowModal(!showModal);
     }
 
-    const logoutClick = () => {
-        console.log("Logout!!!");
+    const logoutClick = async () => {
+        const res = await logoutOpr(cookies.access_token);
+        if (res.status === 200) {
+            console.log("Logout!!!");
+        }
+    }
+
+    const showUploadModal = () => {
+        setShowUpload(prevState => !prevState);
+    }
+
+    const uploadAvatar = async event => {
+        event.preventDefault();
+        const formData = new FormData();
+
+        formData.append("image", img, img.name);
+        
+        const res = await uploadAvatarOpr(cookies.access_token, cookies.id, formData);
+        if (res.status === 201) {
+            setShowUpload(prevState => !prevState);
+            setUpdatedImg(img);
+        }
     }
 
     const choosefile = event => {
         let filename = event.target.files[0];
         let reader = new FileReader();
         let img = document.getElementById("preview");
-
-        reader.addEventListener('load', event => {
+        setImg(filename);
+        reader.addEventListener('load', event => {         
             img.src = event.target.result;
         });
         reader.readAsDataURL(filename);
@@ -74,7 +98,8 @@ const Profile = (props) => {
                     </div>
                 </div>
                 <div style={styles.setting}>
-                    <Route path="/profile" exact component={ UserDetails } />
+                    <Route path="/profile" exact render={props =>
+                     <UserDetails {...props} updatedImg={updatedImg} uploadAvatar={showUploadModal}/>}/>
                     <Route path="/profile/security" exact
                      render={(props) => 
                      <Security {...props} changePwdClick={changePwdClick}/>}/>
@@ -94,14 +119,20 @@ const Profile = (props) => {
                     </div>
                 </div>)
                 }
-                {/* <div className="bg-modal">
+                {showUpload && 
+                (<div className="bg-modal">
                     <div className="upload-avatar">
-                        <form>
-                            <input onChange={choosefile} id="input" type="file"/>
+                        <form id="form" onSubmit={uploadAvatar}>
+                            <input className="file-input"
+                             onChange={choosefile} id="input" type="file" required/>
                             <img id="preview"/>
+                            <div className="btn-div">
+                                <Button onClick={showUploadModal}>Cancel</Button>
+                                <input type="submit" value="Upload"/>
+                            </div>
                         </form>
                     </div>
-                </div> */}
+                </div>)}
             </div>
         </Router>
     );
