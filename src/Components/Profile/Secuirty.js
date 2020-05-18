@@ -26,8 +26,6 @@ function reducer(state, action) {
 
 function Security(props) {
 
-    console.log(props);
-
     const { changePwdClick } = props;
 
     const [ state, dispatch ] = useReducer(reducer, init);
@@ -46,13 +44,10 @@ function Security(props) {
                 <div className="subDiv">
                     <h4>Change Password</h4>
                     <div className="changePwdDiv">
-                        { state.changepwd ? 
-                            (<ChangePwd cancelPwdClick={cancelPwdClick}/>) :
-                            (<Button variant="outlined"  className="changePwdBtn"
+                        <Button variant="outlined"  className="changePwdBtn"
                             onClick={changePwdClick} >
                             Change Password
-                            </Button>)
-                        }                       
+                        </Button>                     
                     </div>
                 </div>
                 <div className="subDiv">

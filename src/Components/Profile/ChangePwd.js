@@ -1,5 +1,6 @@
 import React, { useReducer, useContext } from 'react';
 import { tokenRefresh, changePwd } from './Utils/ChangePassword';
+import { logoutOpr } from '../Admin/CrudFunctions/Data';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -18,7 +19,8 @@ function init(){
         validpwd1: false,
         validpwd2: false,
         submit: false,
-        logout: false
+        logout: false,
+        logoutToken: null
     })
 }
 
@@ -37,7 +39,7 @@ function reducer(state, action) {
         case ('no-submit'):
             return {...state, submit: false};
         case ('logout'):
-            return {...state, logout: true};
+            return {...state, logout: true, logoutToken: action.token};
         default:
             throw new Error();
     }
@@ -53,7 +55,7 @@ function validate(pwd) {
 export function ChangePwd(props) {
 
     const { changePwdClick, cookies } = props;
-    const { id, refresh_token } = cookies;
+    const { id, refresh_token, access_token } = cookies;
 
     const [ state, dispatch ] = useReducer(reducer, init);
     const Auth = useContext(userContext);
@@ -86,13 +88,13 @@ export function ChangePwd(props) {
         if (state.submit) {
             const authToken = await tokenRefresh(state.currentPwd, refresh_token);
             const res = await changePwd(authToken, id, state.pwd1);
-            res.status === 200 ? dispatch({type:'logout'}) : console.log("error");
+            res.status === 200 ? dispatch({type:'logout', token: authToken}) : console.log("error");
         }
         else
             console.log("error",state.submit);
     }
 
-    const logoutUser = () => {
+    const logoutUser = async () => {
         Auth.setAuth(false);
         Cookies.remove("user");
         Cookies.remove("tokens");

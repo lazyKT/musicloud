@@ -50,13 +50,6 @@ const Profile = (props) => {
         setShowModal(!showModal);
     }
 
-    const logoutClick = async () => {
-        const res = await logoutOpr(cookies.access_token);
-        if (res.status === 200) {
-            console.log("Logout!!!");
-        }
-    }
-
     const showUploadModal = () => {
         setShowUpload(prevState => !prevState);
     }
@@ -67,7 +60,7 @@ const Profile = (props) => {
 
         formData.append("image", img, img.name);
         
-        const res = await uploadAvatarOpr(cookies.access_token, cookies.id, formData);
+        const res = await uploadAvatarOpr(cookies.access_token, formData);
         if (res.status === 201) {
             setShowUpload(prevState => !prevState);
             setUpdatedImg(img);
@@ -115,7 +108,7 @@ const Profile = (props) => {
                     <div>
                         <p><b>You have successfully changed your password!</b></p>
                         <p>Click <b>Ok</b> to logout and log in back. :D</p>
-                        <Button onClick={logoutClick}>OKAY</Button>
+                        <Button>OKAY</Button>
                     </div>
                 </div>)
                 }

@@ -46,7 +46,7 @@ export const EditOpr = async (accessToken, id,updateData) => {
 export const uploadAvatarOpr = async (accessToken, data) => {
 
     let headers = { "Authorization": `Bearer ${accessToken}`, "Content-Type": "multipart/form-data"}
-
+    console.log(data);
     try {
         const response = await axios.put(`http://127.0.0.1:8000/upload/avatar`, data, {headers});
         console.log(response);
@@ -57,9 +57,10 @@ export const uploadAvatarOpr = async (accessToken, data) => {
 }
 
 export const logoutOpr = async accessToken => {
+    console.log(accessToken);
     try {
         const response = await axios.post(`http://127.0.0.1:8000/logout`, 
-         { headers: { "Authorization": `Bearer ${accessToken}` }});
+        { headers: { "Authorization": `Bearer ${accessToken}` }});
         console.log(response);
         return response;
     }

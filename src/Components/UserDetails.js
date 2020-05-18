@@ -80,11 +80,17 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
 
   const [ state, dispatch ] = useReducer(reducer, init); 
   const [ avatar, setAvatar ] = useState("");
+  const [ avatarHash, setAvatarHash ] = useState("");
+
+  useEffect(() => {
+    console.log("Render!!")
+    setAvatarHash(new Date().getTime());
+  }, [updatedImg])
 
   useEffect(() => {
     if (cookies && login) {
       //fetchAvatar(cookies.access_token, cookies.id);
-      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}?` + new Date().getTime())
+      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}`)
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
@@ -152,7 +158,7 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
                 <div className={classes.profilePicDiv}>
                   <p id="test"></p>
                   <div className="pp-container">
-                    <img id="avatar" className="profile-pic" src={avatar}/>
+                    <img id="avatar" className="profile-pic" src={`${avatar}?${avatarHash}`}/>
                   </div>
                   <Button onClick={uploadAvatar} 
                     className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>
