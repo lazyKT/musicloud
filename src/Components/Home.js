@@ -2,7 +2,7 @@ import React,{ useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { userContext } from '../Contexts/userContext';
 import Cookies from 'js-cookie'
-import { withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Link, withRouter } from 'react-router-dom';
 import '../App.css';
 
 function Home(props){
@@ -69,6 +69,7 @@ function Home(props){
               <button className="registerBtn" onClick={handleRegister}>
                 Register
               </button>
+              <Link to='/forget-password'>Forget Password?</Link>
               { error ? 
                 <div className="errorResponse">
                   { error }

@@ -1,7 +1,10 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 
-export function About(){
+function About(){
     return(
         <div>About</div>
     )
 }
+
+export default withRouter(About)

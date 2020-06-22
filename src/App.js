@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './Components/Home';
-import { About } from './Components/About';
+import About from './Components/About';
 import { Dashboard } from './Components/Dashboard';
 import { userContext } from './Contexts/userContext';
 import ProtectedRoute from './Routes/ProtectedRoute';
@@ -11,7 +11,7 @@ import ProtectedLogin from './Routes/ProtectedLogin';
 import { Nav } from './Components/Navigation/Nav';
 import Register from './Components/Register';
 import Profile from './Components/Profile';
-import AdminHome from './Components/Admin/AdminHome';
+import ForgetPassword from './Components/ForgetPassword'
 
 function App() {
 
@@ -36,7 +36,8 @@ function App() {
         <Nav/>
         <ProtectedLogin value="/" path="/" exact component={ Home }/>
         <Route value="/register" path="/register" component={ Register } />
-        <Route path="/about" component={ About } />
+        <Route value="/about" path="/about" component={ About } />
+        <Route path="/forget-password" component={ ForgetPassword }/>
         <ProtectedRoute path="/profile" component={ Profile }/>
         <ProtectedRoute path="/dashboard" component={ Dashboard } />
       </Router>

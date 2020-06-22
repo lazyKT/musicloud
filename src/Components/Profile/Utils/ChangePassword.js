@@ -23,3 +23,19 @@ export const changePwd = async (authToken, id, newPwd) => {
         return error.response ? error.response : "Server Fault!!!";
     }
 }
+
+/**
+ * Request for a password-reset link. The password-reset link will be sent to the user email address.
+ * Sent a POST network request to the server along with the email address given by user.
+ */
+export const resetPwd = async email => {
+    console.log(email);
+    try {
+        const response = await axios.post(`http://127.0.0.1:8000/forget-password`, {email});
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+}
