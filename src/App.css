@@ -133,11 +133,9 @@
 }
 
 .container .innerDiv{
-  width: 35%;
+  width: 350px;
   height: fit-content;
-  border: solid 0.2px lightgray;
   padding: 20px;
-  border-radius: 10px;
 }
 
 .innerDiv input{
@@ -149,18 +147,19 @@
   border: solid gray;
 }
 
-.innerDiv button{
- background-color: #000;
- color: #fff;
- width: 45%;
- margin: 10px 5px;
- height: 40px;
- border-radius: 10px;
- border: solid;
+.login-button{
+  display: block;
+  width: 100%;
+  margin: 20px 0px;
+  height: 35px;
+  background: green;
+  border-radius: 5px;
+  border: none;
+  color: white;
 }
 
-.innerDiv button:hover{
-  background-color: darkgray;
+.login-button:hover{
+  background-color: darkgreen;
 }
 
 .innerDiv .errorResponse{
