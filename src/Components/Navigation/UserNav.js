@@ -5,6 +5,37 @@ import { userContext } from '../../Contexts/userContext';
 import '../../App.css'
 import { logoutOpr } from '../Admin/CrudFunctions/Data';
 
+
+// Styling of nav elements
+const styles = {
+    div: {
+        width: "50%"
+    },
+    h3: {
+        width: "fit-content",
+        margin: "15px auto",
+        fontFamily: "fantasy",
+        color: "wheat",
+        textDecoration: "none",
+        cursor: "pointer"
+    },
+    ul: {
+        display: "flex",
+        justifyContent: "space-around",
+        listStyle: "none",
+        width: "50%",
+        float: "right"
+    },
+    link: {
+        display: "block",
+        margin: "auto",
+        textDecoration: "none",
+        color: "white",
+        fontWeight: "600",
+        fontFamily: "sans-serif"
+    }
+}
+
 export const UesrNav = () => {
     
     const Auth = useContext(userContext);
@@ -25,12 +56,17 @@ export const UesrNav = () => {
     }
 
     return(
-        <ul>
-            <Link to="/"><li>Home</li></Link>
-            <Link to="/"><li>About</li></Link>
-            <Link to="/profile"><li>Profile</li></Link>
-            <Link to="/"><li>Library</li></Link>
-            <li><button onClick={ handleLogout } className="authBtn">Logout</button></li>
-        </ul>
+        <>
+            <div style={styles.div}>
+                <Link to="/">
+                    <h3 style={styles.h3}>MusiCloud</h3>
+                </Link>
+            </div>
+            <ul style={styles.ul}>
+                <Link style={styles.link} to="/"><li>Contact</li></Link>
+                <Link style={styles.link} to="/profile"><li>Profile</li></Link>
+                <li style={styles.link}><button onClick={ handleLogout } className="authBtn">Logout</button></li>
+            </ul>
+        </>
     );
 }

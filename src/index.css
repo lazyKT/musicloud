@@ -1,5 +1,5 @@
 body > #root > div {
-  height: fit-content;
+  height: 100%;
 }
 
 body {

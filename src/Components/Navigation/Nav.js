@@ -4,7 +4,19 @@ import { PublicNav } from './PublicNav';
 import { AdminNav } from './AdminNav';
 import { UesrNav } from './UserNav';
 import Cookies from 'js-cookie';
-import '../../App.css';
+//import '../../App.css';
+
+/**
+ * Navigation Styles
+ */
+const styles = {
+    navBar: {
+        display: "flex",
+        background: "black",
+        color: "wheat"
+    },
+}
+
 
 export const Nav = () => {
 
@@ -21,7 +33,7 @@ export const Nav = () => {
     });
 
     return(
-        <nav className="navigation">
+        <nav style={styles.navBar}>
             {
                 Auth.auth ? 
                 (
