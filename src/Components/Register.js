@@ -10,10 +10,11 @@ import '../App.css'
 // Styling for Registeration Components
 const styles = {
     msg: {
-        width: "300px",
+        width: "200px",
         fontSize: "13px",
         color: "white",
-        background: "coral"
+        background: "coral",
+        padding: "10px"
     }
 }
 
@@ -96,11 +97,16 @@ const Register = props => {
           setEmail(event.target.value);
     }
 
+    /**
+     * This is a helper function of Password validation.
+     * Passwords must include at least 8 charactors, 1 uppercase, 1 lowercase and 1 digit.
+     */
     const validatePassword = pwd => {
         let format = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/;
         return format.test(pwd);
     }
 
+    // Password Validation
     const passwordHandler1 = event => {
         if((event.target.value).length < 8){
             setPwderror(true);
@@ -115,6 +121,7 @@ const Register = props => {
         setPassword1(event.target.value);
     }
 
+    // Confirm Password Validation 
     const passwordHandler2 = event => {
         if(event.target.value === password1){
             setPwderror2(false);
@@ -126,8 +133,12 @@ const Register = props => {
         setPassword2(event.target.value);
     }
 
+    // Handle Click event on Register Button
     const onSubmitHandler = event => {
          event.preventDefault();
+         // Remove Messages from previouse Render
+         setMsg(null);
+         setHttperror(null);
          axios.post('http://127.0.0.1:8000/register',{
                     username,
                     email,
@@ -135,7 +146,8 @@ const Register = props => {
                     role: ''
                 }).then(response => {
                     if(response.status === 201){
-                        console.log(response);
+                        // On Successful Registeration,
+                        // message user to activate the account via email link
                         setMsg(response.data.msg);
                     }
                 }).catch(e => {
@@ -186,12 +198,8 @@ const Register = props => {
                     <button disabled={!ready} type="submit" style={ready?null:Register_btn_disable}>
                         Register
                     </button>
-                    {
-                        httperror ? 
-                        <div>
-                            { httperror }
-                        </div> : null
-                    }
+                    {/* message of results */}
+                    <div>{httperror}</div>
                     <div>{ msg }</div>
                 </form>
             </div>
