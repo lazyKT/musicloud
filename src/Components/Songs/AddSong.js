@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 // Stylings for the AddSong DOM Elements
 const styles = {
+    formTitle: {
+        display: "block",
+        width: "fit-content",
+        margin: "5px auto",
+        color: "coral",
+        fontFamily: "sans-serif"
+    },
     formDiv: {
-        width: "300px",
+        width: "350px",
         background: "white",
         borderRadius: "10px"
     },
@@ -23,8 +31,9 @@ const styles = {
     },
     cancelBtn: {
         width: "fit-content",
-        height: "30px",
-        margin: "20px 0px"
+        height: "fit-content",
+        margin: "20px 0px",
+        padding: "7px 20px"
     },
     postBtn: {
         width: "fit-content",
@@ -32,7 +41,7 @@ const styles = {
         margin: "20px 0px",
         float: "right",
         background: "green",
-        padding: "10px 20px",
+        padding: "10px 30px",
         borderRadius: "5px",
         border: "none",
         color: "white"
@@ -42,16 +51,60 @@ const styles = {
         verticalAlign: "middle"
     },
     titleDiv: {
-        display: "inline-block",
-        margin: "10px 0px"
+        display: "block",
+        margin: "10px 0px",
+        cursor: "pointer"
+    },
+    help: {
+        width: "80%",
+        height: "fit-content",
+        borderRadius: "5px",
+        padding: "5px",
+        fontSize: "12px",
+        zIndex: "1",
+        display: "flex",
+        background: "coral",
+        color: "white",
+        margin: "5px 0px"
+    },
+    regulationDiv: {
+        padding: "10px",
+        fontSize: "12px"
     }
+}
+
+const Regulations = _ => {
+    return(
+        <div style={styles.regulationDiv}>
+            <p>Before Posting the new Song</p>
+            <ul>
+                <li>Make sure the url is valid.</li>
+                <li>The song quality is based on the url provided.</li>
+                <li>Make sure you choose the correct tilte, once created, no reversing.</li>
+            </ul>
+            Thanks for your supports :)
+        </div>
+    );
 }
 
 export function AddSong(props) {
 
     const [ hover, setHover ] = useState(false);
+    const [ urlHelp, setUrlHelp ] = useState(false);
+    const [ titleHelp, setTitleHelp ] = useState(false);
 
     const { addDiv, toggle } = props;
+
+    const urlhelpTxt = "Please enter the desired youtube video url.";
+    const titlehelpTxt = "Please enter the title for the song. Make sure you enter the right title.";
+
+    function onHoverURLTitle() {
+        setUrlHelp(!urlHelp);
+    }
+
+    function onHoverSongTitle() {
+        setTitleHelp(!titleHelp);
+    }
 
     // Trigerring hover effects
     function onHoverPostBtn(event) {
@@ -63,17 +116,34 @@ export function AddSong(props) {
     return(
         <div style={addDiv}>
             <div style={styles.formDiv}>
+                <h4 style={styles.formTitle}>Add a new Song</h4>
                 <form style={styles.form}>
-                    <div style={styles.titleDiv}>
+                    { urlHelp && 
+                        <div style={styles.help}>
+                            {urlhelpTxt}
+                        </div>
+                    }
+
+                    {/* URL Input */}
+                    <div style={styles.titleDiv}
+                     onClick={onHoverURLTitle}>
                         <span>Video URL</span>
                         <HelpOutlinedIcon style={styles.icon}/>
                     </div>
-                    <input style={styles.input}/>
-                    <div style={styles.titleDiv}>
-                        <span>Video URL</span>
+                    <input style={styles.input} required/>
+                    { titleHelp && 
+                        <div style={styles.help}>
+                            {titlehelpTxt}
+                        </div>
+                    }
+
+                    {/* Title Input */}
+                    <div style={styles.titleDiv}
+                     onClick={onHoverSongTitle}>
+                        <span>Song Title</span>
                         <HelpOutlinedIcon style={styles.icon}/>
                     </div>
-                    <input style={styles.input}/>
+                    <input style={styles.input} required/>
                     <button style={styles.cancelBtn}
                      onClick={toggle}>
                         CANCEL
@@ -84,6 +154,8 @@ export function AddSong(props) {
                         POST
                     </button>
                 </form>
+                <hr></hr>
+                <Regulations/>
             </div>
         </div>
     );

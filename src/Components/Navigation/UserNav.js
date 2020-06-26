@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { userContext } from '../../Contexts/userContext';
-import '../../App.css'
-import { logoutOpr } from '../Admin/CrudFunctions/Data';
+import '../../App.css';
 
 
 // Styling of nav elements

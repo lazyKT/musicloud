@@ -7,6 +7,17 @@ import Tick from '../Imgs/tick.png';
 import Error from '../Imgs/close.png'
 import '../App.css'
 
+// Styling for Registeration Components
+const styles = {
+    msg: {
+        width: "300px",
+        fontSize: "13px",
+        color: "white",
+        background: "coral"
+    }
+}
+
+
 const valid_icon = {
     width: "15px",
     marginLeft: "10px"
@@ -33,6 +44,7 @@ const Register = props => {
     const [ loginUser, setLoginUser ] = useState(null);
     const [ loginReady, setLoginReady ] = useState(false);
     const [ httperror, setHttperror ] = useState(null);
+    const [ msg, setMsg ] = useState(null);
 
     const Auth = useContext(userContext);
 
@@ -114,18 +126,7 @@ const Register = props => {
         setPassword2(event.target.value);
     }
 
-    const Performlogin = (username,password) => {
-        axios.post("http://127.0.0.1:8000/login",{username, password})
-        .then( res => {
-            if(res.status === 200){
-                setLoginOK(true);
-                setLoginUser(res.data);
-                console.log(res.data);
-            }
-      })
-    }
-
-     const onSubmitHandler = event => {
+    const onSubmitHandler = event => {
          event.preventDefault();
          axios.post('http://127.0.0.1:8000/register',{
                     username,
@@ -134,7 +135,8 @@ const Register = props => {
                     role: ''
                 }).then(response => {
                     if(response.status === 201){
-                        Performlogin(username,password1);
+                        console.log(response);
+                        setMsg(response.data.msg);
                     }
                 }).catch(e => {
                     Promise.reject(e.response);
@@ -190,6 +192,7 @@ const Register = props => {
                             { httperror }
                         </div> : null
                     }
+                    <div>{ msg }</div>
                 </form>
             </div>
         </>

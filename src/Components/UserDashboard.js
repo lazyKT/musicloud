@@ -35,6 +35,7 @@ const styles = {
 export function UserDashboard() {
 
     const [ adding, setAdding ] = useState(false);
+    const [ hover, setHover ] = useState(false);
 
     // Toggle the "Add Song Form"
     function toggleAddForm() {
@@ -42,12 +43,18 @@ export function UserDashboard() {
         setAdding(!adding);
     }
 
+    function onHover(event) {
+        setHover(!hover);
+        hover ? (event.target.style.textDecoration = 'none') :
+            (event.target.style.textDecoration = 'underline');
+    }
 
     return(
         <div className="mainDiv">
             <div style={styles.div}>
                 <pre style={styles.pre}>It's empty here. </pre>
-                <p onClick={toggleAddForm} style={styles.p}>
+                <p onClick={toggleAddForm} style={styles.p}
+                 onMouseOver={onHover} onMouseLeave={onHover}>
                     Try to add something to listen.
                 </p>
             </div>

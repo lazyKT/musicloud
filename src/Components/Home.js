@@ -2,7 +2,7 @@ import React,{ useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { userContext } from '../Contexts/userContext';
 import Cookies from 'js-cookie'
-import { BrowserRouter as Router, Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import '../App.css';
 
 /**
@@ -67,17 +67,12 @@ const styles = {
 /**
  * Home Function. Sign In Page
  */
-function Home(props){
+function Home(){
   const [ user, setUser ] = useState({username:'',password:''});
   const [ loginUser, setLoginUser ] = useState(null);
   const [ error, setError ] = useState(null);
 
   const Auth = useContext(userContext);
-
-  const handleRegister = () => {
-    console.log("register clcked!!");
-    props.history.push("/register");
-  }
 
   const handleChange = event => {
     setUser({
