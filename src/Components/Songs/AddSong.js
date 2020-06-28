@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
-import zIndex from '@material-ui/core/styles/zIndex';
+import { postSongForProcess, checkTaskStatus } from './SongRequests';
 
 // Stylings for the AddSong DOM Elements
 const styles = {
@@ -87,16 +87,69 @@ const Regulations = _ => {
     );
 }
 
+// Initial state for the useReducer Hook
+const init = {
+    song: [],
+    url: "",
+    title: ""
+}
+
+// reduser function for useReducer Hook
+function reducer(state, action) {
+
+    const { song, url, title } = state;
+
+    switch(action.type) {
+        case 'urlChange':
+            return {...state, url: action.url};
+        case 'titleChange':
+            return {...state, title: action.title};
+        case 'add-queue':
+            return {...state, song: song.push(action.song)}
+        default:
+            throw new Error('reducer error!');
+    }
+}
+
+/* This is a helper function for AddSong Component to check status of mp3 conversion process*/
+async function checkStatus(task_id) {
+    const response = await checkTaskStatus(task_id);
+    if (response.status === 201) {
+        console.log("Good To Go");
+    } else {
+        checkStatus(task_id);
+    }
+}
+
+/* This is a helper component to post a song to server */
 export function AddSong(props) {
 
     const [ hover, setHover ] = useState(false);
     const [ urlHelp, setUrlHelp ] = useState(false);
     const [ titleHelp, setTitleHelp ] = useState(false);
 
+    // Reducer
+    const [state, dispatch] = useReducer(reducer, init);
+
     const { addDiv, toggle } = props;
 
     const urlhelpTxt = "Please enter the desired youtube video url.";
     const titlehelpTxt = "Please enter the title for the song. Make sure you enter the right title.";
+
+
+    // onChange function for url input
+    function urlOnChange(event) {
+        const url = event.target.value;
+        // dispatch function to assign url in reducer!
+        dispatch({type: 'urlChange', url});
+    }
+
+    // onChange function for title input
+    function titleOnChange(event) {
+        const title = event.target.value;
+        // dispatch function to assign title in reducer!
+        dispatch({type: 'titleChange', title});
+    }
 
     function onHoverURLTitle() {
         setUrlHelp(!urlHelp);
@@ -106,11 +159,36 @@ export function AddSong(props) {
         setTitleHelp(!titleHelp);
     }
 
-    // Trigerring hover effects
+    // Trigerring hover effects on POST button
     function onHoverPostBtn(event) {
         setHover(!hover);
         hover ? event.target.style.background = 'green' :
             event.target.style.background = 'darkgreen'
+    }
+
+    /* 
+    Post a video url to server for the converion of video to mp3
+    This is just a POST request to the server for the conversion.
+    The ideal response will be 200, acknowledgement from the server has received the task and start processing.
+    Upon Successful POST, the app will check the conversion status in every 5 seconds.(5 times).
+    Processes which finished processing in 25 seconds will be alert back to the user that the mp3 is ready to play.
+    Processes which exeeds more than 25-second processing time will be regarded as an error and 
+    prompt the user to try again.
+    */
+    async function postSong(event) {
+        event.preventDefault();
+        
+        const { url, title } = state;
+
+        const song = { url, title, user_id: 1, genre_id: 1};
+
+        const response = await postSongForProcess(song);
+        console.log(response);
+        if (response.status === 201) {
+            // add song to status check queue
+            dispatch({type: 'add-queue', song});
+            // Need to fetch conversion status
+        }
     }
 
     return(
@@ -130,7 +208,9 @@ export function AddSong(props) {
                         <span>Video URL</span>
                         <HelpOutlinedIcon style={styles.icon}/>
                     </div>
-                    <input style={styles.input} required/>
+                    <input style={styles.input} name="url" value={state.url}
+                     onChange={urlOnChange}
+                     required/>
                     { titleHelp && 
                         <div style={styles.help}>
                             {titlehelpTxt}
@@ -143,12 +223,15 @@ export function AddSong(props) {
                         <span>Song Title</span>
                         <HelpOutlinedIcon style={styles.icon}/>
                     </div>
-                    <input style={styles.input} required/>
+                    <input style={styles.input} name="title" value={state.title}
+                     onChange={titleOnChange}
+                     required/>
                     <button style={styles.cancelBtn}
                      onClick={toggle}>
                         CANCEL
                     </button>
                     <button style={styles.postBtn}
+                        onClick={postSong}
                         onMouseOver={onHoverPostBtn}
                         onMouseLeave={onHoverPostBtn}>
                         POST
