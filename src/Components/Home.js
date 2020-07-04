@@ -96,7 +96,7 @@ function Home(){
   const handleSubmit = async event => {
     event.preventDefault();
     console.log(user.username,user.password);
-    axios.post("http://127.0.0.1:8000/login",{username: user.username, password: user.password})
+    axios.post("http://13.212.2.7/login",{username: user.username, password: user.password})
       .then( response => {
         const data = response.data;
         setLoginUser(data);
@@ -119,6 +119,7 @@ function Home(){
     <div className="mainDiv">
       <div className="container">
         <div className="innerDiv">
+        { process.env.REACT_APP_API_URL }
         <h4 className="registerTitle">Login</h4>
           <form style={styles.form} onSubmit={handleSubmit}>
               <p style={styles.UsernameLabel}>Username or email address</p>

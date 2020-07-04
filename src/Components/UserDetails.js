@@ -2,14 +2,14 @@ import React,{ useEffect, useReducer, useState } from 'react';
 import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
-import { EditOpr, getAvatar } from './Admin/CrudFunctions/Data';
+import { EditOpr } from './Admin/CrudFunctions/Data';
+import { config } from './Config';
 import Cookies from 'js-cookie';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 
-// material ui styles
-
+// ui styles
 const useStyles = makeStyles( theme => ({
   profilePicDiv:{
     width: "100%",
@@ -90,7 +90,7 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
   useEffect(() => {
     if (cookies && login) {
       //fetchAvatar(cookies.access_token, cookies.id);
-      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}`)
+      setAvatar(`${config.API_URL}/avatar/${cookies.id}`)
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});

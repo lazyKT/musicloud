@@ -15,6 +15,8 @@ import ForgetPassword from './Components/ForgetPassword'
 
 function App() {
 
+  console.log(process.env.REACT_APP_API_KEY)
+
   const [ auth, setAuth ] = useState(false);
 
   const readCookies = () => {
