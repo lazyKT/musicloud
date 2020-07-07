@@ -100,7 +100,6 @@ function Home(){
       .then( response => {
         const data = response.data;
         setLoginUser(data);
-        //performLogin()
       }).catch(error => {
         if (error.response) {
           Promise.reject(error.response);

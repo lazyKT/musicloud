@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { AddSong } from './Songs/AddSong'
+import { useCookies } from './Hooks/useCookies';
+import { fetchMySongsReq } from './UsersReqs/Songs'
 
 // Styling for the DOM elements
 const styles = {
@@ -32,10 +34,37 @@ const styles = {
     }
 }
 
+/* -- Initial Values for useReducer -- */
+const init = {
+    songs: []
+}
+
+
+/* -- Reducer Function for useReducer Hook -- */
+function reducer(action, state) {
+    switch(action.type) {
+        default:
+            throw new Error('Invalid Case for MySongs');
+    }
+}
+
+
+/* -- User DashBoard After Login -- */
 export function UserDashboard() {
+
+    // Get Cookies
+    const { login, cookies } = useCookies();
 
     const [ adding, setAdding ] = useState(false);
     const [ hover, setHover ] = useState(false);
+    const [ state, dispatch ] = useReducer(reducer, init);
+
+    /* -- Fetch User's Songs */
+    async function fetchMySongs(cookies) {
+        const { access_token } = cookies;
+        const resp = await fetchMySongsReq(access_token);
+        console.log(resp);
+    }
 
     // Toggle the "Add Song Form"
     function toggleAddForm() {
@@ -43,12 +72,24 @@ export function UserDashboard() {
         setAdding(!adding);
     }
 
+    /* -- Hover the text button -- */
     function onHover(event) {
         setHover(!hover);
         hover ? (event.target.style.textDecoration = 'none') :
             (event.target.style.textDecoration = 'underline');
     }
 
+
+    /* -- Side Effects -- */
+    useEffect(()=> {
+        console.log(cookies);
+        if (cookies && login) {
+            fetchMySongs(cookies);
+        }
+    });
+
+
+    /* -- Renders -- */
     return(
         <div className="mainDiv">
             <div style={styles.div}>
