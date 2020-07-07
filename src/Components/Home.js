@@ -1,6 +1,7 @@
 import React,{ useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { userContext } from '../Contexts/userContext';
+import { config } from './Conf/DevConfig'
 import Cookies from 'js-cookie'
 import { Link, withRouter } from 'react-router-dom';
 import '../App.css';
@@ -96,7 +97,7 @@ function Home(){
   const handleSubmit = async event => {
     event.preventDefault();
     console.log(user.username,user.password);
-    axios.post("http://13.212.2.7/login",{username: user.username, password: user.password})
+    axios.post(`${config.API_URL}/login`,{username: user.username, password: user.password})
       .then( response => {
         const data = response.data;
         setLoginUser(data);
