@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { userContext } from '../../Contexts/userContext';
 import '../../App.css';
@@ -36,28 +36,38 @@ const styles = {
     }
 }
 
-export const UesrNav = () => {
+export const UesrNav = (props) => {
     
     const Auth = useContext(userContext);
     const login = Cookies.get("user");
-    const user = Cookies.get("tokens");
+    let user = Cookies.get("tokens");
     const [ cookies, setCookies ] = useState({});
 
     useEffect(() => {
         if (login && user)
             setCookies(JSON.parse(user));
+        else
+            Auth.setAuth(false); 
     },[user]);
 
     const handleLogout = async () => {
         const res = await logoutUser(cookies.access_token);
         console.log(res);
-        Auth.setAuth(false);
-        Cookies.remove("user");
-        Cookies.remove("tokens");
+        if (res.status === 200) {
+            console.log("success");
+            user = null; // Initiate Logout, so that the effect will be updated
+            Auth.setAuth(false); // set false to Auth Context
+            // Remove Cookies
+            Cookies.remove("user");
+            Cookies.remove("tokens");
+        } else {
+            alert('Logout from API - Failed!');
+        }
     }
 
     return(
         <>
+            { !user && <Redirect to='/'/>}
             <div style={styles.div}>
                 <Link to="/">
                     <h3 style={styles.h3}>MusiCloud</h3>
