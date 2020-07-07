@@ -15,8 +15,6 @@ import ForgetPassword from './Components/ForgetPassword'
 
 function App() {
 
-  console.log(process.env.REACT_APP_API_KEY)
-
   const [ auth, setAuth ] = useState(false);
 
   const readCookies = () => {
@@ -35,11 +33,15 @@ function App() {
   return(
     <userContext.Provider value={{auth,setAuth}}>
       <Router>
+        {/* Navigation */}
         <Nav/>
+        {/* If user is login, redirect to home page */}
         <ProtectedLogin value="/" path="/" exact component={ Home }/>
+        {/* Public Routes */}
         <Route value="/register" path="/register" component={ Register } />
         <Route value="/about" path="/about" component={ About } />
         <Route path="/forget-password" component={ ForgetPassword }/>
+        {/* Private (or) Protected Routes */}
         <ProtectedRoute path="/profile" component={ Profile }/>
         <ProtectedRoute path="/dashboard" component={ Dashboard } />
       </Router>

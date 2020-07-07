@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { AddSong } from './Songs/AddSong'
 import { useCookies } from './Hooks/useCookies';
-import { fetchMySongsReq } from './UsersReqs/Songs'
+import { fetchMySongsReq } from './UsersReqs/SongRequests'
 
 // Styling for the DOM elements
 const styles = {
@@ -71,8 +71,6 @@ export function UserDashboard() {
         // if user has songs, display songs
         if (data.status === 200) {
             dispatch({type: 'get-songs', songs: data.msg});
-        } else { 
-            console.log("No songs");
         } 
     }
 
@@ -102,13 +100,18 @@ export function UserDashboard() {
     /* -- Renders -- */
     return(
         <div className="mainDiv">
-            <div style={styles.div}>
-                <pre style={styles.pre}>It's empty here. </pre>
-                <p onClick={toggleAddForm} style={styles.p}
-                 onMouseOver={onHover} onMouseLeave={onHover}>
-                    Try to add something to listen.
-                </p>
-            </div>
+
+            {/* If user has no songs, show default empty message */}
+            { state.empty && (
+                <div style={styles.div}>
+                    <pre style={styles.pre}>It's empty here. </pre>
+                    <p onClick={toggleAddForm} style={styles.p}
+                    onMouseOver={onHover} onMouseLeave={onHover}>
+                        Try to add something to listen.
+                    </p>
+                </div>
+            )}
+    
             {
                 adding ?
                 (<AddSong addDiv={styles.addDiv} toggle={toggleAddForm}/>)

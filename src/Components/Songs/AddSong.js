@@ -1,6 +1,6 @@
 import React, { useState, useReducer } from 'react';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
-import { postSongForProcess, checkTaskStatus } from './SongRequests';
+import { postSongForProcess, checkTaskStatus } from '../UsersReqs/SongRequests';
 
 // Stylings for the AddSong DOM Elements
 const styles = {
@@ -97,7 +97,7 @@ const init = {
 // reduser function for useReducer Hook
 function reducer(state, action) {
 
-    const { song, url, title } = state;
+    const { song } = state;
 
     switch(action.type) {
         case 'urlChange':
@@ -112,14 +112,14 @@ function reducer(state, action) {
 }
 
 /* This is a helper function for AddSong Component to check status of mp3 conversion process*/
-async function checkStatus(task_id) {
-    const response = await checkTaskStatus(task_id);
-    if (response.status === 201) {
-        console.log("Good To Go");
-    } else {
-        checkStatus(task_id);
-    }
-}
+// async function checkStatus(task_id) {
+//     const response = await checkTaskStatus(task_id);
+//     if (response.status === 201) {
+//         console.log("Good To Go");
+//     } else {
+//         setTimeout(checkStatus, 5000);
+//     }
+// }
 
 /* This is a helper component to post a song to server */
 export function AddSong(props) {
