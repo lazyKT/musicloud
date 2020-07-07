@@ -36,13 +36,16 @@ const styles = {
 
 /* -- Initial Values for useReducer -- */
 const init = {
-    songs: []
+    songs: [],
+    empty: true
 }
 
 
 /* -- Reducer Function for useReducer Hook -- */
 function reducer(action, state) {
     switch(action.type) {
+        case 'get-songs':
+            return {...state, songs: action.songs, empty: false};
         default:
             throw new Error('Invalid Case for MySongs');
     }
@@ -63,7 +66,14 @@ export function UserDashboard() {
     async function fetchMySongs(cookies) {
         const { access_token } = cookies;
         const resp = await fetchMySongsReq(access_token);
-        console.log(resp);
+        const { data } = resp;
+        
+        // if user has songs, display songs
+        if (data.status === 200) {
+            dispatch({type: 'get-songs', songs: data.msg});
+        } else { 
+            console.log("No songs");
+        } 
     }
 
     // Toggle the "Add Song Form"
@@ -86,7 +96,7 @@ export function UserDashboard() {
         if (cookies && login) {
             fetchMySongs(cookies);
         }
-    });
+    },[cookies]);
 
 
     /* -- Renders -- */

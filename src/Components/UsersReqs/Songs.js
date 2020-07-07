@@ -7,11 +7,12 @@ import { config } from '../Conf/DevConfig';
  */
 export async function fetchMySongsReq(token) {
 
-    console.log(token);
     try {
-        const response = await axios.get(`${config.API_URL}/mysongs`, { headers: { "Authorization": `Bearer ${token}` }});
+        console.log("success", token);
+        const response = await axios.get('http://127.0.0.1:8000/mysongs', { headers: { "Authorization": `Bearer ${token}` }});
         return response;
     } catch (error) {
+        console.log("error",token);
         return error;
     }
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { userContext } from '../../Contexts/userContext';
 import '../../App.css';
+import { logoutUser } from '../UsersReqs/Users'
 
 
 // Styling of nav elements
@@ -48,7 +49,8 @@ export const UesrNav = () => {
     },[user]);
 
     const handleLogout = async () => {
-        //const res = await logoutOpr(cookies.access_token)
+        const res = await logoutUser(cookies.access_token);
+        console.log(res);
         Auth.setAuth(false);
         Cookies.remove("user");
         Cookies.remove("tokens");
