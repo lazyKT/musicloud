@@ -67,6 +67,7 @@ export const UesrNav = (props) => {
 
     return(
         <>
+            {/* rediect */}
             { !user && <Redirect to='/'/>}
             <div style={styles.div}>
                 <Link to="/">
