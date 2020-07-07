@@ -102,7 +102,7 @@ export function UserDashboard() {
         <div className="mainDiv">
 
             {/* If user has no songs, show default empty message */}
-            { state.empty && (
+            { state.empty ? (
                 <div style={styles.div}>
                     <pre style={styles.pre}>It's empty here. </pre>
                     <p onClick={toggleAddForm} style={styles.p}
@@ -110,6 +110,9 @@ export function UserDashboard() {
                         Try to add something to listen.
                     </p>
                 </div>
+            )
+            : (
+                <div>Songs</div>
             )}
     
             {
