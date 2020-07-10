@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { AddSong } from './Songs/AddSong'
 import { useCookies } from './Hooks/useCookies';
-import { fetchMySongsReq } from './UsersReqs/SongRequests'
+import { fetchMySongsReq } from './UsersReqs/SongRequests';
+import { SongCard } from './Songs/SongCard';
 
 // Styling for the DOM elements
 const styles = {
@@ -42,12 +43,13 @@ const init = {
 
 
 /* -- Reducer Function for useReducer Hook -- */
-function reducer(action, state) {
+function reducer(state, action) {
+
     switch(action.type) {
-        case 'get-songs':
+        case 'getSongs':
             return {...state, songs: action.songs, empty: false};
         default:
-            throw new Error('Invalid Case for MySongs');
+            throw new Error('reducer error!');
     }
 }
 
@@ -68,10 +70,10 @@ export function UserDashboard() {
         const resp = await fetchMySongsReq(access_token);
         const { data } = resp;
         
-        // if user has songs, display songs
-        if (data.status === 200) {
-            dispatch({type: 'get-songs', songs: data.msg});
-        } 
+        console.log(data.status);
+
+        if (data.status === 200)
+            dispatch({type: 'getSongs', songs: data.msg});
     }
 
     // Toggle the "Add Song Form"
@@ -99,7 +101,7 @@ export function UserDashboard() {
 
     /* -- Renders -- */
     return(
-        <div className="mainDiv">
+        <div className="">
 
             {/* If user has no songs, show default empty message */}
             { state.empty ? (
@@ -112,7 +114,7 @@ export function UserDashboard() {
                 </div>
             )
             : (
-                <div>Songs</div>
+                state.songs.map(song => <SongCard title={song.title} key={song.id} user={song.posted_by} />)
             )}
     
             {
