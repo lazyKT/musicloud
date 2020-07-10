@@ -10,7 +10,7 @@ import { Notifications } from './Profile/Notifications';
 import { Connect } from './Profile/Connect';
 import { ChangePwd } from './Profile/ChangePwd';
 import { Button } from '@material-ui/core';
-import { uploadAvatarOpr, logoutOpr } from '../Components/Admin/CrudFunctions/Data';
+import { uploadAvatarOpr } from '../Components/Admin/CrudFunctions/Data';
 
 const styles = {
     mainDiv: {

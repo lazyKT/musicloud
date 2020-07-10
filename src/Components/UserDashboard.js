@@ -3,6 +3,7 @@ import { AddSong } from './Songs/AddSong'
 import { useCookies } from './Hooks/useCookies';
 import { fetchMySongsReq } from './UsersReqs/SongRequests';
 import { SongCard } from './Songs/SongCard';
+import { Player } from './Songs/Player';
 
 // Styling for the DOM elements
 const styles = {
@@ -32,6 +33,18 @@ const styles = {
         justifyContent: "center",
         alignItems: "center",
         background: "rgb(0,0,0,0.5)", // Opacity 0.5
+    },
+    heading: {
+        width: "fit-content",
+        margin: "20px auto",
+        fontFamily: "fantasy"
+    },
+    player: {
+        width: "100%",
+        position: "fixed",
+        bottom: "0",
+        padding: "10px",
+        boxShadow: "5px 0px 15px 5px gainsboro"
     }
 }
 
@@ -102,7 +115,7 @@ export function UserDashboard() {
     /* -- Renders -- */
     return(
         <div className="">
-
+            <h3 style={styles.heading}>My Songs</h3>
             {/* If user has no songs, show default empty message */}
             { state.empty ? (
                 <div style={styles.div}>
@@ -116,7 +129,13 @@ export function UserDashboard() {
             : (
                 state.songs.map(song => <SongCard title={song.title} key={song.id} user={song.posted_by} />)
             )}
-    
+
+            {/* Music Player */}
+            <div style={styles.player}>
+                <Player/>
+            </div>
+
+            {/* Add Song Option */}
             {
                 adding ?
                 (<AddSong addDiv={styles.addDiv} toggle={toggleAddForm}/>)

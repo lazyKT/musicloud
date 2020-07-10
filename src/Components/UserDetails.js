@@ -90,7 +90,7 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
   useEffect(() => {
     if (cookies && login) {
       //fetchAvatar(cookies.access_token, cookies.id);
-      setAvatar(`${config.API_URL}/avatar/${cookies.id}`)
+      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}`)
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
