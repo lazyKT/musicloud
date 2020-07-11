@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /* Icons From Material UI */
 import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
@@ -54,6 +54,14 @@ const styles = {
 
 export function Player(props) {
 
+    const { pSong } = props;
+
+    useEffect(() => {
+        
+    }, [pSong])
+
+
+    /* -- Rendering of Player -- */
     return(
         <div style={styles.contianer}>
             <div style={styles.bDiv}>
@@ -63,7 +71,7 @@ export function Player(props) {
                 <SkipPreviousIcon style={styles.previous}/>
                 <RepeatIcon style={styles.repeat}/>
             </div>
-            <p style={styles.title}>Song Name</p>
+            <p style={styles.title}>Song Name : {pSong ? pSong.title : "---"}</p>
         </div>
     )
 }

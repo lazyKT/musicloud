@@ -28,7 +28,7 @@ const styles = {
 
 export function SongCard(props) {
 
-    const { title, user } = props;
+    const { id, title, user, click } = props;
 
     const [ hover, setHover ] = useState(false);
 
@@ -39,9 +39,11 @@ export function SongCard(props) {
             event.target.style.boxShadow = '0px 3px 5px 0px gainsboro';
     }
 
+
     return(
         <>
-            <div style={styles.card} onMouseOver={onHoverCard} onMouseLeave={onHoverCard}>
+            <div style={styles.card} onMouseOver={onHoverCard} key={id}
+            onMouseLeave={onHoverCard} onClick={(event) => click(event, id)}>
                 <p style={styles.title}>{title}</p>
                 <span style={styles.user}>Posted by : {user}</span>
             </div>

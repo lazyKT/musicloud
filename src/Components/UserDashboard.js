@@ -51,7 +51,8 @@ const styles = {
 /* -- Initial Values for useReducer -- */
 const init = {
     songs: [],
-    empty: true
+    empty: true,
+    pointed: null   // Clicked Song :: Individual
 }
 
 
@@ -61,6 +62,8 @@ function reducer(state, action) {
     switch(action.type) {
         case 'getSongs':
             return {...state, songs: action.songs, empty: false};
+        case 'pointed':
+            return {...state, pointed: action.song};
         default:
             throw new Error('reducer error!');
     }
@@ -103,6 +106,14 @@ export function UserDashboard() {
     }
 
 
+    /* -- OnClick Song Cards */
+    function onClickCards(event, key) {
+        event.preventDefault();
+        console.log("click on", key);
+        dispatch({type: "pointed", song: state.songs[key-1]});
+    }
+
+
     /* -- Side Effects -- */
     useEffect(()=> {
         console.log(cookies);
@@ -127,12 +138,14 @@ export function UserDashboard() {
                 </div>
             )
             : (
-                state.songs.map(song => <SongCard title={song.title} key={song.id} user={song.posted_by} />)
+                state.songs.map(song => <SongCard 
+                    title={song.title} key={song.id} id={song.id}
+                    user={song.posted_by} click={onClickCards}/>)
             )}
 
             {/* Music Player */}
             <div style={styles.player}>
-                <Player/>
+                <Player pSong={state.pointed}/>
             </div>
 
             {/* Add Song Option */}
