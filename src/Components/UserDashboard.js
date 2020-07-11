@@ -145,7 +145,7 @@ export function UserDashboard() {
 
             {/* Music Player */}
             <div style={styles.player}>
-                <Player pSong={state.pointed}/>
+                <Player pSong={state.pointed} allSong={state.songs}/>
             </div>
 
             {/* Add Song Option */}
