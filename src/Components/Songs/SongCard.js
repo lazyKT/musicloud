@@ -40,6 +40,7 @@ export function SongCard(props) {
     }
 
 
+    /** -- Render -- */
     return(
         <>
             <div style={styles.card} onMouseOver={onHoverCard} key={id}

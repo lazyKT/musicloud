@@ -43,7 +43,9 @@ function App() {
         <Route path="/forget-password" component={ ForgetPassword }/>
         {/* Private (or) Protected Routes */}
         <ProtectedRoute path="/profile" component={ Profile }/>
-        <ProtectedRoute path="/dashboard" component={ Dashboard } />
+        <ProtectedRoute path="/dashboard" component={ Dashboard }/>
+        {/* <Route value="/profile" component={ Profile }/>
+        <Route value="/dashboard" component={ Dashboard } /> */}
       </Router>
     </userContext.Provider>
   );
