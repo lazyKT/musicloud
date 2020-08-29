@@ -143,14 +143,28 @@ export function UserDashboard() {
     /** -- next song -- */
     function next_song(event, id, options) {
 
-        const { shuffle } = options;
+        const { shuffle, repeat } = options;
+        console.log("repeat", repeat%3);
 
         event.preventDefault();
+
+        // if shuffle was on, generate random id for next song
+        // let new_id = 0;
+        // if (shuffle) {
+            
+        // }
+
         if ( id !== 0 ) {
             console.log("id", id);
             dispatch({ type: "pointed", song: songs[id] });
             dispatch({ type: "currentPlaying", id });
-        } 
+        }
+
+        // if repeat all option was on
+        if ( repeat%3 === 1 && id === songs.length ) {
+            dispatch({ type: "pointed", song: songs[0] });
+            dispatch({ type: "currentPlaying", id: 0 });
+        }
     }
 
     /** -- previous song -- */
