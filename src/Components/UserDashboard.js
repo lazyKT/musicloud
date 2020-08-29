@@ -66,7 +66,8 @@ const styles = {
 const init = {
     songs: [],
     empty: true,
-    pointed: null   // Clicked Song :: Individual
+    pointed: null,
+    playing: null  // Clicked Song :: Individual
 }
 
 
@@ -75,9 +76,11 @@ function reducer(state, action) {
 
     switch(action.type) {
         case 'getSongs':
-            return {...state, songs: action.songs, empty: false};
+            return { ...state, songs: action.songs, empty: false};
         case 'pointed':
-            return {...state, pointed: action.song};
+            return { ...state, pointed: action.song};
+        case 'currentPlaying':
+            return { ...state, playing: action.id };
         default:
             throw new Error('reducer error!');
     }
@@ -93,6 +96,8 @@ export function UserDashboard() {
     const [ adding, setAdding ] = useState(false);
     const [ hover, setHover ] = useState(false);
     const [ state, dispatch ] = useReducer(reducer, init);
+
+    const { playing, pointed, empty, songs } = state;
 
     /* -- Fetch User's Songs */
     async function fetchMySongs(cookies) {
@@ -131,7 +136,37 @@ export function UserDashboard() {
     function onClickCards(event, key) {
         event.preventDefault();
         console.log("click on", key);
-        dispatch({type: "pointed", song: state.songs[key-1]});
+        dispatch({ type: "pointed", song: state.songs[key]});
+        dispatch({ type: "currentPlaying", id: key });
+    }
+
+    /** -- next song -- */
+    function next_song(event, id, options) {
+
+        const { shuffle } = options;
+
+        event.preventDefault();
+        if ( id !== 0 ) {
+            console.log("id", id);
+            dispatch({ type: "pointed", song: songs[id] });
+            dispatch({ type: "currentPlaying", id });
+        } 
+    }
+
+    /** -- previous song -- */
+    function prev_song(event, id) {
+        event.preventDefault();
+        console.log("prev id", id);
+
+        // previous button click on first song 
+        // -2 indicates that no song is playing currently
+        if ( id  < 1 && id !== -2 ) {
+            dispatch({ type: "pointed", song: songs[0] });
+            dispatch({ type: "currentPlaying", id: 0 });
+        } else if ( id !== -2 ) {
+            dispatch({ type: "pointed", song: songs[id] });
+            dispatch({ type: "currentPlaying", id });
+        }
     }
 
 
@@ -150,7 +185,7 @@ export function UserDashboard() {
             <h3 style={styles.heading}>My Songs</h3>
 
             {/* display add song button above song cards */}
-            {( !state.empty ) &&
+            {( !empty ) &&
             (
                 <div style={styles.addBtnDiv}>
                     <button style={styles.addBtn} onClick={toggleAddForm}
@@ -161,7 +196,7 @@ export function UserDashboard() {
             )}
 
             {/* If user has no songs, show default empty message */}
-            { state.empty ? (
+            { empty ? (
                 <div style={styles.div}>
                     <pre style={styles.pre}>It's empty here. </pre>
                     <p onClick={toggleAddForm} style={styles.p}
@@ -171,14 +206,15 @@ export function UserDashboard() {
                 </div>
             )
             : (
-                state.songs.map(song => <SongCard 
-                    title={song.title} key={song.id} id={song.id}
+                songs.map( ( song, idx ) => <SongCard 
+                    title={song.title} key={song.id} id={idx} playing={playing}
                     user={song.posted_by} click={onClickCards}/>)
             )}
 
             {/* Music Player */}
             <div style={styles.player}>
-                <Player pSong={state.pointed} allSong={state.songs}/>
+                <Player pSong={pointed} allSong={songs} 
+                    next_song={next_song} prev_song={prev_song}/>
             </div>
 
             {/* Add Song Option */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 /* Styling Card Element*/
@@ -23,12 +23,20 @@ const styles = {
     user: {
         fontSize: "13px",
         fontFamily: "monospace"
+    },
+    current: {
+        background: "gainsboro",
+        width: "50%",
+        height: "fit-content",
+        padding: "5px 20px",
+        margin: "10px auto",
+        boxShadow: "0px 3px 5px 0px gainsboro"
     }
 }
 
 export function SongCard(props) {
 
-    const { id, title, user, click } = props;
+    const { id, title, user, click, playing } = props;
 
     const [ hover, setHover ] = useState(false);
 
@@ -39,12 +47,18 @@ export function SongCard(props) {
             event.target.style.boxShadow = '0px 3px 5px 0px gainsboro';
     }
 
+    /** -- side effects on Click -- */
+    useEffect( () => {
+
+    }, [click]);
 
     /** -- Render -- */
+    /** -- Song Card -- */
     return(
         <>
-            <div style={styles.card} onMouseOver={onHoverCard} key={id}
-            onMouseLeave={onHoverCard} onClick={(event) => click(event, id)}>
+            <div style={ playing === id ? styles.current : styles.card} 
+            onMouseOver={onHoverCard} key={id} onMouseLeave={onHoverCard} 
+            onClick={(event) => click(event, id)}>
                 <p style={styles.title}>{title}</p>
                 <span style={styles.user}>Posted by : {user}</span>
             </div>

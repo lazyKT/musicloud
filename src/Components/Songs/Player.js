@@ -85,6 +85,9 @@ function reducer(state, action) {
 
         case "play_pause":
             return { ...state, playing: !playing };   
+
+        case "stop":
+            return { ...state, playing: false };
         
         case "play_song":
             return { ...state, playing: true };
@@ -97,7 +100,7 @@ function reducer(state, action) {
 
 export function Player(props) {
 
-    const { pSong, allSong } = props;
+    const { pSong, allSong, next_song, prev_song } = props;
 
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
@@ -110,29 +113,10 @@ export function Player(props) {
      */
     const repeatRef = useRef(0);
     const shuffleRef = useRef(null);
+    const skipRef = useRef(null);
+    const prevRef = useRef(null);
 
     const [ hover, setHover ] = useState(false);
-
-
-    /* -- Skip Song */
-    function next(event) {
-        event.preventDefault();
-        let next_id = allSong.indexOf(currentSong) + 1;
-
-        if ( next_id < allSong.length)
-            dispatch({ type: "load_song", song: allSong[next_id] });
-    }
-
-
-    /* -- previous Song -- */
-    function previous(event) {
-        event.preventDefault();
-        console.log("current id", currentSong.id - 1);
-        let prev_id = allSong.indexOf(currentSong) - 1;
-
-        if (prev_id >= 0)
-            dispatch({ type: "load_song", song: allSong[prev_id] });
-    }
 
 
     /* -- play/pause song */
@@ -148,7 +132,7 @@ export function Player(props) {
     /** set hover effects */
     function onHover(event) {
         setHover( !hover );
-        hover ? event.target.style.background = "#000" 
+        (pSong && hover) ? event.target.style.background = "#000" 
             : event.target.style.background = "#d3d3d3";
     }
 
@@ -156,9 +140,19 @@ export function Player(props) {
     /** -- side effects on Song Card Click --  */
     useEffect(() => {
         if (pSong) {
+            console.log("song");
             dispatch({ type: "load_song", song: pSong });
             dispatch({ type: "play_song" });
+            skipRef.current.style.background = "#000";
+            prevRef.current.style.background = "#000";
         }        
+        if (!pSong)
+        {
+            console.log("null song");
+            skipRef.current.style.background = "#d3d3d3";
+            prevRef.current.style.background = "#d3d3d3";
+            dispatch({ type: "stop" });
+        }
     }, [pSong])
 
 
@@ -185,8 +179,9 @@ export function Player(props) {
         <div style={styles.contianer}>
             <div style={styles.bDiv}>
                 <ShuffleIcon style={styles.shuffle} ref={ shuffleRef } onClick={() => dispatch({ type: "shuffleClk" }) }/>
-                <SkipPreviousIcon style={styles.previous} onClick={previous}
-                 onMouseOver={onHover} onMouseLeave={onHover} />
+                <SkipPreviousIcon style={styles.previous} ref={prevRef}
+                    onClick={(event) => prev_song(event, allSong.indexOf(currentSong) - 1)}
+                    onMouseOver={onHover} onMouseLeave={onHover} />
 
                 {/* Pause or Play */}
                 {
@@ -196,7 +191,9 @@ export function Player(props) {
                     : <PlayCircleFilledOutlinedIcon style={styles.play} onClick={play_or_pause}/>
                 }
 
-                <SkipNextIcon style={styles.skip} onClick={next} onMouseOver={onHover} onMouseLeave={onHover}/>
+                <SkipNextIcon style={styles.skip} ref={skipRef} disabled={true}
+                    onClick={(event) => next_song(event, allSong.indexOf(currentSong) + 1, state)} 
+                    onMouseOver={onHover} onMouseLeave={onHover}/>
 
                 {/* repeat btn state */}
                 {
