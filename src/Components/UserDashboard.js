@@ -45,6 +45,20 @@ const styles = {
         bottom: "0",
         padding: "10px",
         boxShadow: "5px 0px 15px 5px gainsboro"
+    },
+    addBtnDiv: {
+        width: "50%",
+        margin: "10px auto"
+    },
+    addBtn: {
+        width: "100px",
+        marginLeft: "80%",
+        display: "block",
+        padding: "5px",
+        background: "coral",
+        border: "solid coral 0.2px",
+        borderRadius: "10px",
+        color: "white"
     }
 }
 
@@ -99,10 +113,17 @@ export function UserDashboard() {
     }
 
     /* -- Hover the text button -- */
-    function onHover(event) {
+    function onHoverText(event) {
         setHover(!hover);
         hover ? (event.target.style.textDecoration = 'none') :
             (event.target.style.textDecoration = 'underline');
+    }
+
+    /** -- Hover effect on add button -- */
+    function onHoverBtn(event) {
+        setHover(!hover);
+        hover ? (event.target.style.background = "coral")
+            : (event.target.style.background = "chocolate");
     }
 
 
@@ -127,12 +148,24 @@ export function UserDashboard() {
     return(
         <div className="">
             <h3 style={styles.heading}>My Songs</h3>
+
+            {/* display add song button above song cards */}
+            {( !state.empty ) &&
+            (
+                <div style={styles.addBtnDiv}>
+                    <button style={styles.addBtn} onClick={toggleAddForm}
+                        onMouseOver={onHoverBtn} onMouseLeave={onHoverBtn}>
+                        Add Song
+                    </button>
+                </div>
+            )}
+
             {/* If user has no songs, show default empty message */}
             { state.empty ? (
                 <div style={styles.div}>
                     <pre style={styles.pre}>It's empty here. </pre>
                     <p onClick={toggleAddForm} style={styles.p}
-                    onMouseOver={onHover} onMouseLeave={onHover}>
+                    onMouseOver={onHoverText} onMouseLeave={onHoverText}>
                         Try to add something to listen.
                     </p>
                 </div>
