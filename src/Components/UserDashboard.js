@@ -152,7 +152,6 @@ export function UserDashboard() {
 
         // if user click shuffle all
         if (!shuffle_all) {
-            console.log("shuffle on");
             shuffleSongs(playlist);
             dispatch({ type: "assignPL", _playlist: playlist });
 
@@ -161,13 +160,12 @@ export function UserDashboard() {
             dispatch({ type: "pointed", song: playlist[0] });
             dispatch({ type: "currentPlaying", id: songs.indexOf(playlist[0]) });
         } else {
-            console.log("shuffle off");
             // spread operator ... also prevents the mutation on original state
             dispatch({ type: "assignPL", _playlist: [...songs] })
         }
 
-        console.log("song", songs);
-        console.log("playlist", playlist);
+        // console.log("song", songs);
+        // console.log("playlist", playlist);
     }
 
 
@@ -290,7 +288,7 @@ export function UserDashboard() {
 
             {/* Music Player */}
             <div style={styles.player}>
-                <Player pSong={pointed} allSong={playlist} 
+                <Player pSong={pointed} allSong={playlist} shuffle_all={shuffle_all}
                     next_song={next_song} prev_song={prev_song}/>
             </div>
 

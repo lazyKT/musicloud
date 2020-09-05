@@ -3,7 +3,6 @@ import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
 import { EditOpr } from './Admin/CrudFunctions/Data';
-import { config } from './Conf/DevConfig';
 import Cookies from 'js-cookie';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';

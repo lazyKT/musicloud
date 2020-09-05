@@ -100,7 +100,7 @@ function reducer(state, action) {
 
 export function Player(props) {
 
-    const { pSong, allSong, next_song, prev_song } = props;
+    const { pSong, allSong, next_song, prev_song, shuffle_all } = props;
 
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
@@ -137,12 +137,17 @@ export function Player(props) {
     }
 
 
-    /** -- side effects on Song Card Click --  */
+    /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
-        //console.log("all song", allSong);
+        
+        // if shuffle_all was on
+        if (shuffle_all)
+            dispatch({ type: "shuffleClk" });
+        else 
+            dispatch({ type: "shuffleClk" });
 
         if (pSong) {
-            console.log("song");
+            console.log("song link", pSong.task_id);
             dispatch({ type: "load_song", song: pSong });
             dispatch({ type: "play_song" });
             skipRef.current.style.background = "#000";
@@ -150,15 +155,14 @@ export function Player(props) {
         }        
         if (!pSong)
         {
-            console.log("null song");
             skipRef.current.style.background = "#d3d3d3";
             prevRef.current.style.background = "#d3d3d3";
             dispatch({ type: "stop" });
         }
-    }, [pSong])
+    }, [pSong, shuffle_all])
 
 
-    /** Side Effects on Repeat and Play Btn Click */
+    /** Side Effects on Repeat, Shuffle and Play Btn Click */
     useEffect(() => {
         
         /** play btn operation */
@@ -204,6 +208,7 @@ export function Player(props) {
                     : <RepeatIcon ref={repeatRef} style={styles.repeat} onClick={() => dispatch({ type: "repeatClk" })}/>
                 }
             </div>
+            <audio/>
             <p style={styles.title}>{currentSong ? currentSong.title : "---"}</p>
         </div>
     )
