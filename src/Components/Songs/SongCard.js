@@ -56,6 +56,7 @@ export function SongCard(props) {
     /** -- Song Card -- */
     return(
         <>
+            {/* change card color of current playing song */}
             <div style={ playing === id ? styles.current : styles.card} 
             onMouseOver={onHoverCard} key={id} onMouseLeave={onHoverCard} 
             onClick={(event) => click(event, id)}>

@@ -139,6 +139,8 @@ export function Player(props) {
 
     /** -- side effects on Song Card Click --  */
     useEffect(() => {
+        //console.log("all song", allSong);
+
         if (pSong) {
             console.log("song");
             dispatch({ type: "load_song", song: pSong });
@@ -180,7 +182,7 @@ export function Player(props) {
             <div style={styles.bDiv}>
                 <ShuffleIcon style={styles.shuffle} ref={ shuffleRef } onClick={() => dispatch({ type: "shuffleClk" }) }/>
                 <SkipPreviousIcon style={styles.previous} ref={prevRef}
-                    onClick={(event) => prev_song(event, allSong.indexOf(currentSong) - 1)}
+                    onClick={(event) => prev_song(event, allSong.indexOf(currentSong) - 1, state)}
                     onMouseOver={onHover} onMouseLeave={onHover} />
 
                 {/* Pause or Play */}

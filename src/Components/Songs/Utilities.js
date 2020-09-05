@@ -4,6 +4,8 @@
  */
 export function shuffleSongs(songs) {
    
+    //console.log("fn", songs);
+
     /** 
      * -- the ideal implementation is copy the original contents
      * -- to the new array.
