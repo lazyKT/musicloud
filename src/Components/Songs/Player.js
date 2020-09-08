@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useReducer, useRef } from 'react';
+import { firstSongURL } from './Utilities';
 
 /* Icons From Material UI */
 import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
@@ -102,6 +103,8 @@ export function Player(props) {
 
     const { pSong, allSong, next_song, prev_song, shuffle_all } = props;
 
+    const dev_url = "http://127.0.0.1:8000/listen/";
+
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
     const { repeat, shuffle, currentSong, playing } = state;
@@ -125,7 +128,10 @@ export function Player(props) {
         // if playing, pause the song. if not playing, play the song
         dispatch({ type: "play_pause" });
 
+        const url = `http://127.0.0.1:8000/listen/2`
 
+        let audio = document.getElementById("song");
+        audio.play();
     }
 
 
@@ -147,7 +153,6 @@ export function Player(props) {
             dispatch({ type: "shuffleClk" });
 
         if (pSong) {
-            console.log("song link", pSong.task_id);
             dispatch({ type: "load_song", song: pSong });
             dispatch({ type: "play_song" });
             skipRef.current.style.background = "#000";
@@ -165,10 +170,20 @@ export function Player(props) {
     /** Side Effects on Repeat, Shuffle and Play Btn Click */
     useEffect(() => {
         
+        let audio = document.getElementById("song");
+
         /** play btn operation */
-        if (!pSong && playing)
+        if (!pSong && playing) {
             dispatch({ type: "load_song", song: allSong[0] });
-        
+            // play the first song on play btn click
+            audio.play();
+        }
+
+        if (!playing) {
+            // pause the song
+            audio.pause();
+        }
+                   
         /** toggle shuffle  */
         shuffle ? ( shuffleRef.current.style.color = "blue" ) 
             : ( shuffleRef.current.style.color = "grey" );
@@ -208,7 +223,13 @@ export function Player(props) {
                     : <RepeatIcon ref={repeatRef} style={styles.repeat} onClick={() => dispatch({ type: "repeatClk" })}/>
                 }
             </div>
-            <audio/>
+
+            {/* audio tag */}
+            <audio id="song" 
+             src={currentSong ? `${dev_url}${currentSong.id}` 
+                : firstSongURL(allSong, dev_url)} />
+            
+            {/* song name */}
             <p style={styles.title}>{currentSong ? currentSong.title : "---"}</p>
         </div>
     )

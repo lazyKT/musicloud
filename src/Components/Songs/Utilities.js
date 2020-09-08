@@ -18,3 +18,17 @@ export function shuffleSongs(songs) {
         songs[j] = temp;
     }
 }
+
+
+/** 
+ * function for the play btn click without specifying any song
+ * If the user click the play btn, but currently no song has been playing,
+ * Play the first song in the song list
+ */
+export function firstSongURL(songs, url) {
+    if (songs.length !== 0) 
+        return `${url}${songs[0].id}`;
+    // return null if songs is empty
+    return null;
+}
+
