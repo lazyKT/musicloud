@@ -101,7 +101,10 @@ function reducer(state, action) {
 
 export function Player(props) {
 
-    const { pSong, allSong, next_song, prev_song, shuffle_all } = props;
+    const { pSong, allSong, next_song, prev_song, shuffle_all, repeat_one } = props;
+
+    let song = document.getElementById("song");
+    let prog = document.getElementById("progress-bar");
 
     const dev_url = "http://127.0.0.1:8000/listen/";
 
@@ -111,13 +114,14 @@ export function Player(props) {
 
     /**
      * 0 = no repeat
-     * 1 = single repeat
-     * 2 = repeat all
+     * 1 = repeat all
+     * 2 = repeat single
      */
     const repeatRef = useRef(0);
     const shuffleRef = useRef(null);
     const skipRef = useRef(null);
     const prevRef = useRef(null);
+    const progRef = useRef(null);
 
     const [ hover, setHover ] = useState(false);
 
@@ -127,11 +131,6 @@ export function Player(props) {
         event.preventDefault();
         // if playing, pause the song. if not playing, play the song
         dispatch({ type: "play_pause" });
-
-        const url = `http://127.0.0.1:8000/listen/2`
-
-        let audio = document.getElementById("song");
-        audio.play();
     }
 
 
@@ -142,10 +141,56 @@ export function Player(props) {
             : event.target.style.background = "#d3d3d3";
     }
 
+    /** -- disable/enable skip/rev buttons -- */
+    function toggleSkipRev_Btn(enable = false) {
+        if (enable) {
+            skipRef.current.style.background = "#000";
+            prevRef.current.style.background = "#000";
+        } else {
+            skipRef.current.style.background = "#d3d3d3";
+            prevRef.current.style.background = "#d3d3d3";
+        }
+    }
+
+    // /** -- onChange Progress bar -- */
+    // function onChangeProgress() {
+    //     //console.log(song.currentTime,"/",song.duration);
+    //     song.currentTime = prog.value;
+    // }
+
+
+    // /** -- change progress bar on playing -- */
+    // function changeProgOnPlay() {
+    //     prog.max = song.duration;
+    //     prog.value = song.currentTime;
+    // }
+
+    /** -- load progress bar on play -- */
+    function loadProgBar() {
+        prog.max = song.duration;
+        prog.value = song.currentTime;
+    }
+
+
+    /** -- clean up useEffect of play/pause -- */
+    function clean_up_lastSong() {
+        console.log("clean up", song);
+        if (currentSong && allSong.indexOf(currentSong) === (allSong.length - 1)
+            && repeat%3 !== 1) {
+            // console.log("last song");
+            // stop the song
+            song.pause();
+            song.currentTime = 0;
+            dispatch({ type: "load_song", song: null });
+        }
+    }
+
 
     /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
-        
+
+        console.log("playing", pSong);
+
         // if shuffle_all was on
         if (shuffle_all)
             dispatch({ type: "shuffleClk" });
@@ -153,35 +198,43 @@ export function Player(props) {
             dispatch({ type: "shuffleClk" });
 
         if (pSong) {
+        
             dispatch({ type: "load_song", song: pSong });
             dispatch({ type: "play_song" });
-            skipRef.current.style.background = "#000";
-            prevRef.current.style.background = "#000";
+
+            toggleSkipRev_Btn(true);
         }        
         if (!pSong)
         {
-            skipRef.current.style.background = "#d3d3d3";
-            prevRef.current.style.background = "#d3d3d3";
+            toggleSkipRev_Btn(false);
             dispatch({ type: "stop" });
         }
+
+        /** -- clean up -- */
+        return (clean_up_lastSong());
+
     }, [pSong, shuffle_all])
 
 
     /** Side Effects on Repeat, Shuffle and Play Btn Click */
     useEffect(() => {
-        
-        let audio = document.getElementById("song");
+
+        console.log("playing", playing);
+        console.log("song", song);
 
         /** play btn operation */
-        if (!pSong && playing) {
-            dispatch({ type: "load_song", song: allSong[0] });
-            // play the first song on play btn click
-            audio.play();
-        }
+        if (playing) {
 
-        if (!playing) {
+            if (!currentSong)
+                dispatch({ type: "load_song", song: allSong[0] });
+
+            toggleSkipRev_Btn(true);
+            // play the first song on play btn click
+            song.play();
+        } else {
             // pause the song
-            audio.pause();
+            currentSong && song.pause();
+            
         }
                    
         /** toggle shuffle  */
@@ -190,7 +243,10 @@ export function Player(props) {
 
         /** repeat operation  */
         repeat%3 === 0 && ( repeatRef.current.style.color = "grey" );
-        repeat%3 > 0 && ( repeatRef.current.style.color = "black" ); 
+        repeat%3 > 0 && ( repeatRef.current.style.color = "black" );
+        
+        /** -- clean up useEffect -- */
+        
         
     }, [playing, repeat, shuffle]);
 
@@ -214,7 +270,7 @@ export function Player(props) {
 
                 <SkipNextIcon style={styles.skip} ref={skipRef} disabled={true}
                     onClick={(event) => next_song(event, allSong.indexOf(currentSong) + 1, state)} 
-                    onMouseOver={onHover} onMouseLeave={onHover}/>
+                    />
 
                 {/* repeat btn state */}
                 {
@@ -227,7 +283,16 @@ export function Player(props) {
             {/* audio tag */}
             <audio id="song" 
              src={currentSong ? `${dev_url}${currentSong.id}` 
-                : firstSongURL(allSong, dev_url)} />
+                : firstSongURL(allSong, dev_url)} 
+             onEnded={ (event) => 
+               repeat%3 === 2 ? repeat_one(currentSong) 
+               : next_song(event, allSong.indexOf(currentSong) + 1, state) }/>
+            
+            {/* audio progress bar */}
+            {/* <input id="progress-bar" type="range" min="0" max="" 
+              value="" onChange={onChangeProgress}/>
+            <div id="current"></div>
+            <div id="duration"></div> */}
             
             {/* song name */}
             <p style={styles.title}>{currentSong ? currentSong.title : "---"}</p>

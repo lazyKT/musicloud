@@ -206,6 +206,13 @@ export function UserDashboard() {
         }   
     }
 
+    /** -- repeat one song -- */
+    function repeat_song(current_song) {
+        console.log("repeat one");
+        dispatch({ type: "pointed", song: current_song });
+        dispatch({ type: "currentPlaying", id: songs.indexOf(current_song) });
+    }
+
     /** -- previous song -- */
     function prev_song(event, id, options) {
         event.preventDefault();
@@ -289,7 +296,7 @@ export function UserDashboard() {
             {/* Music Player */}
             <div style={styles.player}>
                 <Player pSong={pointed} allSong={playlist} shuffle_all={shuffle_all}
-                    next_song={next_song} prev_song={prev_song}/>
+                    next_song={next_song} prev_song={prev_song} repeat_one={repeat_song} />
             </div>
 
             {/* Add Song Option */}

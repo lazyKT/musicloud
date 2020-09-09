@@ -31,4 +31,3 @@ export function firstSongURL(songs, url) {
     // return null if songs is empty
     return null;
 }
-
