@@ -174,10 +174,16 @@ export function Player(props) {
         }
     }
 
-    /** -- onChange Progress bar -- */
+    /** -- onChange Progress bar -- 
+     * Move to desired position (time) of a song using progress bar
+    */
     function onChangeProgress(event) {
-        if(currentSong)
-            song.currentTime = event.target.value;
+        console.log(currentSong, Number(event.target.value));
+        if(currentSong || pSong) {
+            console.log(song.currentTime);
+            song.currentTime = Number(event.target.value);
+            //setTime(Number(event.target.value));
+        }
     }
 
     /** -- load progress bar on play -- */
@@ -206,13 +212,8 @@ export function Player(props) {
     /** -- clean up play/pause useEffect -- */
     function clean_up_pp(interval_func) {
         if(currentSong) {
-            console.log("clan up pp");
+            //console.log("current time = ",song.currentTime);
             clearInterval(interval_func);
-            //setTime(0);
-            if (repeat%3 === 2) {
-                // dispatch({ type: "play_pause" });
-            }
-                
         }
     }
 
@@ -249,6 +250,8 @@ export function Player(props) {
 
     /** Side Effects on Repeat, Shuffle and Play Btn Click */
     useEffect(() => {
+
+        console.log("pp");
 
         let updateProg = null;
 
