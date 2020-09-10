@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useReducer, useRef } from 'react';
-import { firstSongURL } from './Utilities';
+import { firstSongURL, formatTimeStamps } from './Utilities';
 
 /* Icons From Material UI */
 import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
@@ -58,6 +58,23 @@ const styles = {
         display: "block",
         width: "fit-content",
         margin: "auto",
+    },
+    progress: {
+        width: "300px",
+        display: "block",
+        margin: "auto"
+    },  
+    timeDiv: {
+        display: "flex",
+        width: "320px",
+        margin: "auto"
+    },
+    durationDiv: {
+        marginLeft: "75%",
+        width: "45px"
+    },
+    currentDiv: {
+        width: "45px"
     }
 }
 
@@ -66,7 +83,8 @@ const init = {
     repeat: 0,
     shuffle: true,
     currentSong: null,
-    playing: false
+    playing: false,
+    duration: 0
 }
 
 /** Reducer Function */
@@ -92,6 +110,9 @@ function reducer(state, action) {
         
         case "play_song":
             return { ...state, playing: true };
+
+        case "setDuration":
+            return { ...state, duration: action.duration }
              
         default:
             throw new Error();
@@ -104,13 +125,12 @@ export function Player(props) {
     const { pSong, allSong, next_song, prev_song, shuffle_all, repeat_one } = props;
 
     let song = document.getElementById("song");
-    let prog = document.getElementById("progress-bar");
 
     const dev_url = "http://127.0.0.1:8000/listen/";
 
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
-    const { repeat, shuffle, currentSong, playing } = state;
+    const { repeat, shuffle, currentSong, playing, duration } = state;
 
     /**
      * 0 = no repeat
@@ -121,9 +141,11 @@ export function Player(props) {
     const shuffleRef = useRef(null);
     const skipRef = useRef(null);
     const prevRef = useRef(null);
-    const progRef = useRef(null);
+    const prog = useRef(0);
+    const currentRef = useRef(0);
 
     const [ hover, setHover ] = useState(false);
+    const [ time, setTime ] = useState(0);
 
 
     /* -- play/pause song */
@@ -152,28 +174,23 @@ export function Player(props) {
         }
     }
 
-    // /** -- onChange Progress bar -- */
-    // function onChangeProgress() {
-    //     //console.log(song.currentTime,"/",song.duration);
-    //     song.currentTime = prog.value;
-    // }
-
-
-    // /** -- change progress bar on playing -- */
-    // function changeProgOnPlay() {
-    //     prog.max = song.duration;
-    //     prog.value = song.currentTime;
-    // }
+    /** -- onChange Progress bar -- */
+    function onChangeProgress(event) {
+        if(currentSong)
+            song.currentTime = event.target.value;
+    }
 
     /** -- load progress bar on play -- */
     function loadProgBar() {
-        prog.max = song.duration;
-        prog.value = song.currentTime;
+        prog.current.max = song.duration;
+        prog.current.value = song.currentTime;
+        setTime(song.currentTime);
+        dispatch({ type: "setDuration", duration: song.duration })
     }
 
 
     /** -- clean up useEffect of play/pause -- */
-    function clean_up_lastSong() {
+    function clean_up_song() {
         console.log("clean up", song);
         if (currentSong && allSong.indexOf(currentSong) === (allSong.length - 1)
             && repeat%3 !== 1) {
@@ -186,10 +203,24 @@ export function Player(props) {
     }
 
 
+    /** -- clean up play/pause useEffect -- */
+    function clean_up_pp(interval_func) {
+        if(currentSong) {
+            console.log("clan up pp");
+            clearInterval(interval_func);
+            //setTime(0);
+            if (repeat%3 === 2) {
+                // dispatch({ type: "play_pause" });
+            }
+                
+        }
+    }
+
+
     /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
 
-        console.log("playing", pSong);
+        console.log("pSong");
 
         // if shuffle_all was on
         if (shuffle_all)
@@ -211,7 +242,7 @@ export function Player(props) {
         }
 
         /** -- clean up -- */
-        return (clean_up_lastSong());
+        return (clean_up_song());
 
     }, [pSong, shuffle_all])
 
@@ -219,8 +250,10 @@ export function Player(props) {
     /** Side Effects on Repeat, Shuffle and Play Btn Click */
     useEffect(() => {
 
-        console.log("playing", playing);
-        console.log("song", song);
+        let updateProg = null;
+
+        if (currentSong)
+            loadProgBar();
 
         /** play btn operation */
         if (playing) {
@@ -231,10 +264,13 @@ export function Player(props) {
             toggleSkipRev_Btn(true);
             // play the first song on play btn click
             song.play();
+
+            updateProg = setInterval(loadProgBar, 1000);
         } else {
             // pause the song
             currentSong && song.pause();
-            
+            if (currentSong)
+                clearInterval(updateProg);
         }
                    
         /** toggle shuffle  */
@@ -246,7 +282,7 @@ export function Player(props) {
         repeat%3 > 0 && ( repeatRef.current.style.color = "black" );
         
         /** -- clean up useEffect -- */
-        
+        return clean_up_pp;
         
     }, [playing, repeat, shuffle]);
 
@@ -289,10 +325,15 @@ export function Player(props) {
                : next_song(event, allSong.indexOf(currentSong) + 1, state) }/>
             
             {/* audio progress bar */}
-            {/* <input id="progress-bar" type="range" min="0" max="" 
-              value="" onChange={onChangeProgress}/>
-            <div id="current"></div>
-            <div id="duration"></div> */}
+            { (currentSong || pSong) && 
+                <input ref={prog} type="range" min="0" max="" style={styles.progress}
+                defaultValue="" onChange={onChangeProgress}/>}
+
+            {/* display timestamps of song */}
+            <div style={styles.timeDiv}>
+                <div ref={currentRef} style={styles.currentDiv}>{formatTimeStamps(time)}</div>
+                <div style={styles.durationDiv}>{formatTimeStamps(duration)}</div>
+            </div>
             
             {/* song name */}
             <p style={styles.title}>{currentSong ? currentSong.title : "---"}</p>

@@ -31,3 +31,34 @@ export function firstSongURL(songs, url) {
     // return null if songs is empty
     return null;
 }
+
+
+/**
+ * convert seconds to hh:mm:ss format 
+ */
+export function formatTimeStamps(seconds) {
+
+    let s = Number(seconds);
+    let min = 0;
+    let hr = 0;
+
+    // if less than an hour
+    if (s < 3600) {
+        min = Math.floor(s/60);
+        s = Math.floor(s%60);
+
+        let timestamps = padZero((min).toString()) + ":" + padZero((s).toString());
+        return timestamps;
+    } 
+    return "00:00"
+}
+
+
+/**
+ * pad zeros to the start of timestamps
+ */
+function padZero(time) {
+    if (time.length < 2)
+        return `0${time}`;
+    return time;
+}
