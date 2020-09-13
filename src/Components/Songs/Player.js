@@ -84,13 +84,14 @@ const init = {
     shuffle: true,
     currentSong: null,
     playing: false,
-    duration: 0
+    duration: 0,
+    adjustTime : false
 }
 
 /** Reducer Function */
 function reducer(state, action) {
     // destructure the state object
-    const { repeat, shuffle, playing } = state;
+    const { repeat, shuffle, playing, adjustTime } = state;
 
     switch (action.type) {
         case "repeatClk":
@@ -113,6 +114,9 @@ function reducer(state, action) {
 
         case "setDuration":
             return { ...state, duration: action.duration }
+        
+        case "adjustTime":
+            return { ...state, adjustTime: !adjustTime }
              
         default:
             throw new Error();
@@ -141,11 +145,11 @@ export function Player(props) {
     const shuffleRef = useRef(null);
     const skipRef = useRef(null);
     const prevRef = useRef(null);
-    const prog = useRef(null);
     const currentRef = useRef(0);
+    const songRef = useRef(null);
 
     const [ hover, setHover ] = useState(false);
-    const [ time, setTime ] = useState(0);
+    const [ currentTime, setCurrentTime ] = useState(0);
 
 
     /** handle shuffle and repeat click -- */
@@ -189,21 +193,33 @@ export function Player(props) {
      * Move to desired position (time) of a song using progress bar
     */
     function onChangeProgress(event) {
-        console.log(currentSong, Number(event.target.value));
-        if(currentSong || pSong) {
-            console.log(song.currentTime);
-            song.currentTime = Number(event.target.value);
-        }
+       let time = (event.target.value * duration) / 100;
+       setCurrentTime(time);
+       songRef.current.currentTime = time;
     }
 
-    /** -- load progress bar on play -- */
-    function loadProgBar() {
-        console.log("update");
-        prog.current.max = song.duration;
-        prog.current.value = song.currentTime;
-        setTime(song.currentTime);
-        dispatch({ type: "setDuration", duration: song.duration })
+
+    function handleEnd(event) {
+        console.log("current song", songRef.current, currentSong);
     }
+
+     /** -- side effects on playing state */
+     useEffect(() => {
+
+        // only if there is a song to play, start the play/pause operation
+        if (currentSong) {
+            if (playing) {
+                songRef.current.play();
+            } else {
+                songRef.current.pause();
+            }
+        }
+
+        /** handle shuffle and repeat ops */
+        handleShuffleRepeat(shuffle, repeat);
+
+    }, [playing, currentSong, shuffle, repeat]);
+
 
     /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
@@ -214,40 +230,12 @@ export function Player(props) {
             dispatch({ type: "load_song", song: pSong }); // set currentSong
             dispatch({ type: "play_song"});
             toggleSkipRev_Btn(true);
-            song.play();
         } else {
             dispatch({ type: "stop" });
             toggleSkipRev_Btn(false);
         }
 
     }, [pSong, shuffle_all]);
-
-
-    /** -- side effects on playing state */
-    useEffect(() => {
-
-        let updateProg = null;
-
-        // only if there is a song to play, start the play/pause operation
-        if (currentSong) {
-
-            updateProg = setInterval(loadProgBar, 1000);
-
-            if (playing) {
-                song.play();
-            } else {
-                song.pause();
-            }
-        }
-
-        /** handle shuffle and repeat ops */
-        handleShuffleRepeat(shuffle, repeat);
-
-        /** clean up */
-        return () => updateProg && clearInterval(updateProg);
-
-    }, [playing, currentSong, shuffle, repeat]);
-
 
     /* -- Rendering of Player -- */
     return(
@@ -287,22 +275,25 @@ export function Player(props) {
             </div>
 
             {/* audio tag */}
-            <audio id="song" 
+            <audio id="song" ref={songRef} type="audio/mp3" preload="true"
+             onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
+             onCanPlay={e => dispatch({ type: "setDuration", duration: e.target.duration }) }
              src={currentSong ? `${dev_url}${currentSong.id}` 
                 : firstSongURL(allSong, dev_url)} 
              onEnded={ (event) => 
-               repeat%3 === 2 ? repeat_one(currentSong) 
+               repeat%3 === 2 ? handleEnd(event)
                : next_song(event, allSong.indexOf(currentSong) + 1, state) }/>
             
             {/* audio progress bar */}
             { (currentSong || pSong) && 
-                <input ref={prog} type="range" min="0" max="" style={styles.progress}
-                defaultValue="" onChange={onChangeProgress}/>}
+                <input type="range" style={styles.progress}
+                value={duration ? (currentTime * 100)/duration : 0} 
+                onChange={onChangeProgress}/>}
 
             {/* display timestamps of song */}
             { (currentSong) && 
                 <div style={styles.timeDiv}>
-                    <div ref={currentRef} style={styles.currentDiv}>{formatTimeStamps(time)}</div>
+                    <div ref={currentRef} style={styles.currentDiv}>{formatTimeStamps(currentTime)}</div>
                     <div style={styles.durationDiv}>{formatTimeStamps(duration)}</div>
                 </div>}
             
