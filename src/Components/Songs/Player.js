@@ -106,7 +106,7 @@ function reducer(state, action) {
             return { ...state, playing: !playing };   
 
         case "stop":
-            return { ...state, playing: false };
+            return { ...state, playing: false, currentSong: null };
         
         case "play_song":
             return { ...state, playing: true };
@@ -141,11 +141,22 @@ export function Player(props) {
     const shuffleRef = useRef(null);
     const skipRef = useRef(null);
     const prevRef = useRef(null);
-    const prog = useRef(0);
+    const prog = useRef(null);
     const currentRef = useRef(0);
 
     const [ hover, setHover ] = useState(false);
     const [ time, setTime ] = useState(0);
+
+
+    /** handle shuffle and repeat click -- */
+    function handleShuffleRepeat(s, r) {
+        /** shuffle */
+        s ? ( shuffleRef.current.style.color = "blue" ) 
+        : ( shuffleRef.current.style.color = "grey" );
+        /** repeat */
+        (r % 3) === 0 && ( repeatRef.current.style.color = "grey" );
+        (r % 3) > 0 && ( repeatRef.current.style.color = "black" );
+    }
 
 
     /* -- play/pause song */
@@ -182,140 +193,96 @@ export function Player(props) {
         if(currentSong || pSong) {
             console.log(song.currentTime);
             song.currentTime = Number(event.target.value);
-            //setTime(Number(event.target.value));
         }
     }
 
     /** -- load progress bar on play -- */
     function loadProgBar() {
+        console.log("update");
         prog.current.max = song.duration;
         prog.current.value = song.currentTime;
         setTime(song.currentTime);
         dispatch({ type: "setDuration", duration: song.duration })
     }
 
-
-    /** -- clean up useEffect of play/pause -- */
-    function clean_up_song() {
-        console.log("clean up", song);
-        if (currentSong && allSong.indexOf(currentSong) === (allSong.length - 1)
-            && repeat%3 !== 1) {
-            // console.log("last song");
-            // stop the song
-            song.pause();
-            song.currentTime = 0;
-            dispatch({ type: "load_song", song: null });
-        }
-    }
-
-
-    /** -- clean up play/pause useEffect -- */
-    function clean_up_pp(interval_func) {
-        if(currentSong) {
-            //console.log("current time = ",song.currentTime);
-            clearInterval(interval_func);
-        }
-    }
-
-
     /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
 
         console.log("pSong");
 
-        // if shuffle_all was on
-        if (shuffle_all)
-            dispatch({ type: "shuffleClk" });
-        else 
-            dispatch({ type: "shuffleClk" });
-
         if (pSong) {
-        
-            dispatch({ type: "load_song", song: pSong });
-            dispatch({ type: "play_song" });
-
+            dispatch({ type: "load_song", song: pSong }); // set currentSong
+            dispatch({ type: "play_song"});
             toggleSkipRev_Btn(true);
-        }        
-        if (!pSong)
-        {
-            toggleSkipRev_Btn(false);
+            song.play();
+        } else {
             dispatch({ type: "stop" });
+            toggleSkipRev_Btn(false);
         }
 
-        /** -- clean up -- */
-        return (clean_up_song());
-
-    }, [pSong, shuffle_all])
+    }, [pSong, shuffle_all]);
 
 
-    /** Side Effects on Repeat, Shuffle and Play Btn Click */
+    /** -- side effects on playing state */
     useEffect(() => {
-
-        console.log("pp");
 
         let updateProg = null;
 
-        if (currentSong)
-            loadProgBar();
-
-        /** play btn operation */
-        if (playing) {
-
-            if (!currentSong)
-                dispatch({ type: "load_song", song: allSong[0] });
-
-            toggleSkipRev_Btn(true);
-            // play the first song on play btn click
-            song.play();
+        // only if there is a song to play, start the play/pause operation
+        if (currentSong) {
 
             updateProg = setInterval(loadProgBar, 1000);
-        } else {
-            // pause the song
-            currentSong && song.pause();
-            if (currentSong)
-                clearInterval(updateProg);
-        }
-                   
-        /** toggle shuffle  */
-        shuffle ? ( shuffleRef.current.style.color = "blue" ) 
-            : ( shuffleRef.current.style.color = "grey" );
 
-        /** repeat operation  */
-        repeat%3 === 0 && ( repeatRef.current.style.color = "grey" );
-        repeat%3 > 0 && ( repeatRef.current.style.color = "black" );
-        
-        /** -- clean up useEffect -- */
-        return clean_up_pp;
-        
-    }, [playing, repeat, shuffle]);
+            if (playing) {
+                song.play();
+            } else {
+                song.pause();
+            }
+        }
+
+        /** handle shuffle and repeat ops */
+        handleShuffleRepeat(shuffle, repeat);
+
+        /** clean up */
+        return () => updateProg && clearInterval(updateProg);
+
+    }, [playing, currentSong, shuffle, repeat]);
 
 
     /* -- Rendering of Player -- */
     return(
         <div style={styles.contianer}>
             <div style={styles.bDiv}>
-                <ShuffleIcon style={styles.shuffle} ref={ shuffleRef } onClick={() => dispatch({ type: "shuffleClk" }) }/>
-                <SkipPreviousIcon style={styles.previous} ref={prevRef}
-                    onClick={(event) => prev_song(event, allSong.indexOf(currentSong) - 1, state)}
-                    onMouseOver={onHover} onMouseLeave={onHover} />
+
+                {/* shuffle button */}
+                <ShuffleIcon style={styles.shuffle} ref={ shuffleRef } 
+                    onClick={() => currentSong && dispatch({ type: "shuffleClk" }) }/>
+
+                {/* previous button */}
+                <SkipPreviousIcon style={styles.previous} ref={prevRef} onMouseOver={onHover} onMouseLeave={onHover} 
+                    onClick={(event) => 
+                    currentSong && prev_song(event, allSong.indexOf(currentSong) - 1, state)}/>
 
                 {/* Pause or Play */}
                 {
                     playing 
-                    ? <PauseCircleFilledOutlinedIcon style={styles.play} onClick={play_or_pause}
-                        />
-                    : <PlayCircleFilledOutlinedIcon style={styles.play} onClick={play_or_pause}/>
+                    ? <PauseCircleFilledOutlinedIcon style={styles.play} onClick={currentSong && play_or_pause}/>
+                    : <PlayCircleFilledOutlinedIcon style={styles.play} onClick={currentSong && play_or_pause}/>
                 }
 
+                {/* next button */}
                 <SkipNextIcon style={styles.skip} ref={skipRef} disabled={true}
-                    onClick={(event) => next_song(event, allSong.indexOf(currentSong) + 1, state)} 
+                    onClick={(event) => 
+                        currentSong && next_song(event, allSong.indexOf(currentSong) + 1, state)} 
                     />
 
                 {/* repeat btn state */}
                 {
                     (repeat%3) === 2 
-                    ? <RepeatOneIcon ref={repeatRef} style={styles.repeat} onClick={() => dispatch({ type: "repeatClk" })}/>
-                    : <RepeatIcon ref={repeatRef} style={styles.repeat} onClick={() => dispatch({ type: "repeatClk" })}/>
+                    ? <RepeatOneIcon ref={repeatRef} style={styles.repeat} 
+                        onClick={() => currentSong && dispatch({ type: "repeatClk" })}/>
+                    : <RepeatIcon ref={repeatRef} style={styles.repeat} 
+                        onClick={() => currentSong && dispatch({ type: "repeatClk" })}/>
                 }
             </div>
 
@@ -333,10 +300,11 @@ export function Player(props) {
                 defaultValue="" onChange={onChangeProgress}/>}
 
             {/* display timestamps of song */}
-            <div style={styles.timeDiv}>
-                <div ref={currentRef} style={styles.currentDiv}>{formatTimeStamps(time)}</div>
-                <div style={styles.durationDiv}>{formatTimeStamps(duration)}</div>
-            </div>
+            { (currentSong) && 
+                <div style={styles.timeDiv}>
+                    <div ref={currentRef} style={styles.currentDiv}>{formatTimeStamps(time)}</div>
+                    <div style={styles.durationDiv}>{formatTimeStamps(duration)}</div>
+                </div>}
             
             {/* song name */}
             <p style={styles.title}>{currentSong ? currentSong.title : "---"}</p>
