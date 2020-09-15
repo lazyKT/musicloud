@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useReducer, useRef } from 'react';
 import { firstSongURL, formatTimeStamps } from './Utilities';
+import PlayerControls from './PlayerControls';
+
+import sample2 from "../../Samples/Sample2.mp3";
 
 /* Icons From Material UI */
 import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
@@ -112,9 +115,6 @@ function reducer(state, action) {
         case "play_song":
             return { ...state, playing: true };
 
-        case "setDuration":
-            return { ...state, duration: action.duration }
-        
         case "adjustTime":
             return { ...state, adjustTime: !adjustTime }
              
@@ -126,48 +126,32 @@ function reducer(state, action) {
 
 export function Player(props) {
 
-    const { pSong, allSong, next_song, prev_song, shuffle_all, repeat_one } = props;
-
-    let song = document.getElementById("song");
+    const { pSong, allSong, next_song, prev_song, shuffle_all } = props;
 
     const dev_url = "http://127.0.0.1:8000/listen/";
 
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
-    const { repeat, shuffle, currentSong, playing, duration } = state;
+    const { repeat, shuffle, currentSong, playing } = state;
 
     /**
      * 0 = no repeat
      * 1 = repeat all
      * 2 = repeat single
      */
-    const repeatRef = useRef(0);
-    const shuffleRef = useRef(null);
-    const skipRef = useRef(null);
-    const prevRef = useRef(null);
     const currentRef = useRef(0);
     const songRef = useRef(null);
 
     const [ hover, setHover ] = useState(false);
     const [ currentTime, setCurrentTime ] = useState(0);
-
-
-    /** handle shuffle and repeat click -- */
-    function handleShuffleRepeat(s, r) {
-        /** shuffle */
-        s ? ( shuffleRef.current.style.color = "blue" ) 
-        : ( shuffleRef.current.style.color = "grey" );
-        /** repeat */
-        (r % 3) === 0 && ( repeatRef.current.style.color = "grey" );
-        (r % 3) > 0 && ( repeatRef.current.style.color = "black" );
-    }
+    const [ duration, setDuration ] = useState(0);
 
 
     /* -- play/pause song */
     function play_or_pause(event) {
         event.preventDefault();
         // if playing, pause the song. if not playing, play the song
-        dispatch({ type: "play_pause" });
+        if (currentSong) dispatch({ type: "play_pause" });
     }
 
 
@@ -178,16 +162,18 @@ export function Player(props) {
             : event.target.style.background = "#d3d3d3";
     }
 
-    /** -- disable/enable skip/rev buttons -- */
-    function toggleSkipRev_Btn(enable = false) {
-        if (enable) {
-            skipRef.current.style.background = "#000";
-            prevRef.current.style.background = "#000";
-        } else {
-            skipRef.current.style.background = "#d3d3d3";
-            prevRef.current.style.background = "#d3d3d3";
-        }
-    }
+
+    // onClick event on shuffle btn
+    const shuffleClk = () => currentSong && dispatch({ type: "shuffleClk" });
+
+    // onClick event on repeat btn
+    const repeatClk = () =>  currentSong && dispatch({ type: "repeatClk" });
+
+    // onClick event on skip btn
+    const skipClk = (e) => currentSong && next_song(e, allSong.indexOf(currentSong) + 1, state);
+
+    const prevClk = (e) => currentSong && prev_song(e, allSong.indexOf(currentSong) - 1, state)
+
 
     /** -- onChange Progress bar -- 
      * Move to desired position (time) of a song using progress bar
@@ -196,11 +182,6 @@ export function Player(props) {
        let time = (event.target.value * duration) / 100;
        setCurrentTime(time);
        songRef.current.currentTime = time;
-    }
-
-
-    function handleEnd(event) {
-        console.log("current song", songRef.current, currentSong);
     }
 
      /** -- side effects on playing state */
@@ -215,10 +196,10 @@ export function Player(props) {
             }
         }
 
-        /** handle shuffle and repeat ops */
-        handleShuffleRepeat(shuffle, repeat);
+        if (repeat % 3 === 2 && currentSong) songRef.current.loop = true;
 
-    }, [playing, currentSong, shuffle, repeat]);
+
+    }, [playing, currentSong, repeat]);
 
 
     /** -- side effects on Song Card Click or Shuffle All --  */
@@ -229,60 +210,36 @@ export function Player(props) {
         if (pSong) {
             dispatch({ type: "load_song", song: pSong }); // set currentSong
             dispatch({ type: "play_song"});
-            toggleSkipRev_Btn(true);
         } else {
             dispatch({ type: "stop" });
-            toggleSkipRev_Btn(false);
+            songRef.current.pause();
         }
+
+        return () => { if(pSong) {
+            songRef.current.pause();
+            songRef.current.currentTime = 0;
+        }}
 
     }, [pSong, shuffle_all]);
 
     /* -- Rendering of Player -- */
     return(
         <div style={styles.contianer}>
-            <div style={styles.bDiv}>
 
-                {/* shuffle button */}
-                <ShuffleIcon style={styles.shuffle} ref={ shuffleRef } 
-                    onClick={() => currentSong && dispatch({ type: "shuffleClk" }) }/>
+            {/* Player Control buttons */}
+            <PlayerControls allSong={allSong} next_song={next_song} onHover={onHover} 
+             shuffleClk={shuffleClk} repeatClk={repeatClk} currentSong={currentSong}
+             prev_song={prev_song} play_or_pause={play_or_pause} shuffle={shuffle} 
+             repeat={repeat} playing={playing} skipClk={skipClk} prevClk={prevClk}/>
 
-                {/* previous button */}
-                <SkipPreviousIcon style={styles.previous} ref={prevRef} onMouseOver={onHover} onMouseLeave={onHover} 
-                    onClick={(event) => 
-                    currentSong && prev_song(event, allSong.indexOf(currentSong) - 1, state)}/>
-
-                {/* Pause or Play */}
-                {
-                    playing 
-                    ? <PauseCircleFilledOutlinedIcon style={styles.play} onClick={currentSong && play_or_pause}/>
-                    : <PlayCircleFilledOutlinedIcon style={styles.play} onClick={currentSong && play_or_pause}/>
-                }
-
-                {/* next button */}
-                <SkipNextIcon style={styles.skip} ref={skipRef} disabled={true}
-                    onClick={(event) => 
-                        currentSong && next_song(event, allSong.indexOf(currentSong) + 1, state)} 
-                    />
-
-                {/* repeat btn state */}
-                {
-                    (repeat%3) === 2 
-                    ? <RepeatOneIcon ref={repeatRef} style={styles.repeat} 
-                        onClick={() => currentSong && dispatch({ type: "repeatClk" })}/>
-                    : <RepeatIcon ref={repeatRef} style={styles.repeat} 
-                        onClick={() => currentSong && dispatch({ type: "repeatClk" })}/>
-                }
-            </div>
 
             {/* audio tag */}
-            <audio id="song" ref={songRef} type="audio/mp3" preload="true"
-             onTimeUpdate={e => setCurrentTime(e.target.currentTime)}
-             onCanPlay={e => dispatch({ type: "setDuration", duration: e.target.duration }) }
-             src={currentSong ? `${dev_url}${currentSong.id}` 
-                : firstSongURL(allSong, dev_url)} 
-             onEnded={ (event) => 
-               repeat%3 === 2 ? handleEnd(event)
-               : next_song(event, allSong.indexOf(currentSong) + 1, state) }/>
+            <audio ref={songRef} type="audio/mpeg" preload="true" id="song"
+             onTimeUpdate = { e => setCurrentTime(e.target.currentTime) }
+             onCanPlay={ e => setDuration(e.target.duration) }
+             onEnded={ e =>  repeat%3 !== 2 && next_song(e, allSong.indexOf(currentSong) + 1, state) }
+             src={ sample2 }
+             />
             
             {/* audio progress bar */}
             { (currentSong || pSong) && 

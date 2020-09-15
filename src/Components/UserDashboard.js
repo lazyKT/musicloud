@@ -180,6 +180,8 @@ export function UserDashboard() {
     /** -- next song -- */
     function next_song(event, id, options) {
 
+        console.log("skip");
+
         const { shuffle, repeat } = options;
         //console.log("repeat", repeat%3);
         
@@ -216,6 +218,8 @@ export function UserDashboard() {
     /** -- previous song -- */
     function prev_song(event, id, options) {
         event.preventDefault();
+
+        console.log("prev");
 
         const { shuffle, repeat } = options;
 

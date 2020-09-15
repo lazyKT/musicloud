@@ -13,6 +13,7 @@
 
 # misc
 /src/Components/Config.js
+/src/Samples
 .DS_Store
 .env
 .env.local
