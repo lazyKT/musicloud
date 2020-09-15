@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useReducer, useRef } from 'react';
-import { firstSongURL, formatTimeStamps } from './Utilities';
+import { formatTimeStamps } from './Utilities';
 import PlayerControls from './PlayerControls';
+import { getSong } from '../UsersReqs/SongRequests';
 
 import sample2 from "../../Samples/Sample2.mp3";
 
@@ -77,11 +78,10 @@ export function Player(props) {
 
     const { pSong, allSong, next_song, prev_song, shuffle_all } = props;
 
-    const dev_url = "http://127.0.0.1:8000/listen/";
-
     // define useReducer
     const [ state, dispatch ] = useReducer(reducer, init);
     const { repeat, shuffle, currentSong, playing } = state;
+    const [ url, setUrl ] = useState();
 
     /**
      * 0 = no repeat
@@ -94,6 +94,16 @@ export function Player(props) {
     const [ hover, setHover ] = useState(false);
     const [ currentTime, setCurrentTime ] = useState(0);
     const [ duration, setDuration ] = useState(0);
+
+
+    /** get song data */
+    async function getSongData(id) {
+        const data = await getSong(id);
+        console.log("data", data);
+        if (data) {
+            setUrl(data);
+        }
+    }
 
 
     /* -- play/pause song */
@@ -148,7 +158,7 @@ export function Player(props) {
         if (repeat % 3 === 2 && currentSong) songRef.current.loop = true;
         else songRef.current.loop = false;
 
-    }, [playing, currentSong, repeat]);
+    }, [playing, currentSong, repeat, url]);
 
 
     /** -- side effects on Song Card Click or Shuffle All --  */
@@ -157,8 +167,9 @@ export function Player(props) {
         console.log("pSong");
 
         if (pSong) {
+            getSongData(pSong.id);
             dispatch({ type: "load_song", song: pSong }); // set currentSong
-            dispatch({ type: "play_song"});
+            dispatch({ type: "play_song"});      
         } else {
             dispatch({ type: "stop" });
             songRef.current.pause();
@@ -170,6 +181,10 @@ export function Player(props) {
         }}
 
     }, [pSong, shuffle_all]);
+
+    // useEffect(() => {
+
+    // }, [url])
 
     /* -- Rendering of Player -- */
     return(
@@ -187,7 +202,7 @@ export function Player(props) {
              onTimeUpdate = { e => setCurrentTime(e.target.currentTime) }
              onCanPlay={ e => setDuration(e.target.duration) }
              onEnded={ e =>  repeat%3 !== 2 && next_song(e, allSong.indexOf(currentSong) + 1, state) }
-             src={ sample2 }
+             src={ url }
              />
             
             {/* audio progress bar */}

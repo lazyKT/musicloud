@@ -49,3 +49,29 @@ export async function fetchMySongsReq(token) {
         return error;
     }
 }
+
+
+/**
+ * Get A Song's Blob Data from server to play
+ */
+export async function getSong(id) {
+    const url = `http://127.0.0.1:8000/listen/${id}`;
+    //console.log("url", url);
+    try {
+        const response = await axios.get(url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'Content-Type': 'audio/mp3'
+            }
+        });
+        console.log(response);
+        const blob = new Blob([response.data], {
+            type: 'audio/mpeg'
+        });
+        const bloburl = URL.createObjectURL(blob);
+        console.log("url", bloburl)
+        return bloburl;
+    } catch (error) {
+        console.log("get song error", error);
+    }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { AddSong } from './Songs/AddSong'
 import { useCookies } from './Hooks/useCookies';
-import { fetchMySongsReq } from './UsersReqs/SongRequests';
+import { fetchMySongsReq, getSong } from './UsersReqs/SongRequests';
 import { SongCard } from './Songs/SongCard';
 import { Player } from './Songs/Player';
 import { shuffleSongs } from './Songs/Utilities';
@@ -172,6 +172,7 @@ export function UserDashboard() {
     /* -- OnClick Song Cards */
     function onClickCards(event, key) {
         event.preventDefault();
+        getSong(songs[key].id);
         console.log("click on", key);
         dispatch({ type: "pointed", song: songs[key]});
         dispatch({ type: "currentPlaying", id: key });
