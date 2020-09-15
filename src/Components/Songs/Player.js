@@ -4,58 +4,12 @@ import PlayerControls from './PlayerControls';
 
 import sample2 from "../../Samples/Sample2.mp3";
 
-/* Icons From Material UI */
-import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
-import PauseCircleFilledOutlinedIcon from '@material-ui/icons/PauseCircleFilledOutlined';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import RepeatIcon from '@material-ui/icons/Repeat';
-import RepeatOneIcon from '@material-ui/icons/RepeatOne';
-import ShuffleIcon from '@material-ui/icons/Shuffle';
-
 /* -- Styling for Player */
 const styles = {
     contianer: {
         width: "60%",
         margin: "auto",
         padding: "10px"
-    },
-    bDiv: {
-        width: "fit-content",
-        margin: "auto"
-    },
-    play: {
-        fontSize: "60px",
-        margin: "0px 30px"
-    },
-    skip: {
-        fontSize: "23px",
-        padding: "7px",
-        display: "inline-block",
-        marginBottom: "10px",
-        borderRadius: "50%",
-        background: "black",
-        color: "white"
-    },
-    previous: {
-        fontSize: "23px",
-        padding: "7px",
-        display: "inline-block",
-        marginBottom: "10px",
-        borderRadius: "50%",
-        background: "black",
-        color: "white"
-    },
-    shuffle: {
-        marginBottom: "10px",
-        padding: "0px 40px",
-        fontSize: "18px"
-    },
-    repeat: {
-        marginBottom: "10px",
-        padding: "0px 40px",
-        fontSize: "18px",
-        color: 'grey'
     },
     title: {
         display: "block",
@@ -86,15 +40,13 @@ const init = {
     repeat: 0,
     shuffle: true,
     currentSong: null,
-    playing: false,
-    duration: 0,
-    adjustTime : false
+    playing: false
 }
 
 /** Reducer Function */
 function reducer(state, action) {
     // destructure the state object
-    const { repeat, shuffle, playing, adjustTime } = state;
+    const { repeat, shuffle, playing } = state;
 
     switch (action.type) {
         case "repeatClk":
@@ -114,9 +66,6 @@ function reducer(state, action) {
         
         case "play_song":
             return { ...state, playing: true };
-
-        case "adjustTime":
-            return { ...state, adjustTime: !adjustTime }
              
         default:
             throw new Error();
@@ -195,9 +144,9 @@ export function Player(props) {
                 songRef.current.pause();
             }
         }
-
+        // single repeat
         if (repeat % 3 === 2 && currentSong) songRef.current.loop = true;
-
+        else songRef.current.loop = false;
 
     }, [playing, currentSong, repeat]);
 
@@ -214,7 +163,7 @@ export function Player(props) {
             dispatch({ type: "stop" });
             songRef.current.pause();
         }
-
+        // clean up
         return () => { if(pSong) {
             songRef.current.pause();
             songRef.current.currentTime = 0;
