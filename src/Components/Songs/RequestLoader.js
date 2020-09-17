@@ -1,6 +1,7 @@
 /** -- UI (render) part of Song Player -- */
 import React, { useEffect }  from 'react';
 import Loader from 'react-loader-spinner';
+import { FakeReq } from './Utilities';
 
 const styles = {
     loaderContainer: {
@@ -36,14 +37,21 @@ function RequestLoader (props) {
     function startProcess(name) {
         let processTime = 0;
 
-        let processInterval = setInterval(processing, 1000);
+        let processInterval = setInterval(processing, 5000);
 
-        function processing() {
-            if (processTime >= 10) {
+        async function processing() {
+            try {
+                const resp = await FakeReq();
+                console.log(resp);
+                addSong(name, true);
                 clearInterval(processInterval);
-                addSong(name);
+            } catch (err) {
+                console.log(err);
+                if (processTime > 5) {
+                    addSong(name, false);
+                    clearInterval(processInterval);
+                }
             }
-            processTime++;
         }
     }
 
@@ -61,7 +69,7 @@ function RequestLoader (props) {
                     color="#00BFFF"
                     height={30}
                     width={30}
-                    timeout={10000} //31 secs
+                    timeout={31000} //31 secs
                 />
                 &nbsp;
                 <Loader
@@ -69,7 +77,7 @@ function RequestLoader (props) {
                     color="#00BFFF"
                     height={30}
                     width={30}
-                    timeout={10000} //31 secs
+                    timeout={31000} //31 secs
                 /> 
             </div>
           </div>

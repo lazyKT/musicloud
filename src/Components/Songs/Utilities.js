@@ -50,3 +50,17 @@ function padZero(time) {
     return time;
 }
 
+
+/** Fake Network Req For Testing */
+export function FakeReq() {
+
+    return new Promise( (resolve, reject) => {
+        const num = Math.floor(Math.random() * 100);
+
+        if (num % 9 <= 3) {
+            resolve("200");
+        } else {
+            reject("Error Encountered");
+        }
+    });
+}

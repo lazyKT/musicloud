@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { AddSong } from './Songs/AddSong'
 import { useCookies } from './Hooks/useCookies';
 import { fetchMySongsReq, getSong } from './UsersReqs/SongRequests';
@@ -142,10 +144,16 @@ export function UserDashboard() {
     }
 
     // add song upon request finished
-    function addSongOnReq(request) {
-        const newSong = {title: request, id: 1000, posted_by: 1};
-        const newList = [ newSong, ...songs ];
-        dispatch({ type: "getSongs", songs: newList });
+    function addSongOnReq(request, success) {
+        console.log("success", success);
+        if (success) {
+            const newSong = {title: request, id: 1000, posted_by: 1};
+            const newList = [ newSong, ...songs ];
+            dispatch({ type: "getSongs", songs: newList });
+            toast.success(`Hoo Yay! New Song added to the library.`);
+        } else {
+            toast.error(`New Song Request Failed. :(`);
+        }
         setAdded(false);
     }
 
@@ -277,7 +285,7 @@ export function UserDashboard() {
     return(
         <div className="">
             <h3 style={styles.heading}>My Songs</h3>
-
+            <ToastContainer/>
             {/* display add song button above song cards */}
             {( !empty ) &&
             (
