@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useRef, useEffect } from 'react';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
 import { postSongForProcess, checkTaskStatus } from '../UsersReqs/SongRequests';
 
@@ -40,11 +40,11 @@ const styles = {
         height: "fit-content",
         margin: "20px 0px",
         float: "right",
-        background: "green",
+        background: "#d3d3d3",
         padding: "10px 30px",
         borderRadius: "5px",
         border: "none",
-        color: "white"
+        color: "black"
     },
     icon: {
         width: "20px",
@@ -133,8 +133,24 @@ export function AddSong(props) {
 
     const { addDiv, toggle } = props;
 
+    const postBtn = useRef('');
+    const urlRef = useRef('');
+
     const urlhelpTxt = "Please enter the desired youtube video url.";
     const titlehelpTxt = "Please enter the title for the song. Make sure you enter the right title.";
+
+    // toggle POST button state
+    function togglePostBtn(enable) {
+        if (enable) {
+            postBtn.current.style.color = "white";
+            postBtn.current.style.background = "green";
+            postBtn.current.disabled = false; 
+        } else {
+            postBtn.current.style.color = "black";
+            postBtn.current.style.background = "#d3d3d3";
+            postBtn.current.disabled = true;
+        }
+    } 
 
 
     // onChange function for url input
@@ -142,6 +158,8 @@ export function AddSong(props) {
         const url = event.target.value;
         // dispatch function to assign url in reducer!
         dispatch({type: 'urlChange', url});
+        if (event.target.value && state.title) togglePostBtn(true);
+        else togglePostBtn(false);
     }
 
     // onChange function for title input
@@ -149,6 +167,8 @@ export function AddSong(props) {
         const title = event.target.value;
         // dispatch function to assign title in reducer!
         dispatch({type: 'titleChange', title});
+        if (event.target.value && state.url) togglePostBtn(true);
+        else togglePostBtn(false);
     }
 
     function onHoverURLTitle() {
@@ -175,27 +195,35 @@ export function AddSong(props) {
     Processes which exeeds more than 25-second processing time will be regarded as an error and 
     prompt the user to try again.
     */
-    async function postSong(event) {
+    function postSong(event) {
+        console.log("added");
         event.preventDefault();
-        
-        const { url, title } = state;
+        const { requestAdded } = props;
+    
+        const { title } = state;
+        requestAdded(event, title);
 
-        const song = { url, title, user_id: 1, genre_id: 1};
+        // const song = { url, title, user_id: 1, genre_id: 1};
 
-        const response = await postSongForProcess(song);
-        console.log(response);
-        if (response.status === 201) {
-            // add song to status check queue
-            dispatch({type: 'add-queue', song});
-            // Need to fetch conversion status
-        }
+        // const response = await postSongForProcess(song);
+        // console.log(response);
+        // if (response.status === 201) {
+        //     // add song to status check queue
+        //     dispatch({type: 'add-queue', song});
+        //     // Need to fetch conversion status
+        // }
     }
+
+    useEffect(() => {
+        togglePostBtn(false);
+        urlRef && urlRef.current.focus();
+    }, [])
 
     return(
         <div style={addDiv}>
             <div style={styles.formDiv}>
                 <h4 style={styles.formTitle}>Add a new Song</h4>
-                <form style={styles.form}>
+                <div style={styles.form}>
                     { urlHelp && 
                         <div style={styles.help}>
                             {urlhelpTxt}
@@ -209,7 +237,7 @@ export function AddSong(props) {
                         <HelpOutlinedIcon style={styles.icon}/>
                     </div>
                     <input style={styles.input} name="url" value={state.url}
-                     onChange={urlOnChange}
+                     onChange={urlOnChange} ref={urlRef}
                      required/>
                     { titleHelp && 
                         <div style={styles.help}>
@@ -231,12 +259,13 @@ export function AddSong(props) {
                         CANCEL
                     </button>
                     <button style={styles.postBtn}
-                        onClick={postSong}
+                        onClick={ e => props.requestAdded(e, state.title)}
                         onMouseOver={onHoverPostBtn}
-                        onMouseLeave={onHoverPostBtn}>
+                        onMouseLeave={onHoverPostBtn}
+                        ref={postBtn}>
                         POST
                     </button>
-                </form>
+                </div>
                 <hr></hr>
                 <Regulations/>
             </div>

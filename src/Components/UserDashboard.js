@@ -8,6 +8,7 @@ import { shuffleSongs } from './Songs/Utilities';
 
 import ShuffleOutlinedIcon from '@material-ui/icons/ShuffleOutlined';
 import Button from '@material-ui/core/Button';
+import RequestLoader from './Songs/RequestLoader';
 
 // Styling for the DOM elements
 const styles = {
@@ -111,6 +112,8 @@ export function UserDashboard() {
     const [ adding, setAdding ] = useState(false);
     const [ hover, setHover ] = useState(false);
     const [ state, dispatch ] = useReducer(reducer, init);
+    const [ added, setAdded ] = useState(false);
+    const [ request, setRequest ] = useState(null);
 
     const { playing, pointed, empty, songs, shuffle_all, playlist } = state;
 
@@ -128,6 +131,22 @@ export function UserDashboard() {
             // array.prototype.concat prevent mutation on original objects
             dispatch({ type: 'assignPL', _playlist: playlist.concat(data.msg) });
         }
+    }
+
+    function requestAdded(e, request) {
+        e.preventDefault();
+        console.log("request added", request);
+        setAdded(true);
+        setRequest(request);
+        setAdding(false);
+    }
+
+    // add song upon request finished
+    function addSongOnReq(request) {
+        const newSong = {title: request, id: 1000, posted_by: 1};
+        const newList = [ newSong, ...songs ];
+        dispatch({ type: "getSongs", songs: newList });
+        setAdded(false);
     }
 
     // Toggle the "Add Song Form"
@@ -163,9 +182,6 @@ export function UserDashboard() {
             // spread operator ... also prevents the mutation on original state
             dispatch({ type: "assignPL", _playlist: [...songs] })
         }
-
-        // console.log("song", songs);
-        // console.log("playlist", playlist);
     }
 
 
@@ -275,12 +291,17 @@ export function UserDashboard() {
                     <Button
                         variant="contained" color="secondary"
                         style={styles.addBtn} endIcon={<ShuffleOutlinedIcon />}
-                        onClick={toggleAddForm}>
+                        onClick={toggleAddForm}
+                        disabled={added ? true : false}>
                         Add Song
                     </Button>
                     
                 </div>
             )}
+
+            { added && 
+                <RequestLoader name={request} addSong={addSongOnReq}/>
+            }
 
             {/* If user has no songs, show default empty message */}
             { empty ? (
@@ -307,7 +328,7 @@ export function UserDashboard() {
             {/* Add Song Option */}
             {
                 adding ?
-                (<AddSong addDiv={styles.addDiv} toggle={toggleAddForm}/>)
+                (<AddSong addDiv={styles.addDiv} toggle={toggleAddForm} requestAdded={requestAdded}/>)
                 : ""
             }
         </div>
