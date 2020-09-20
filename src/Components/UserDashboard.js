@@ -46,12 +46,16 @@ const styles = {
         margin: "20px auto",
         fontFamily: "fantasy"
     },
+    headers: {
+        height: "100px"
+    },
     player: {
         width: "100%",
         position: "fixed",
         bottom: "0",
         padding: "10px",
-        boxShadow: "5px 0px 15px 5px gainsboro"
+        boxShadow: "5px 0px 15px 5px gainsboro",
+        height: "15%"
     },
     topASDiv: {
         width: "fit-content",
@@ -129,26 +133,26 @@ export function UserDashboard() {
         console.log(data.msg);
 
         if (data.status === 200) {
-            dispatch({ type: 'getSongs', songs: data.msg });
+            dispatch({ type: 'getSongs', songs: (data.msg).reverse() });
+            console.log((data.msg).reverse());
             // array.prototype.concat prevent mutation on original objects
-            dispatch({ type: 'assignPL', _playlist: playlist.concat(data.msg) });
+            dispatch({ type: 'assignPL', _playlist: playlist.concat((data.msg).reverse()) });
         }
     }
 
-    function requestAdded(e, request) {
-        e.preventDefault();
-        console.log("request added", request);
+    function requestAdded(request) {
+        console.log(request);
         setAdded(true);
         setRequest(request);
         setAdding(false);
+        toast.success('A new song request has been sent to server!');
     }
 
     // add song upon request finished
-    function addSongOnReq(request, success) {
-        console.log("success", success);
+    function addSongOnReq(success) {
+        console.log("success", request);
         if (success) {
-            const newSong = {title: request, id: 1000, posted_by: 1};
-            const newList = [ newSong, ...songs ];
+            const newList = [ request, ...songs ];
             dispatch({ type: "getSongs", songs: newList });
             toast.success(`Hoo Yay! New Song added to the library.`);
         } else {
@@ -284,59 +288,67 @@ export function UserDashboard() {
     /* -- Renders -- */
     return(
         <div className="">
-            <h3 style={styles.heading}>My Songs</h3>
-            <ToastContainer/>
-            {/* display add song button above song cards */}
-            {( !empty ) &&
-            (
-                <div style={styles.topASDiv}>
-                    <Button
-                        variant="contained" color={shuffle_all ? "primary" : "default"}
-                        style={styles.shuffleBtn} endIcon={<ShuffleOutlinedIcon />}
-                        onClick={shuffleAllClk}>
-                        Shuffle All
-                    </Button>
-                    <Button
-                        variant="contained" color="secondary"
-                        style={styles.addBtn} endIcon={<ShuffleOutlinedIcon />}
-                        onClick={toggleAddForm}
-                        disabled={added ? true : false}>
-                        Add Song
-                    </Button>
-                    
-                </div>
-            )}
-
-            { added && 
-                <RequestLoader name={request} addSong={addSongOnReq}/>
-            }
-
-            {/* If user has no songs, show default empty message */}
-            { empty ? (
-                <div style={styles.div}>
-                    <pre style={styles.pre}>It's empty here. </pre>
-                    <p onClick={toggleAddForm} style={styles.p}
-                    onMouseOver={onHoverText} onMouseLeave={onHoverText}>
-                        Try to add something to listen.
-                    </p>
-                </div>
-            )
-            : (
-                songs.map( ( song, idx ) => <SongCard 
-                    title={song.title} key={song.id} id={idx} playing={playing}
-                    user={song.posted_by} click={onClickCards}/>)
-            )}
-
-            {/* Music Player */}
-            <div style={styles.player}>
-                <Player pSong={pointed} allSong={playlist} shuffle_all={shuffle_all}
-                    next_song={next_song} prev_song={prev_song} repeat_one={repeat_song} />
+            
+            <div style={styles.headers}>
+                <h3 style={styles.heading}>My Songs</h3>
+                <ToastContainer/>
+                {/* display add song button above song cards */}
+                {( !empty ) &&
+                (
+                    <div style={styles.topASDiv}>
+                        <Button
+                            variant="contained" color={shuffle_all ? "primary" : "default"}
+                            style={styles.shuffleBtn} endIcon={<ShuffleOutlinedIcon />}
+                            onClick={shuffleAllClk}>
+                            Shuffle All
+                        </Button>
+                        <Button
+                            variant="contained" color="secondary"
+                            style={styles.addBtn} endIcon={<ShuffleOutlinedIcon />}
+                            onClick={toggleAddForm}
+                            disabled={added ? true : false}>
+                            Add Song
+                        </Button>
+                        
+                    </div>
+                )}
             </div>
+
+            <div>
+                <div>
+                    { (added && request) && 
+                        <RequestLoader title={request.title} addSong={addSongOnReq}/>
+                    }
+
+                    {/* If user has no songs, show default empty message */}
+                    { empty ? (
+                        <div style={styles.div}>
+                            <pre style={styles.pre}>It's empty here. </pre>
+                            <p onClick={toggleAddForm} style={styles.p}
+                            onMouseOver={onHoverText} onMouseLeave={onHoverText}>
+                                Try to add something to listen.
+                            </p>
+                        </div>
+                    )
+                    : (
+                        songs.map( ( song, idx ) => <SongCard 
+                            title={song.title} key={song.id} id={idx} playing={playing}
+                            user={song.posted_by} click={onClickCards}/>)
+                    )}
+                </div>
+
+                {/* Music Player */}
+                <div style={styles.player}>
+                    <Player pSong={pointed} allSong={playlist} shuffle_all={shuffle_all}
+                        next_song={next_song} prev_song={prev_song} repeat_one={repeat_song} />
+                </div>
+            </div>   
 
             {/* Add Song Option */}
             {
                 adding ?
-                (<AddSong addDiv={styles.addDiv} toggle={toggleAddForm} requestAdded={requestAdded}/>)
+                (<AddSong addDiv={styles.addDiv} 
+                    toggle={toggleAddForm} requestAdded={requestAdded} token={cookies}/>)
                 : ""
             }
         </div>

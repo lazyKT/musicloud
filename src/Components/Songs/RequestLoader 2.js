@@ -32,23 +32,23 @@ const styles = {
 
 function RequestLoader (props) {
 
-    const { title, addSong } = props;
+    const { name, addSong } = props;
 
-    function startProcess(title) {
+    function startProcess(name) {
         let processTime = 0;
 
-        let processInterval = setInterval(processing, 5000);
+        let processInterval = setInterval(processing, 30000);
 
         async function processing() {
             try {
                 const resp = await FakeReq();
-                console.log("fetch process", resp);
-                addSong(true);
+                console.log(resp);
+                addSong(name, true);
                 clearInterval(processInterval);
             } catch (err) {
                 console.log(err);
                 if (processTime > 5) {
-                    addSong(false);
+                    addSong(name, false);
                     clearInterval(processInterval);
                 }
             }
@@ -56,13 +56,13 @@ function RequestLoader (props) {
     }
 
     useEffect(() => {
-        title && startProcess(title);
-    }, [title]);
+        name && startProcess(name);
+    }, [name]);
 
     return (
       <div style={styles.loaderContainer}>
           <div>
-            <span style={styles.label}>Processing {title}</span>
+            <span style={styles.label}>Processing {name}</span>
             <div style={styles.loader}>
                 <Loader
                     type="ThreeDots"

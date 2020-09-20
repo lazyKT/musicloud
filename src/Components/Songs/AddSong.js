@@ -1,4 +1,5 @@
 import React, { useState, useReducer, useRef, useEffect } from 'react';
+import Loader from 'react-loader-spinner';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
 import { postSongForProcess, checkTaskStatus } from '../UsersReqs/SongRequests';
 
@@ -127,6 +128,7 @@ export function AddSong(props) {
     const [ hover, setHover ] = useState(false);
     const [ urlHelp, setUrlHelp ] = useState(false);
     const [ titleHelp, setTitleHelp ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
 
     // Reducer
     const [state, dispatch] = useReducer(reducer, init);
@@ -195,23 +197,30 @@ export function AddSong(props) {
     Processes which exeeds more than 25-second processing time will be regarded as an error and 
     prompt the user to try again.
     */
-    function postSong(event) {
-        console.log("added");
+    async function postSong(event) {
         event.preventDefault();
-        const { requestAdded } = props;
+        console.log("added");
+        const { requestAdded, token } = props;
+        console.log("token", token);
     
-        const { title } = state;
-        requestAdded(event, title);
+        const { title, url } = state;
+        // setLoading(true);
+    
+        const song = { url, title, user_id: token.id, genre_id: 1};
 
-        // const song = { url, title, user_id: 1, genre_id: 1};
-
-        // const response = await postSongForProcess(song);
-        // console.log(response);
-        // if (response.status === 201) {
-        //     // add song to status check queue
-        //     dispatch({type: 'add-queue', song});
-        //     // Need to fetch conversion status
-        // }
+        try {
+            const response = await postSongForProcess(song, token.access_token);
+            console.log(response);
+            if (response.status === 201) {
+                requestAdded(response.data);
+            } else {
+                console.log("request error");
+                //setLoading(false);
+            }
+        } catch (err) {
+            console.log(err.status);
+        } 
+        
     }
 
     useEffect(() => {
@@ -259,11 +268,13 @@ export function AddSong(props) {
                         CANCEL
                     </button>
                     <button style={styles.postBtn}
-                        onClick={ e => props.requestAdded(e, state.title)}
+                        onClick={ postSong }
                         onMouseOver={onHoverPostBtn}
                         onMouseLeave={onHoverPostBtn}
                         ref={postBtn}>
-                        POST
+                        { loading ? 
+                            <Loader type="ThreeDots" color="#00BFFF" height={10} width={10} timeout={5000}/>
+                            : "POST" }
                     </button>
                 </div>
                 <hr></hr>

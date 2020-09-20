@@ -61,7 +61,8 @@ export const UesrNav = (props) => {
             Cookies.remove("user");
             Cookies.remove("tokens");
         } else {
-            alert('Logout from API - Failed!');
+            //alert('Logout from API - Failed!');
+            console.log("Logout Failed");
         }
     }
 
