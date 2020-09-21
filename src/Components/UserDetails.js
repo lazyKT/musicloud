@@ -104,7 +104,7 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
       if (status === 200) setAvatar(`http://127.0.0.1:8000/avatar/${user_id}`);
     } catch(err) {
       console.log("error", err);
-      setAvatar("");
+      setAvatar(null);
     }
   }
 
@@ -187,7 +187,7 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
                 <div className={classes.profilePicDiv}>
                   <p id="test"></p>
                   <div className="pp-container">
-                    {avatar === "" ? 
+                    {avatar ? 
                       <img id="avatar" className={classes.avatar} 
                       src={`${avatar}?${avatarHash}`}/>
                       : <AccountCircleIcon className={classes.avatar}/>
