@@ -1,9 +1,16 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom'
+import React, { useContext } from 'react';
+import { withRouter, Redirect } from 'react-router-dom'
+import { userContext } from '../Contexts/userContext';
+import { Dashboard } from './Dashboard';
+import Home from './Home';
 
 function About(){
+
+    const { auth } = useContext(userContext);
+    console.log("About", auth);
+
     return(
-        <div>About</div>
+       auth ? <Dashboard/> : <Home/>
     )
 }
 

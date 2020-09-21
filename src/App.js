@@ -39,7 +39,7 @@ function App() {
         <ProtectedLogin value="/" path="/" exact component={ Home }/>
         {/* Public Routes */}
         <Route value="/register" path="/register" component={ Register } />
-        <Route value="/about" path="/about" component={ About } />
+        <Route value="/home" path="/home" component={ About } />
         <Route path="/forget-password" component={ ForgetPassword }/>
         {/* Private (or) Protected Routes */}
         <ProtectedRoute path="/profile" component={ Profile }/>

@@ -129,19 +129,16 @@ export function UserDashboard() {
         const { access_token } = cookies;
         const resp = await fetchMySongsReq(access_token);
         const { data } = resp;
-        
-        console.log(data.msg);
 
         if (data.status === 200) {
             dispatch({ type: 'getSongs', songs: (data.msg).reverse() });
-            console.log((data.msg).reverse());
+            
             // array.prototype.concat prevent mutation on original objects
             dispatch({ type: 'assignPL', _playlist: playlist.concat((data.msg).reverse()) });
         }
     }
 
     function requestAdded(request) {
-        console.log(request);
         setAdded(true);
         setRequest(request);
         setAdding(false);
@@ -150,7 +147,6 @@ export function UserDashboard() {
 
     // add song upon request finished
     function addSongOnReq(success) {
-        console.log("success", request);
         if (success) {
             const newList = [ request, ...songs ];
             dispatch({ type: "getSongs", songs: newList });
@@ -163,7 +159,7 @@ export function UserDashboard() {
 
     // Toggle the "Add Song Form"
     function toggleAddForm() {
-        console.log("Adding")
+
         setAdding(!adding);
     }
 
@@ -278,7 +274,6 @@ export function UserDashboard() {
 
     /* -- Side Effects -- */
     useEffect(()=> {
-        console.log(cookies);
         if (cookies && login) {
             fetchMySongs(cookies);
         }

@@ -5,15 +5,16 @@ import { userContext } from '../Contexts/userContext';
 const ProtectedRoute = ({ component:Component, ...rest}) => {
 
     const Auth = useContext(userContext);
-    console.log(Auth.auth);
+    const { auth } = Auth;
+    console.log("Protected Route", auth);
 
     return(
         <Route
             {...rest}
-            render = { ()=> Auth.auth ? (
+            render = { ()=> auth ? (
                 <Component/>
             ) : (
-                <Redirect to="/about"/>
+                <Redirect to="/home"/>
             )}
         />
     );
