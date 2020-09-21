@@ -2,17 +2,26 @@ import React,{ useEffect, useReducer, useState } from 'react';
 import UpdateUser from './UpdateUser';
 import '../App.css'
 import { useCookies } from './Hooks/useCookies';
+import { getAvatar } from './UsersReqs/Users';
 import { EditOpr } from './Admin/CrudFunctions/Data';
+import profile from '../Imgs/default_profile.png'
+
 import Cookies from 'js-cookie';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 // ui styles
 const useStyles = makeStyles( theme => ({
   profilePicDiv:{
     width: "100%",
     display: "flex",
+  },
+  avatar: {
+    height: "150px",
+    width: "150px",
+    borderRadius: "50%"
   },
   large: {
     width: theme.spacing(9),
@@ -81,6 +90,25 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
   const [ avatar, setAvatar ] = useState("");
   const [ avatarHash, setAvatarHash ] = useState("");
 
+
+  /** 
+   * check user's avatar from server 
+   * if the user has uploaded avatar, display that in profile
+   * if not, display default avatar in profile
+   * */
+  async function checkAvatar(user_id) {
+    
+    try {
+      const status = await getAvatar(user_id);
+      console.log("Status", status);
+      if (status === 200) setAvatar(`http://127.0.0.1:8000/avatar/${user_id}`);
+    } catch(err) {
+      console.log("error", err);
+      setAvatar("");
+    }
+  }
+
+
   useEffect(() => {
     console.log("Render!!")
     setAvatarHash(new Date().getTime());
@@ -89,12 +117,14 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
   useEffect(() => {
     if (cookies && login) {
       //fetchAvatar(cookies.access_token, cookies.id);
-      setAvatar(`http://127.0.0.1:8000/avatar/${cookies.id}`)
+      checkAvatar(cookies.id);
       dispatch({type: "setAvatar", id: cookies.id})
       dispatch({type: "userDetails", user: cookies});
       dispatch({type: 'updateValue'});
     }
   },[cookies, updatedImg]);
+
+  useEffect(() => console.log("avatar", avatar), [avatar]);
 
   const onChangeListender = event =>{
     if((event.target.value).length < 4)
@@ -157,7 +187,11 @@ const UserDetails = ({uploadAvatar, updatedImg}) => {
                 <div className={classes.profilePicDiv}>
                   <p id="test"></p>
                   <div className="pp-container">
-                    <img id="avatar" className="profile-pic" src={`${avatar}?${avatarHash}`}/>
+                    {avatar === "" ? 
+                      <img id="avatar" className={classes.avatar} 
+                      src={`${avatar}?${avatarHash}`}/>
+                      : <AccountCircleIcon className={classes.avatar}/>
+                    }
                   </div>
                   <Button onClick={uploadAvatar} 
                     className={classes.uploadBtn} variant="outlined" endIcon={<CameraAltIcon/>}>

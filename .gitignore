@@ -14,6 +14,7 @@
 # misc
 /src/Components/Config.js
 /src/Samples
+/src/Imgs
 .DS_Store
 .env
 .env.local
