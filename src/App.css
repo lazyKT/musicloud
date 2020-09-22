@@ -446,8 +446,10 @@
 }
 
 .upload-avatar{
-  width: 40vh;
-  height: 40vh;
+  width: fit-content;
+  height: fit-content;
+  padding: 30px;
+  border-radius: 10px;
   background-color: #fff;
 }
 
@@ -461,6 +463,8 @@
   height: 30vh;
   width: 35vh;
   margin: 10px auto;
+  border: solid 0.2px #d3d3d3;
+  border-radius: 10px;
 }
 
 .upload-avatar .btn-div{
@@ -471,7 +475,10 @@
 }
 
 .btn-div input{
+  height: 40px;
+  width: fit-content;
   background-color: coral;
+  margin: auto 5px;
   padding: auto 5px;
   border: coral solid;
   border-radius: 5px;

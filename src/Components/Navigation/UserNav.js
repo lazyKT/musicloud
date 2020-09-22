@@ -84,8 +84,8 @@ export const UesrNav = (props) => {
 
             {/* Contact & Support */}
             <ul style={styles.ul}>
-                <Link style={styles.link} to={auth ? "/dashboard" : "/"}
-                    ><li>Support</li>
+                <Link style={styles.link} to="/support">
+                    <li>Support</li>
                 </Link>
 
                 {/* Profile Link */}

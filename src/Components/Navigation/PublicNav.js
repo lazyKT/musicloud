@@ -26,7 +26,7 @@ export const PublicNav = () => {
        <ul style={styles.ul}>
             <Link style={styles.link} to="/"><li>Home</li></Link>
             <Link style={styles.link} to="/about"><li>About</li></Link>
-            <Link style={styles.link} to="/contact"><li>Contact</li></Link>
+            <Link style={styles.link} to="/support"><li>Support</li></Link>
         </ul>
     );
 }

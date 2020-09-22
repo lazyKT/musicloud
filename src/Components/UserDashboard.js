@@ -9,6 +9,7 @@ import { Player } from './Songs/Player';
 import { shuffleSongs } from './Songs/Utilities';
 
 import ShuffleOutlinedIcon from '@material-ui/icons/ShuffleOutlined';
+import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import RequestLoader from './Songs/RequestLoader';
 
@@ -310,7 +311,7 @@ export function UserDashboard() {
                         </Button>
                         <Button
                             variant="contained" color="secondary"
-                            style={styles.addBtn} endIcon={<ShuffleOutlinedIcon />}
+                            style={styles.addBtn} endIcon={<AddIcon />}
                             onClick={toggleAddForm}
                             disabled={added ? true : false}>
                             Add Song
@@ -339,7 +340,7 @@ export function UserDashboard() {
                     : (
                         songs.map( ( song, idx ) => <SongCard 
                             title={song.title} key={song.id} id={idx} playing={playing}
-                            user={song.posted_by} click={onClickCards}/>)
+                            user={cookies.username} click={onClickCards}/>)
                     )}
                 </div>
 
