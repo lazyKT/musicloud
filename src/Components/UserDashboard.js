@@ -43,11 +43,21 @@ const styles = {
     },
     heading: {
         width: "fit-content",
-        margin: "20px auto",
+        margin: "auto",
+        padding: "20px",
         fontFamily: "fantasy"
     },
     headers: {
-        height: "100px"
+        height: "130px",
+        width: "100%",
+        position: "fixed",
+        top: "60px",
+        background: "#fff",
+        borderBottom: "solid 0.2px gainsboro"
+    },
+    songDiv: {
+        marginTop: "130px",
+        marginBottom: "150px"
     },
     player: {
         width: "100%",
@@ -55,7 +65,8 @@ const styles = {
         bottom: "0",
         padding: "10px",
         boxShadow: "5px 0px 15px 5px gainsboro",
-        height: "15%"
+        height: "100px",
+        background: "#fff"
     },
     topASDiv: {
         width: "fit-content",
@@ -282,7 +293,7 @@ export function UserDashboard() {
 
     /* -- Renders -- */
     return(
-        <div className="">
+        <div className="mainDiv">
             
             <div style={styles.headers}>
                 <h3 style={styles.heading}>My Songs</h3>
@@ -309,7 +320,7 @@ export function UserDashboard() {
                 )}
             </div>
 
-            <div>
+            <div style={styles.songDiv}>
                 <div>
                     { (added && request) && 
                         <RequestLoader title={request.title} addSong={addSongOnReq}/>

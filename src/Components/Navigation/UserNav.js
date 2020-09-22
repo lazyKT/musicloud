@@ -49,9 +49,7 @@ export const UesrNav = (props) => {
     useEffect(() => {
         if (login && user)
             setCookies(JSON.parse(user));
-        else
-            Auth.setAuth(false); 
-    },[user]);
+    },[auth]);
 
 
     /** 
@@ -64,12 +62,10 @@ export const UesrNav = (props) => {
         if (res.status === 200) {
 
             user = null; // Initiate Logout, so that the effect will be updated
-            Auth.setAuth(false); // set false to Auth Context
-            // Remove Cookies
             Cookies.remove("user");
             Cookies.remove("tokens");
+            Auth.setAuth(false); // set false to Auth Context
         } else {
-            
             console.log("Logout Failed");
         }
     }
@@ -77,7 +73,7 @@ export const UesrNav = (props) => {
     return(
         <>
             {/* rediect */}
-            { !user && <Redirect to='/'/>}
+            { !auth && <Redirect to='/'/>}
 
             {/* Website Logo */}
             <div style={styles.div}>

@@ -16,23 +16,23 @@ const styles = {
         margin: "auto"
     },
     play: {
-        fontSize: "60px",
+        fontSize: "50px",
         margin: "0px 30px"
     },
     skip: {
-        fontSize: "23px",
-        padding: "7px",
+        fontSize: "18px",
+        padding: "5px",
         display: "inline-block",
-        marginBottom: "10px",
+        marginBottom: "5px",
         borderRadius: "50%",
         background: "black",
         color: "white"
     },
     previous: {
-        fontSize: "23px",
-        padding: "7px",
+        fontSize: "18px",
+        padding: "5px",
         display: "inline-block",
-        marginBottom: "10px",
+        marginBottom: "5px",
         borderRadius: "50%",
         background: "black",
         color: "white"

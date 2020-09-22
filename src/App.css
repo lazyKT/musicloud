@@ -482,3 +482,44 @@
   background-color: chocolate;
   border: chocolate solid;
 }
+
+/* style for the progress bar */
+.progress-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  z-index: 4;
+  height: 5px;
+  background: #000000;
+  border-radius: 30px;
+  width: 300px;
+  display: block;
+  margin: auto;
+}
+
+/* style for the progress bar's slider thumb */
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  margin-top: -3px;
+  margin-left: 0px;
+  height: 10px;
+  width: 7px;
+  border: 0;
+  background: -webkit-linear-gradient(45deg,  rgb(213, 213, 213), rgb(193, 255, 6));
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+/* style for the progress bar's runnable track */
+.progress-bar::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  color: cyan;
+  max-height: 5px;
+  border-radius: 30px;
+}
+
+/* Remove the focus effect on click/drag progress bar */
+.progress-bar:focus {
+  outline: none;
+}

@@ -13,7 +13,12 @@ const styles = {
     navBar: {
         display: "flex",
         background: "black",
-        color: "wheat"
+        color: "wheat",
+        width: "100%",
+        position: "fixed",
+        top: "0",
+        paddingBottom: "10px",
+        height: "60px"
     },
 }
 

@@ -3,7 +3,7 @@ import { formatTimeStamps } from './Utilities';
 import PlayerControls from './PlayerControls';
 import { getSong } from '../UsersReqs/SongRequests';
 
-import sample2 from "../../Samples/Sample2.mp3";
+import '../../App.css'
 
 /* -- Styling for Player */
 const styles = {
@@ -20,16 +20,19 @@ const styles = {
     progress: {
         width: "300px",
         display: "block",
-        margin: "auto"
+        margin: "auto",
+        height: "5px"
     },  
     timeDiv: {
         display: "flex",
         width: "320px",
-        margin: "auto"
+        margin: "auto",
+        fontSize: "12px"
     },
     durationDiv: {
         marginLeft: "75%",
-        width: "45px"
+        width: "45px",
+        fontSize: "12px"
     },
     currentDiv: {
         width: "45px"
@@ -207,7 +210,7 @@ export function Player(props) {
             
             {/* audio progress bar */}
             { (currentSong || pSong) && 
-                <input type="range" style={styles.progress}
+                <input type="range" className="progress-bar"
                 value={duration ? (currentTime * 100)/duration : 0} 
                 onChange={onChangeProgress}/>}
 
