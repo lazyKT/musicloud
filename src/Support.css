@@ -1,0 +1,22 @@
+/*
+** CSS styling for Support Page 
+*/
+
+.sup-div {
+  margin-top: 70px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.support-contents {
+  min-height: 75vh;
+  flex: 1 0 auto;
+}
+
+.support-footer {
+  flex-shrink: 0;
+  height: 130px;
+  background: cornflowerblue;
+  color: white;
+}

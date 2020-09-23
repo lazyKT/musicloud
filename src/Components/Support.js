@@ -2,42 +2,31 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import "../App.css";
+import SupportSection from "./SupportSection";
+import "../Support.css";
 
-
-const styles = {
-
-    footer: {
-        position: "absolute",
-        bottom: "0",
-        dispaly: "flex",
-        width: "100%",
-        height: "120px",
-        backgroundColor: "#003",
-        color: "#fff",
-        padding: "10px auto",
-        marginTop: "10px"
-    }
-}
-
+const supports = ["About", "Guide", "Report"];
 
 function Support() {
+  return (
+    <div className="sup-div">
+      <div className="support-contents">
+        <h3>Support Contents</h3>
 
-    return (
-        <div className="mainDiv">
-            Support
+        {supports.map((s, i) => (
+          <SupportSection header={s} key={i} />
+        ))}
+      </div>
 
-            {/* Footer */}
-            <div style={styles.footer}>
-                <ul>
-                    <li>Contact</li>
-                    <li>User Support</li>
-                </ul>
-            </div>
-
-        </div>
-    )
+      {/* Footer */}
+      <div className="support-footer">
+        <ul>
+          <li>Contact</li>
+          <li>User Support</li>
+        </ul>
+      </div>
+    </div>
+  );
 }
-
 
 export default withRouter(Support);
