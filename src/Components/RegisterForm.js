@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import RegisterInput from "./RegisterInput";
 
 // Styling for Registeration Components
 const styles = {
@@ -9,32 +10,6 @@ const styles = {
     margin: "auto",
     border: "solid 0.5px",
     borderRadius: "10px"
-  },
-  input: {
-    display: "block",
-    minWidth: "150px",
-    width: "100%",
-    lineHeight: "20px",
-    padding: "5px 10px",
-    margin: "5px auto",
-    border: "solid 1px #d3d3d3",
-    borderRadius: "5px",
-    boxSizing: "border-box"
-  },
-  title: {
-    display: "block",
-    fontSize: "16px",
-    fontWeight: "bold"
-  },
-  error: {
-    display: "block",
-    width: "fit-content",
-    paddingLeft: "5px",
-    paddingRight: "5px",
-    background: "lightcoral",
-    fontSize: "13px",
-    borderRadius: "5px",
-    color: "#fff"
   },
   backToHome: {
     width: "50%",
@@ -61,9 +36,36 @@ const styles = {
   }
 };
 
+/** Input Fields */
+const inputs = [
+  {
+    name: "email",
+    title: "Email Address"
+  },
+  {
+    name: "username",
+    title: "Username"
+  },
+  {
+    name: "password",
+    title: "Password"
+  },
+  {
+    name: "cPwd",
+    title: "Confirm Password"
+  }
+];
+
 export const RegisterForm = (props) => {
   const regBtn = useRef("");
   const backBtn = useRef("");
+
+  const [data, setData] = useState({
+    email: "",
+    username: "",
+    password: "",
+    role: "user"
+  });
 
   const toggleRegBtn = (enable) => {
     if (!enable) {
@@ -77,6 +79,15 @@ export const RegisterForm = (props) => {
     }
   };
 
+  // setPayload for registration Network Request
+  const setPayload = (key, value) => {
+    console.log("setPayload for", key);
+    setData({
+      ...data,
+      [key]: value
+    });
+  };
+
   // initial render
   useEffect(() => {
     //regBtn && toggleRegBtn(false);
@@ -85,22 +96,14 @@ export const RegisterForm = (props) => {
   return (
     <>
       <form style={styles.form}>
-        {/* Email Address */}
-        <span style={styles.title}>Email Address</span>
-        <span style={styles.error}>Error</span>
-        <input style={styles.input} />
-        {/* Username */}
-        <span style={styles.title}>Email Address</span>
-        <span style={styles.error}>Error</span>
-        <input style={styles.input} />
-        {/* Password */}
-        <span style={styles.title}>Email Address</span>
-        <span style={styles.error}>Error</span>
-        <input style={styles.input} />
-        {/* Confirm Password */}
-        <span style={styles.title}>Email Address</span>
-        <span style={styles.error}>Error</span>
-        <input style={styles.input} />
+        {inputs.map((input, idx) => (
+          <RegisterInput
+            name={input.name}
+            title={input.title}
+            key={idx}
+            setPayload={setPayload}
+          />
+        ))}
 
         {/** Back to Home */}
         <button
