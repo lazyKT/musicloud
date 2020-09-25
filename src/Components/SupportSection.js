@@ -7,10 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function SupportSection(props) {
-  const { header } = props;
+  const { header, name, hash } = props;
+
+  const handleExpanded = () => {
+    if (!hash) return name === "about";
+    return (hash.slice(1)).toLowerCase() === name;
+  }
 
   return (
-    <Accordion>
+    <Accordion expanded={handleExpanded()}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"

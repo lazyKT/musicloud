@@ -112,16 +112,6 @@ function reducer(state, action) {
     }
 }
 
-/* This is a helper function for AddSong Component to check status of mp3 conversion process*/
-// async function checkStatus(task_id) {
-//     const response = await checkTaskStatus(task_id);
-//     if (response.status === 201) {
-//         console.log("Good To Go");
-//     } else {
-//         setTimeout(checkStatus, 5000);
-//     }
-// }
-
 /* This is a helper component to post a song to server */
 export function AddSong(props) {
 

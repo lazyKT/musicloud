@@ -33,7 +33,7 @@ const styles = {
     },
     addDiv: {
         zIndex: "1",
-        position: "absolute",
+        position: "fixed",
         top: "0",
         height: "100%",
         width: "100%",
@@ -72,16 +72,6 @@ const styles = {
     topASDiv: {
         width: "fit-content",
         margin: "10px auto",
-    },
-    addBtn: {
-        // width: "100px",
-        // marginLeft: "80%",
-        // display: "block",
-        // padding: "5px",
-        // background: "coral",
-        // border: "solid coral 0.2px",
-        // borderRadius: "10px",
-        // color: "white"
     },
     shuffleBtn: {
         margin: "0px 10px",
@@ -144,7 +134,7 @@ export function UserDashboard() {
 
         if (data.status === 200) {
             dispatch({ type: 'getSongs', songs: (data.msg).reverse() });
-            
+            console.log((data.msg).reverse());
             // array.prototype.concat prevent mutation on original objects
             dispatch({ type: 'assignPL', _playlist: playlist.concat((data.msg).reverse()) });
         }
