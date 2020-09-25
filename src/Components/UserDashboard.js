@@ -12,6 +12,7 @@ import ShuffleOutlinedIcon from '@material-ui/icons/ShuffleOutlined';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import RequestLoader from './Songs/RequestLoader';
+import Loading from './Errors/Loading';
 
 // Styling for the DOM elements
 const styles = {
@@ -117,6 +118,7 @@ export function UserDashboard() {
     // Get Cookies
     const { login, cookies } = useCookies();
 
+    const [ loaded, setLoaded ] = useState(false);
     const [ adding, setAdding ] = useState(false);
     const [ hover, setHover ] = useState(false);
     const [ state, dispatch ] = useReducer(reducer, init);
@@ -127,16 +129,21 @@ export function UserDashboard() {
 
     /* -- Fetch User's Songs */
     async function fetchMySongs(cookies) {
-        console.log("Fetching Songs");
         const { access_token } = cookies;
-        const resp = await fetchMySongsReq(access_token);
-        const { data } = resp;
-
-        if (data.status === 200) {
-            dispatch({ type: 'getSongs', songs: (data.msg).reverse() });
-            console.log((data.msg).reverse());
-            // array.prototype.concat prevent mutation on original objects
-            dispatch({ type: 'assignPL', _playlist: playlist.concat((data.msg).reverse()) });
+        try {
+            const response = await fetchMySongsReq(access_token);
+            const { status, msg } = response.data;
+            
+            if (status === 200) {
+                setLoaded(true);
+                dispatch({ type: 'getSongs', songs: msg.reverse() });
+                //console.log(msg.reverse());
+                // array.prototype.concat prevent mutation on original objects
+                dispatch({ type: 'assignPL', _playlist: playlist.concat((msg).reverse()) });
+            }
+        } catch (error) {
+            console.log("Network Error Fetching Songs");
+            setLoaded(false);
         }
     }
 
@@ -289,6 +296,7 @@ export function UserDashboard() {
             <div style={styles.headers}>
                 <h3 style={styles.heading}>My Songs</h3>
                 <ToastContainer/>
+
                 {/* display add song button above song cards */}
                 {( !empty ) &&
                 (
@@ -312,13 +320,16 @@ export function UserDashboard() {
             </div>
 
             <div style={styles.songDiv}>
+                {/* Error Fetching Songs */}
+                { !loaded && <Loading msg={"Fetching Songs"}/>}
+
                 <div>
                     { (added && request) && 
                         <RequestLoader title={request.title} addSong={addSongOnReq}/>
                     }
 
                     {/* If user has no songs, show default empty message */}
-                    { empty ? (
+                    { (empty && loaded) ? (
                         <div style={styles.div}>
                             <pre style={styles.pre}>It's empty here. </pre>
                             <p onClick={toggleAddForm} style={styles.p}
