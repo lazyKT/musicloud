@@ -1,230 +1,109 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { userContext } from '../Contexts/userContext';
-import { withRouter } from 'react-router-dom';
-import Tick from '../Imgs/tick.png';
-import Error from '../Imgs/close.png'
-import '../App.css'
+import React, { useState, useEffect, useContext } from "react";
+import Cookies from "js-cookie";
+import { userContext } from "../Contexts/userContext";
+import { withRouter } from "react-router-dom";
+import "../App.css";
+import { RegisterForm } from "./RegisterForm";
+import { registerUser } from "./UsersReqs/Users";
+import Footer from "./Footer";
 
-// Styling for Registeration Components
+// styling for Register Component
 const styles = {
-    msg: {
-        width: "200px",
-        fontSize: "13px",
-        color: "white",
-        background: "coral",
-        padding: "10px"
+  registerDiv: {
+    marginTop: "70px",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
+  },
+  errorDiv: {
+    display: "block",
+    width: "300px",
+    height: "30px",
+    margin: "10px auto",
+    padding: "0px 20px",
+    background: "lightcoral",
+    borderRadius: "5px"
+  },
+  message: {
+    padding: "5px",
+    fontSize: "14px"
+  }
+};
+
+// Register new user
+const Register = (props) => {
+  const [error, setError] = useState(null);
+  const [loginOK, setLoginOK] = useState(false);
+  const [loginUser, setLoginUser] = useState(null);
+  const [loginReady, setLoginReady] = useState(false);
+
+  const Auth = useContext(userContext);
+
+  const setCookies = () => {
+    Auth.setAuth(true);
+    Cookies.set("user", "login");
+    Cookies.set("tokens", loginUser);
+    setLoginReady(true);
+    console.log("All cookies are set!!1");
+  };
+
+  // onClick Event on Back to Home Button
+  const backBtnClick = (e) => {
+    console.log("Back Button Clicked");
+    e.preventDefault();
+    props.history.push("/");
+  };
+
+  // Register Button Click Event
+  const handleRegister = async (e, data) => {
+    e.preventDefault();
+    console.log("Register Payload", data);
+    try {
+      const response = await registerUser(data);
+      console.log("response");
+      if (response.status === 200) {
+        console.log("register ok");
+      } else {
+        response ? setError(response.data.msg) : setError("Network Error!");
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error.response) setError("Non Network Error!");
+      else setError("Network Error");
     }
-}
+  };
 
+  useEffect(() => {
+    console.log("1st render!!");
+    const login = Cookies.get("user");
+    const tokens = Cookies.get("tokens");
+    if (login && tokens) props.history.push("/dashboard");
+  }, [loginReady]);
 
-const valid_icon = {
-    width: "15px",
-    marginLeft: "10px"
-}
-
-const Register_btn_disable = {
-    background: "grey",
-    color: "white",
-    border: "grey"
-}
-
-const Register = props => {
-
-    const [ username, setUsername ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ password1, setPassword1 ] = useState('');
-    const [ password2, setPassword2 ] = useState('');
-    const [ usernameerror, setusernameError ] = useState(null);
-    const [ emailerror, setemailError ] = useState(null);
-    const [ pwderror, setPwderror] = useState(null);
-    const [ pwderror2, setPwderror2] = useState(false);
-    const [ ready, setReady ] = useState(false);
-    const [ loginOK, setLoginOK ] = useState(false);
-    const [ loginUser, setLoginUser ] = useState(null);
-    const [ loginReady, setLoginReady ] = useState(false);
-    const [ httperror, setHttperror ] = useState(null);
-    const [ msg, setMsg ] = useState(null);
-
-    const Auth = useContext(userContext);
-
-    const setCookies = () => {
-        Auth.setAuth(true);
-        Cookies.set("user","login");
-        Cookies.set("tokens",loginUser);
-        setLoginReady(true);
-        console.log("All cookies are set!!1");
+  useEffect(() => {
+    if (loginOK && loginUser) {
+      // proceed to Home Page
+      console.log("Login loz ya p!!");
+      setCookies();
+    } else {
+      console.log("Login loz mya woo");
     }
+  }, [loginUser]);
 
-    useEffect(() => {
-        console.log("1st render!!");
-        const login = Cookies.get("user");
-        const tokens = Cookies.get("tokens");
-        if(login && tokens)
-            props.history.push("/dashboard");
-    },[loginReady])
-
-    useEffect(() => {
-        if(loginOK && loginUser){
-            // proceed to Home Page
-            console.log("Login loz ya p!!");
-            setCookies();
-        }else{
-            console.log("Login loz mya woo");
-        }
-    },[loginUser])
-
-    const usernameHandler = event => {
-        if((event.target.value).length < 4){
-            setusernameError(true);
-            setReady(false);
-          }else{
-            setusernameError(false);
-            setReady(true);
-          }      
-          setUsername(event.target.value);
-    }
-
-    const emailHandler = event => {
-        if(!(event.target.value).includes("@")){
-            setemailError(true);
-            setReady(false);
-          }else{
-            setemailError(false);
-            setReady(true);
-          }      
-          setEmail(event.target.value);
-    }
-
-    /**
-     * This is a helper function of Password validation.
-     * Passwords must include at least 8 charactors, 1 uppercase, 1 lowercase and 1 digit.
-     */
-    const validatePassword = pwd => {
-        let format = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/;
-        return format.test(pwd);
-    }
-
-    // Password Validation
-    const passwordHandler1 = event => {
-        if((event.target.value).length < 8){
-            setPwderror(true);
-            setReady(false);
-        }else{
-            if(validatePassword(event.target.value)){
-                setPwderror(false);
-                setReady(true);
-            }
-        }      
-    
-        setPassword1(event.target.value);
-    }
-
-    // Confirm Password Validation 
-    const passwordHandler2 = event => {
-        if(event.target.value === password1){
-            setPwderror2(false);
-            setReady(true);
-        }else{
-            setPwderror2(true);
-            setReady(false);
-        }
-        setPassword2(event.target.value);
-    }
-
-    // Handle Click event on Register Button
-    const onSubmitHandler = event => {
-         event.preventDefault();
-         // Remove Messages from previouse Render
-         setMsg(null);
-         setHttperror(null);
-         axios.post('http://127.0.0.1:8000/register',{
-                    username,
-                    email,
-                    password: password1,
-                    role: ''
-                }).then(response => {
-                    if(response.status === 201){
-                        // On Successful Registeration,
-                        // message user to activate the account via email link
-                        setMsg(response.data.msg);
-                    }
-                }).catch(e => {
-                    Promise.reject(e.response);
-                    setHttperror(e.response.data.msg)
-                })
-     }
-
-    return(
-        <>
-            <div className="mainDiv">
-            <h4 className="registerTitle">Registeration</h4>
-                <form className="authForm" onSubmit={onSubmitHandler}>
-                    <input value={ username } name="username" 
-                        placeholder="Username" onChange={usernameHandler} required/>
-                    { usernameerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                    { !usernameerror && username ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                    { usernameerror && <span style={{color:'red'}}>Username should have at least 4 charactors!!</span>}    
-                    <br/>
-
-                    <input value={ email } name="email" 
-                        placeholder="Email" onChange={emailHandler} required/>
-                    { emailerror && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                    { !emailerror && email ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                    { emailerror && <span style={{color:'red'}}>Invalid Email</span>}    
-                    <br/>
-
-                    <input value={ password1 } name="password1" type="password"
-                        placeholder="Password" onChange={passwordHandler1} required/>
-                    { pwderror && <img style={valid_icon} src={Error} alt="Credit to Flaticon"/> } 
-                    { !pwderror && password1 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/> : null} 
-                    { pwderror && 
-                        <span style={{color:'red'}}>
-                            Password should have at least 8 charactors, 1 uppercase letter, 1 lowercase and 1 digit.
-                        </span>}    
-                    <br/>
-
-                    <input value={ password2 } name="password2" type="password"
-                        placeholder="Re-enter Password" onChange={passwordHandler2} required/>
-                    { pwderror2 && <img style={valid_icon} src={Error} alt="Credit to Flaticon" />}
-                    { !pwderror2 && password2 ? <img style={valid_icon} src={Tick} alt="Credit to Flaticon"/>:null}
-                    { pwderror2 && 
-                        <span style={{color:'red'}}>
-                            Password Doesn't Match!!!
-                        </span>}    
-                    <br/>
-
-                    <button disabled={!ready} type="submit" style={ready?null:Register_btn_disable}>
-                        Register
-                    </button>
-                    {/* message of results */}
-                    <div>{httperror}</div>
-                    <div>{ msg }</div>
-                </form>
-            </div>
-        </>
-    );
-} 
-
-
-export const Validate = (user) => {
-
-    const validation = {
-        username: /^(?=.{4,})/,
-        email: /^([a-z]|[A-Z]).*$/,
-        password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/
-    }
-
-    var returnVal = "pass";
-
-    if (!validation.password.test(user.password))
-        returnVal = "Password should have at least 1 uppercase letter, 1 lowercase and 1 digit.";
-    else{
-        if(!validation.username.test(user.username))
-            returnVal ="Username's should have at least 4 charactors!!";
-    }
-    return returnVal;        
-}
+  return (
+    <>
+      <div className="mainDiv">
+        <h4 className="registerTitle">Registeration</h4>
+        {error && (
+          <div style={styles.errorDiv}>
+            <span style={styles.message}>{error}</span>
+          </div>
+        )}
+        <RegisterForm backFunc={backBtnClick} regFunc={handleRegister} />
+        <Footer />
+      </div>
+    </>
+  );
+};
 
 export default withRouter(Register);

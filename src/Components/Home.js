@@ -1,10 +1,11 @@
-import React,{ useState, useContext, useEffect } from 'react';
-import axios from 'axios';
-import { userContext } from '../Contexts/userContext';
-import { config } from './Conf/Config'
-import Cookies from 'js-cookie'
-import { Link, withRouter } from 'react-router-dom';
-import '../App.css';
+import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import { userContext } from "../Contexts/userContext";
+import { config } from "./Conf/Config";
+import Cookies from "js-cookie";
+import { Link, withRouter } from "react-router-dom";
+import "../App.css";
+import Footer from "./Footer";
 
 /**
  * Styling for Home DOM Elments
@@ -17,7 +18,7 @@ const styles = {
   },
   UsernameLabel: {
     fontSize: "15px",
-    fontWeight: "800",
+    fontWeight: "800"
   },
   PwdLabel: {
     display: "inline",
@@ -61,46 +62,50 @@ const styles = {
     borderRadius: "5px",
     color: "white",
     fontSize: "13px",
-    width: "fit-content",
+    width: "fit-content"
   }
-}
+};
 
 /**
  * Home Function. Sign In Page
  */
-function Home(){
-  const [ user, setUser ] = useState({username:'',password:''});
-  const [ loginUser, setLoginUser ] = useState(null);
-  const [ error, setError ] = useState(null);
+function Home() {
+  const [user, setUser] = useState({ username: "", password: "" });
+  const [loginUser, setLoginUser] = useState(null);
+  const [error, setError] = useState(null);
 
   const Auth = useContext(userContext);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setUser({
       ...user,
-      [event.target.name]:event.target.value
-    })
+      [event.target.name]: event.target.value
+    });
   };
 
   const setCookies = () => {
     Auth.setAuth(true);
-    Cookies.set("user","login");
-    Cookies.set("tokens",loginUser);
-  }
+    Cookies.set("user", "login");
+    Cookies.set("tokens", loginUser);
+  };
 
   useEffect(() => {
     console.log(loginUser);
-    if(loginUser)
-      setCookies();
-  },[loginUser])
+    if (loginUser) setCookies();
+  }, [loginUser]);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    axios.post('http://127.0.0.1:8000/login',{username: user.username, password: user.password})
-      .then( response => {
+    axios
+      .post("http://127.0.0.1:8000/login", {
+        username: user.username,
+        password: user.password
+      })
+      .then((response) => {
         const data = response.data;
         setLoginUser(data);
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response) {
           Promise.reject(error.response);
           setError(error.response.data.msg);
@@ -108,41 +113,50 @@ function Home(){
           console.log("No Response");
           setError("Failed to connect with Server!!");
         }
-      })
-  }
-  
+      });
+  };
+
   /**
    * Rendering
    */
-  return(
+  return (
     <div className="mainDiv">
       <div className="container">
         <div className="innerDiv">
-        { process.env.REACT_APP_API_URL }
-        <h4 className="registerTitle">Login</h4>
+          {process.env.REACT_APP_API_URL}
+          <h4 className="registerTitle">Login</h4>
           <form style={styles.form} onSubmit={handleSubmit}>
-              <p style={styles.UsernameLabel}>Username or email address</p>
-              <input style={styles.input} value={ user.username } name="username" 
-                onChange={handleChange} required/>
-              <p style={styles.PwdLabel}>Password</p>
-              <Link to='/forget-password' style={styles.ForgetPwd}>
-                Forget Password?
-              </Link>
-              <input style={styles.input} value={ user.password } type="password" name="password" 
-                onChange={handleChange} required/>
-              <button className="login-button" type="submit">Login</button>
-              {/* Link To register */}
-              <pre style={styles.pre}>New to MusiCloud? </pre> 
-              <Link to='/register'>
-                Create Account...
-              </Link>
+            <p style={styles.UsernameLabel}>Username or email address</p>
+            <input
+              style={styles.input}
+              value={user.username}
+              name="username"
+              onChange={handleChange}
+              required
+            />
+            <p style={styles.PwdLabel}>Password</p>
+            <Link to="/forget-password" style={styles.ForgetPwd}>
+              Forget Password?
+            </Link>
+            <input
+              style={styles.input}
+              value={user.password}
+              type="password"
+              name="password"
+              onChange={handleChange}
+              required
+            />
+            <button className="login-button" type="submit">
+              Login
+            </button>
+            {/* Link To register */}
+            <pre style={styles.pre}>New to MusiCloud? </pre>
+            <Link to="/register">Create Account...</Link>
           </form>
-          { error ? 
-            <div style={styles.error}>
-              { error }
-            </div>:null}
+          {error ? <div style={styles.error}>{error}</div> : null}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
