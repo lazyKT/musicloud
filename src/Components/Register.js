@@ -8,17 +8,6 @@ import Error from "../Imgs/close.png";
 import "../App.css";
 import { RegisterForm } from "./RegisterForm";
 
-const valid_icon = {
-  width: "15px",
-  marginLeft: "10px"
-};
-
-const Register_btn_disable = {
-  background: "grey",
-  color: "white",
-  border: "grey"
-};
-
 const Register = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -45,6 +34,19 @@ const Register = (props) => {
     console.log("All cookies are set!!1");
   };
 
+  // onClick Event on Back to Home Button
+  const backBtnClick = (e) => {
+    console.log("Back Button Clicked");
+    e.preventDefault();
+    props.history.push("/");
+  };
+
+  // Register Button Click Event
+  const handleRegister = (e, data) => {
+    e.preventDefault();
+    console.log("Register Payload", data);
+  };
+
   useEffect(() => {
     console.log("1st render!!");
     const login = Cookies.get("user");
@@ -62,117 +64,14 @@ const Register = (props) => {
     }
   }, [loginUser]);
 
-  const usernameHandler = (event) => {
-    if (event.target.value.length < 4) {
-      setusernameError(true);
-      setReady(false);
-    } else {
-      setusernameError(false);
-      setReady(true);
-    }
-    setUsername(event.target.value);
-  };
-
-  const emailHandler = (event) => {
-    if (!event.target.value.includes("@")) {
-      setemailError(true);
-      setReady(false);
-    } else {
-      setemailError(false);
-      setReady(true);
-    }
-    setEmail(event.target.value);
-  };
-
-  /**
-   * This is a helper function of Password validation.
-   * Passwords must include at least 8 charactors, 1 uppercase, 1 lowercase and 1 digit.
-   */
-  const validatePassword = (pwd) => {
-    let format = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/;
-    return format.test(pwd);
-  };
-
-  // Password Validation
-  const passwordHandler1 = (event) => {
-    if (event.target.value.length < 8) {
-      setPwderror(true);
-      setReady(false);
-    } else {
-      if (validatePassword(event.target.value)) {
-        setPwderror(false);
-        setReady(true);
-      }
-    }
-
-    setPassword1(event.target.value);
-  };
-
-  // Confirm Password Validation
-  const passwordHandler2 = (event) => {
-    if (event.target.value === password1) {
-      setPwderror2(false);
-      setReady(true);
-    } else {
-      setPwderror2(true);
-      setReady(false);
-    }
-    setPassword2(event.target.value);
-  };
-
-  // Handle Click event on Register Button
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-    // Remove Messages from previouse Render
-    setMsg(null);
-    setHttperror(null);
-    axios
-      .post("http://127.0.0.1:8000/register", {
-        username,
-        email,
-        password: password1,
-        role: ""
-      })
-      .then((response) => {
-        if (response.status === 201) {
-          // On Successful Registeration,
-          // message user to activate the account via email link
-          setMsg(response.data.msg);
-        }
-      })
-      .catch((e) => {
-        Promise.reject(e.response);
-        setHttperror(e.response.data.msg);
-      });
-  };
-
   return (
     <>
       <div className="mainDiv">
         <h4 className="registerTitle">Registeration</h4>
-        <RegisterForm />
+        <RegisterForm backFunc={backBtnClick} regFunc={handleRegister} />
       </div>
     </>
   );
-};
-
-export const Validate = (user) => {
-  const validation = {
-    username: /^(?=.{4,})/,
-    email: /^([a-z]|[A-Z]).*$/,
-    password: /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/
-  };
-
-  var returnVal = "pass";
-
-  if (!validation.password.test(user.password))
-    returnVal =
-      "Password should have at least 1 uppercase letter, 1 lowercase and 1 digit.";
-  else {
-    if (!validation.username.test(user.username))
-      returnVal = "Username's should have at least 4 charactors!!";
-  }
-  return returnVal;
 };
 
 export default withRouter(Register);

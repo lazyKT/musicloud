@@ -44,5 +44,6 @@ export const Messages = {
   email: "Invalid Email Format!",
   username: "Username must have at least three characters!",
   password:
-    "Password must have at least 8 characters, should contain at least 1 UpperCase and 1 LowerCase!"
+    "Password must have at least 8 characters, should contain at least 1 UpperCase and 1 LowerCase!",
+  cPwd: "Passwords do not match!"
 };

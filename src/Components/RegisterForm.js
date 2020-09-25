@@ -40,23 +40,27 @@ const styles = {
 const inputs = [
   {
     name: "email",
-    title: "Email Address"
+    title: "Email Address",
+    ready: false
   },
   {
     name: "username",
-    title: "Username"
+    title: "Username",
+    ready: false
   },
   {
     name: "password",
-    title: "Password"
+    title: "Password",
+    ready: false
   },
   {
     name: "cPwd",
-    title: "Confirm Password"
+    title: "Confirm Password",
+    ready: false
   }
 ];
 
-export const RegisterForm = (props) => {
+export const RegisterForm = ({ backFunc, regFunc }) => {
   const regBtn = useRef("");
   const backBtn = useRef("");
 
@@ -64,6 +68,7 @@ export const RegisterForm = (props) => {
     email: "",
     username: "",
     password: "",
+    cPwd: "",
     role: "user"
   });
 
@@ -88,10 +93,25 @@ export const RegisterForm = (props) => {
     });
   };
 
-  // initial render
+  // check if the registration data are ready for the Network Post Requests
+  const checkDataReady = () => {
+    const dataArr = Object.values(data);
+    console.log(dataArr);
+    return dataArr.every((value) => value !== "");
+  };
+
+  // Register Button Click Event
+  const handleRegister = (e) => {
+    console.log("Ready to register", data);
+  };
+
+  // run Effects on "data" change
   useEffect(() => {
-    //regBtn && toggleRegBtn(false);
-  }, []);
+    console.log("register render");
+    if (regBtn) {
+      checkDataReady() ? toggleRegBtn(true) : toggleRegBtn(false);
+    }
+  }, [data]);
 
   return (
     <>
@@ -101,6 +121,7 @@ export const RegisterForm = (props) => {
             name={input.name}
             title={input.title}
             key={idx}
+            pwd={input.name === "cPwd" && data.password}
             setPayload={setPayload}
           />
         ))}
@@ -109,7 +130,8 @@ export const RegisterForm = (props) => {
         <button
           style={styles.backToHome}
           ref={backBtn}
-          onMouseEnter={() => (backBtn.current.style.background = "#d3d3d3")}
+          onClick={(e) => backFunc(e)}
+          onMouseEnter={() => (backBtn.current.style.background = "#f9f9f9")}
           onMouseLeave={() => (backBtn.current.style.background = "#fff")}
         >
           Back to Home
@@ -118,8 +140,13 @@ export const RegisterForm = (props) => {
         <button
           style={styles.registerBtn}
           ref={regBtn}
-          onMouseEnter={() => (regBtn.current.style.background = "green")}
-          onMouseLeave={() => (regBtn.current.style.background = "lightgreen")}
+          onClick={(e) => regFunc(e, data)}
+          onMouseEnter={() =>
+            checkDataReady() && (regBtn.current.style.background = "green")
+          }
+          onMouseLeave={() =>
+            checkDataReady() && (regBtn.current.style.background = "lightgreen")
+          }
         >
           Register
         </button>

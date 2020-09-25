@@ -1,8 +1,8 @@
 /**
  * Input Component for Registeration Form
  */
-import React, { useState } from "react";
-import { validate, Messages } from "./RegisterValidation";
+import React, { useState, useEffect } from "react";
+import { validate, Messages, checkPWDs } from "./RegisterValidation";
 
 const styles = {
   input: {
@@ -34,7 +34,7 @@ const styles = {
 };
 
 function RegisterInput(props) {
-  const { name, title, setPayload } = props;
+  const { name, title, setPayload, pwd } = props;
 
   const [value, setValue] = useState("");
   const [error, setError] = useState(false);
@@ -46,9 +46,13 @@ function RegisterInput(props) {
     if (name !== "cPwd" && validate(name, event.target.value)) {
       setError(false);
       setPayload(name, event.target.value);
+    } else if (name === "cPwd" && checkPWDs(pwd, event.target.value)) {
+      setError(false);
+      setPayload(name, event.target.value);
     } else {
       setError(true);
       setErrMsg(Messages[name]);
+      setPayload(name, "");
     }
   };
 
