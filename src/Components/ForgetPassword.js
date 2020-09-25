@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import '../App.css'
 import { resetPwd } from './Profile/Utils/ChangePassword'
+import Footer from './Footer'
 
 
 /**
@@ -114,6 +115,7 @@ function ForgetPassword() {
                     response && 
                     (<div style={ restype ? (styles.success) : (styles.error)}>{response}</div>)
                 }
+                <Footer/>
             </div>
         </>
     )

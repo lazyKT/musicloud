@@ -1,6 +1,6 @@
 /** All the user guides, user support and contact will be available in this component */
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
 import SupportSection from "./SupportSection";
 import "../Support.css";
@@ -20,10 +20,25 @@ function Support() {
 
       {/* Footer */}
       <div className="support-footer">
-        <ul>
-          <li>Contact</li>
-          <li>User Support</li>
-        </ul>
+        <div className="brand">
+          <span className="app-name">MusiCloud</span>
+          <span className="version-number">&nbsp; ~ beta</span>
+        </div>
+        <div>
+          <ul>
+            <li><Link to="/about">About</Link></li>
+            <li><Link to="/contact">Contact</Link></li>
+            <li><Link to="/support">Support</Link></li>
+            <li><Link to="/contact">Feedback & Request</Link></li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><Link to="/about">Terms & Condition</Link></li>
+            <li><Link to="/contact">Privacy</Link></li>
+            <li><Link to="/support">Technical Information</Link></li>
+          </ul>
+        </div>
       </div>
     </div>
   );

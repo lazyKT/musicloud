@@ -532,15 +532,19 @@
   position: fixed;
   bottom: 0;
   display: flex;
-  height: 100px;
+  min-height: 100px;
   width: 100%;
   padding: 10px;
-  background: cornflowerblue;
-  color: aliceblue;
+  background: #f9f9f9;
+  color: #000000;
+}
+
+.footer div {
+  width: 25%;
 }
 
 .footer .brand {
-  padding: 20px;
+  padding: 30px;
 }
 
 /** App */
@@ -556,4 +560,21 @@
   font-family: fantasy;
   font-size: 18px;
   font-weight: 700;
+}
+
+/** Footer Elements */
+.footer li {
+  list-style: none;
+  padding: 5px;
+}
+
+.footer a {
+  text-decoration: none;
+  color: gray;
+  font-size: 15px;
+}
+
+.footer a:hover {
+  color: coral;
+  text-decoration: underline;
 }
