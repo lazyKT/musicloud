@@ -86,7 +86,6 @@ export const RegisterForm = ({ backFunc, regFunc }) => {
 
   // setPayload for registration Network Request
   const setPayload = (key, value) => {
-    console.log("setPayload for", key);
     setData({
       ...data,
       [key]: value
@@ -96,18 +95,11 @@ export const RegisterForm = ({ backFunc, regFunc }) => {
   // check if the registration data are ready for the Network Post Requests
   const checkDataReady = () => {
     const dataArr = Object.values(data);
-    console.log(dataArr);
     return dataArr.every((value) => value !== "");
-  };
-
-  // Register Button Click Event
-  const handleRegister = (e) => {
-    console.log("Ready to register", data);
   };
 
   // run Effects on "data" change
   useEffect(() => {
-    console.log("register render");
     if (regBtn) {
       checkDataReady() ? toggleRegBtn(true) : toggleRegBtn(false);
     }

@@ -12,7 +12,7 @@
   position: fixed;
 }
 
-.navigation ul{
+.navigation ul {
   display: flex;
   width: 20%;
   justify-content: space-around;
@@ -20,7 +20,7 @@
   list-style: none;
 }
 
-.navigation li{
+.navigation li {
   text-decoration: none;
   display: inline-block;
   font-size: large;
@@ -28,11 +28,11 @@
   color: antiquewhite;
 }
 
-.navigation .img-container{
+.navigation .img-container {
   height: 40px;
 }
 
-.navigation img{
+.navigation img {
   width: 45px;
   height: 60%;
   position: absolute;
@@ -42,11 +42,9 @@
   margin: auto 10px;
 }
 
-
-
 /* Admin Console Side Bar */
 
-.menu-icon{
+.menu-icon {
   height: 30px;
 }
 
@@ -55,39 +53,39 @@
   height: 100%;
 }
 
-.side-nav-container button{
+.side-nav-container button {
   background: gray;
   border: none;
   padding: 10px 5px;
   display: block;
 }
 
-.side-nav-container button:hover{
+.side-nav-container button:hover {
   cursor: pointer;
   background-color: #cccccc;
 }
 
-.side-nav-container .btn-expand{
+.side-nav-container .btn-expand {
   padding: 10px 60px;
 }
 
-.side-nav-container .nav-elements{
+.side-nav-container .nav-elements {
   margin: 10px 10px;
 }
 
-.side-bar{
+.side-bar {
   width: 150px;
   background: gray;
   color: white;
 }
 
-.side-bar ul{
+.side-bar ul {
   justify-content: space-around;
   align-items: center;
   list-style: none;
 }
 
-.side-bar li{
+.side-bar li {
   text-decoration: none;
   display: inline-block;
   font-size: large;
@@ -95,7 +93,7 @@
   color: antiquewhite;
 }
 
-.side-bar a{
+.side-bar a {
   padding: 10px 5px;
   text-decoration: none;
   font-size: 18px;
@@ -104,12 +102,11 @@
   transition: 0.3s;
 }
 
-.side-bar a:hover{
+.side-bar a:hover {
   cursor: pointer;
   color: aquamarine;
   background-color: #000;
 }
-
 
 /* Main Div below Top Nav */
 .mainDiv {
@@ -117,10 +114,9 @@
   height: 100%;
 }
 
-
 /* Authentication Forms */
 
-.container{
+.container {
   height: 100%;
   z-index: -1;
   position: absolute;
@@ -132,13 +128,13 @@
   align-items: center;
 }
 
-.container .innerDiv{
+.container .innerDiv {
   width: 350px;
   height: fit-content;
   padding: 20px;
 }
 
-.innerDiv input{
+.innerDiv input {
   display: block;
   width: 95%;
   height: 25px;
@@ -147,7 +143,7 @@
   border: solid gray;
 }
 
-.login-button{
+.login-button {
   display: block;
   width: 100%;
   margin: 20px 0px;
@@ -158,11 +154,11 @@
   color: white;
 }
 
-.login-button:hover{
+.login-button:hover {
   background-color: darkgreen;
 }
 
-.innerDiv .errorResponse{
+.innerDiv .errorResponse {
   margin: 10px;
   height: max-content;
   padding: 5px 15px;
@@ -174,19 +170,19 @@
   width: 170px;
 }
 
-.registerTitle{
+.registerTitle {
   margin: 10px auto;
   width: fit-content;
   font-size: 20px;
   font-family: monospace;
 }
 
-.authForm{
+.authForm {
   width: fit-content;
   margin: auto;
 }
 
-.authForm input{
+.authForm input {
   padding: 5px 10px;
   width: 175px;
   margin: 5px 5px;
@@ -195,36 +191,35 @@
   height: 20px;
 }
 
-.authForm button{
+.authForm button {
   background: black;
   color: white;
   height: 35px;
   width: 175px;
   border: 1px solid;
   border-radius: 10px;
-  margin: 5px 15px
+  margin: 5px 15px;
 }
 
-.authForm button:hover{
+.authForm button:hover {
   color: antiquewhite;
 }
 
-.authForm span{
+.authForm span {
   color: red;
   font-size: 12px;
   display: inline-block;
   margin-left: 5px;
 }
 
-.authForm .registerBtn{
+.authForm .registerBtn {
   background: none;
   color: gray;
 }
 
-.authForm .registerBtn:hover{
+.authForm .registerBtn:hover {
   color: #000;
 }
-
 
 /* Profile Page */
 .pp-container {
@@ -234,21 +229,20 @@
   margin: auto;
 }
 
-.profile-pic{
+.profile-pic {
   height: 150px;
   width: 150px;
   border-radius: 50%;
 }
 
-
 /* Update User Account */
 
-.updateField{
+.updateField {
   margin: 20px 20px;
   border-top: 0.1px solid grey;
 }
 
-.updateField .editbutton{
+.updateField .editbutton {
   width: fit-content;
   float: right;
   height: 30px;
@@ -260,11 +254,11 @@
   margin-right: 5px;
 }
 
-.updateField .editbutton:hover{
+.updateField .editbutton:hover {
   border: 1px solid;
 }
 
-.updateField .savebutton{
+.updateField .savebutton {
   float: right;
   color: green;
   background: white;
@@ -274,7 +268,7 @@
   border-radius: 5px;
 }
 
-.updateField input{
+.updateField input {
   width: 100px;
   height: 30px;
   background: lightgray;
@@ -284,7 +278,7 @@
   font-size: 15px;
 }
 
-.authBtn{
+.authBtn {
   width: 75px;
   height: 30px;
   font-size: 15px;
@@ -294,14 +288,13 @@
   border-radius: 5px;
 }
 
-.authBtn:hover{
+.authBtn:hover {
   color: antiquewhite;
   border: 1px solid;
 }
 
-
 /* Profile Page */
-.sideDiv{
+.sideDiv {
   height: 50%;
   width: 160px;
   position: fixed;
@@ -316,45 +309,44 @@
   font-weight: bold;
 }
 
-.sideDiv a{
+.sideDiv a {
   text-decoration: none;
   display: block;
   color: gray;
   padding: 20px;
 }
 
-
 /* Security Field from Profile */
-.secDiv{
+.secDiv {
   margin-bottom: 20px;
 }
 
-.secDiv .subDiv{
+.secDiv .subDiv {
   margin: 30px 20px;
   border-top: solid 0.2px lightgray;
 }
 
-.secDiv a{
+.secDiv a {
   color: gray;
   font-style: italic;
   text-decoration: underline;
 }
 
-.secDiv .changePwdDiv{
+.secDiv .changePwdDiv {
   display: flex;
   width: 80%;
 }
 
-.secDiv .changePwdBtn{
+.secDiv .changePwdBtn {
   background: darksalmon;
 }
 
 /* Change Password Form */
-.cpf{
+.cpf {
   display: flex;
 }
 
-.cpf-txt{
+.cpf-txt {
   margin: 0px 10px;
 }
 
@@ -364,7 +356,7 @@
 }
 
 /* bg-modal */
-.bg-modal{
+.bg-modal {
   height: 100%;
   z-index: 1;
   position: absolute;
@@ -376,42 +368,42 @@
   align-items: center;
 }
 
-.bg-modal .form{
+.bg-modal .form {
   width: 50%;
   height: 60%;
   background-color: #fff;
 }
 
-.form form{
+.form form {
   padding: 10px;
 }
 
-.form .title{
+.form .title {
   display: block;
   margin: 10px auto;
   width: 35%;
 }
 
-.form .textField{
+.form .textField {
   width: 50%;
   display: block;
   margin: 15px auto;
 }
 
-.form Button{
+.form Button {
   width: 50%;
   display: block;
   margin: 10px auto;
 }
 
-.pwd-desc{
+.pwd-desc {
   font-size: xx-small;
   color: crimson;
   width: 50%;
   margin: auto;
 }
 
-.bg-modal-logout{
+.bg-modal-logout {
   height: 100%;
   z-index: 1;
   position: absolute;
@@ -423,7 +415,7 @@
   padding-top: 10%;
 }
 
-.bg-modal-logout div{
+.bg-modal-logout div {
   width: 45%;
   height: 30%;
   background-color: indianred;
@@ -432,7 +424,7 @@
   font-size: 18px;
 }
 
-.bg-modal-logout Button{
+.bg-modal-logout Button {
   background: beige;
   display: block;
   float: right;
@@ -441,11 +433,11 @@
   font-weight: bold;
 }
 
-.bg-modal-logout Button:hover{
+.bg-modal-logout Button:hover {
   background: bisque;
 }
 
-.upload-avatar{
+.upload-avatar {
   width: fit-content;
   height: fit-content;
   padding: 30px;
@@ -453,12 +445,12 @@
   background-color: #fff;
 }
 
-.upload-avatar .file-input{
+.upload-avatar .file-input {
   display: block;
   margin: 10px auto;
 }
 
-.upload-avatar img{
+.upload-avatar img {
   display: block;
   height: 30vh;
   width: 35vh;
@@ -467,14 +459,14 @@
   border-radius: 10px;
 }
 
-.upload-avatar .btn-div{
+.upload-avatar .btn-div {
   float: right;
   margin: auto 20px;
   display: flex;
   justify-content: space-around;
 }
 
-.btn-div input{
+.btn-div input {
   height: 40px;
   width: fit-content;
   background-color: coral;
@@ -485,7 +477,7 @@
   color: #fff;
 }
 
-.btn-div input:hover{
+.btn-div input:hover {
   background-color: chocolate;
   border: chocolate solid;
 }
@@ -511,7 +503,11 @@
   height: 10px;
   width: 7px;
   border: 0;
-  background: -webkit-linear-gradient(45deg,  rgb(213, 213, 213), rgb(193, 255, 6));
+  background: -webkit-linear-gradient(
+    45deg,
+    rgb(213, 213, 213),
+    rgb(193, 255, 6)
+  );
   border-radius: 30px;
   cursor: pointer;
 }
@@ -529,4 +525,35 @@
 /* Remove the focus effect on click/drag progress bar */
 .progress-bar:focus {
   outline: none;
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  height: 100px;
+  width: 100%;
+  padding: 10px;
+  background: cornflowerblue;
+  color: aliceblue;
+}
+
+.footer .brand {
+  padding: 20px;
+}
+
+/** App */
+.footer .app-name {
+  padding: 10px 0px;
+  font-family: system-ui;
+  font-weight: 900;
+  font-size: 24px;
+}
+
+/** Version Number */
+.footer .version-number {
+  font-family: fantasy;
+  font-size: 18px;
+  font-weight: 700;
 }

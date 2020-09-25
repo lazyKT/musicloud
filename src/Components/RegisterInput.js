@@ -18,8 +18,9 @@ const styles = {
   },
   title: {
     display: "block",
-    fontSize: "16px",
-    fontWeight: "bold"
+    fontSize: "14px",
+    fontWeight: "bold",
+    marginBottom: "15px"
   },
   error: {
     display: "block",

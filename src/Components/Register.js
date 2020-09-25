@@ -1,28 +1,41 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { userContext } from "../Contexts/userContext";
 import { withRouter } from "react-router-dom";
-import Tick from "../Imgs/tick.png";
-import Error from "../Imgs/close.png";
 import "../App.css";
 import { RegisterForm } from "./RegisterForm";
+import { registerUser } from "./UsersReqs/Users";
+import Footer from "./Footer";
 
+// styling for Register Component
+const styles = {
+  registerDiv: {
+    marginTop: "70px",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column"
+  },
+  errorDiv: {
+    display: "block",
+    width: "300px",
+    height: "30px",
+    margin: "10px auto",
+    padding: "0px 20px",
+    background: "lightcoral",
+    borderRadius: "5px"
+  },
+  message: {
+    padding: "5px",
+    fontSize: "14px"
+  }
+};
+
+// Register new user
 const Register = (props) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password1, setPassword1] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [usernameerror, setusernameError] = useState(null);
-  const [emailerror, setemailError] = useState(null);
-  const [pwderror, setPwderror] = useState(null);
-  const [pwderror2, setPwderror2] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [error, setError] = useState(null);
   const [loginOK, setLoginOK] = useState(false);
   const [loginUser, setLoginUser] = useState(null);
   const [loginReady, setLoginReady] = useState(false);
-  const [httperror, setHttperror] = useState(null);
-  const [msg, setMsg] = useState(null);
 
   const Auth = useContext(userContext);
 
@@ -42,9 +55,22 @@ const Register = (props) => {
   };
 
   // Register Button Click Event
-  const handleRegister = (e, data) => {
+  const handleRegister = async (e, data) => {
     e.preventDefault();
     console.log("Register Payload", data);
+    try {
+      const response = await registerUser(data);
+      console.log("response");
+      if (response.status === 200) {
+        console.log("register ok");
+      } else {
+        response ? setError(response.data.msg) : setError("Network Error!");
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error.response) setError("Non Network Error!");
+      else setError("Network Error");
+    }
   };
 
   useEffect(() => {
@@ -68,7 +94,13 @@ const Register = (props) => {
     <>
       <div className="mainDiv">
         <h4 className="registerTitle">Registeration</h4>
+        {error && (
+          <div style={styles.errorDiv}>
+            <span style={styles.message}>{error}</span>
+          </div>
+        )}
         <RegisterForm backFunc={backBtnClick} regFunc={handleRegister} />
+        <Footer />
       </div>
     </>
   );
