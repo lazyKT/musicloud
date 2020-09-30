@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+const url = 'http://128.199.163.240/';
 
 /* 
 : This is a helper function to Post a video url for the conversion of mp3
@@ -8,12 +9,12 @@ import axios from 'axios';
 */
 export async function postSongForProcess(song, token) {
 
-    const { url, title, user_id } = song;
+    const { title, user_id } = song;
     console.log(token);
 
     try {
-        const res = await axios.post('http://127.0.0.1:8000/process',
-            {url, title, posted_by: user_id, genre_id: 1},
+        const res = await axios.post(`${url}process`,
+            {url: song.url, title, posted_by: user_id, genre_id: 1},
             { headers: { "Authorization": `Bearer ${token}` }});
         //console.log(res);
         return res;
@@ -29,9 +30,10 @@ export async function postSongForProcess(song, token) {
 : This is a 'GET' request.
 : This function takes task_id(conversion_id) and check the conversion status on the server.
 */
-export async function checkTaskStatus(task_id) {
+export async function checkTaskStatus(task_id, token) {
     try {
-        const res = await axios.get(`http://127.0.0.1:8000/mp3Convert/status/${task_id}`);
+        const res = await axios.get(`${url}mp3Convert/status/${task_id}`,
+            { headers: { "Authorization": `Bearer ${token}` }});
         //console.log(res)
         return res;
     } catch(error) {
@@ -46,7 +48,7 @@ export async function checkTaskStatus(task_id) {
 export async function fetchMySongsReq(token) {
 
     try {
-        const response = await axios.get('http://127.0.0.1:8000/mysongs', { headers: { "Authorization": `Bearer ${token}` }});
+        const response = await axios.get(`${url}mysongs`, { headers: { "Authorization": `Bearer ${token}` }});
         return response;
     } catch (error) {
         return error;
@@ -58,10 +60,10 @@ export async function fetchMySongsReq(token) {
  * Get A Song's Blob Data from server to play
  */
 export async function getSong(id) {
-    const url = `http://127.0.0.1:8000/listen/${id}`;
+    const songurl = `${url}listen/${id}`;
     //console.log("url", url);
     try {
-        const response = await axios.get(url, {
+        const response = await axios.get(songurl, {
             responseType: 'arraybuffer',
             headers: {
                 'Content-Type': 'audio/mp3'

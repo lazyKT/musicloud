@@ -24,6 +24,15 @@ const styles = {
     background: "lightcoral",
     borderRadius: "5px"
   },
+  successDiv: {
+    display: "block",
+    width: "300px",
+    height: "30px",
+    margin: "10px auto",
+    padding: "0px 20px",
+    background: "lightgreen",
+    borderRadius: "5px"
+  },
   message: {
     padding: "5px",
     fontSize: "14px"
@@ -33,6 +42,7 @@ const styles = {
 // Register new user
 const Register = (props) => {
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [loginOK, setLoginOK] = useState(false);
   const [loginUser, setLoginUser] = useState(null);
   const [loginReady, setLoginReady] = useState(false);
@@ -61,13 +71,17 @@ const Register = (props) => {
     try {
       const response = await registerUser(data);
       console.log("response");
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("register ok");
+        setError(null);
+        setSuccess("Successfully Registered. Please check your email to activate the account:)");
       } else {
+        setSuccess(null);
         response ? setError(response.data.msg) : setError("Network Error!");
       }
     } catch (error) {
       console.log("error", error);
+      setSuccess(null);
       if (error.response) setError("Non Network Error!");
       else setError("Network Error");
     }
@@ -99,6 +113,13 @@ const Register = (props) => {
             <span style={styles.message}>{error}</span>
           </div>
         )}
+
+        {success && (
+          <div style={styles.successDiv}>
+            <span style={styles.message}>{success}</span>
+          </div>
+        )}
+
         <RegisterForm backFunc={backBtnClick} regFunc={handleRegister} />
         <Footer />
       </div>

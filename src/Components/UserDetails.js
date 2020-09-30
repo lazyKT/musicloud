@@ -2,8 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import UpdateUser from "./UpdateUser";
 import "../App.css";
 import { useCookies } from "./Hooks/useCookies";
-import { getAvatar } from "./UsersReqs/Users";
-import { EditOpr } from "./Admin/CrudFunctions/Data";
+import { getAvatar, editUser } from "./UsersReqs/Users";
 
 import Cookies from "js-cookie";
 import { makeStyles } from "@material-ui/core/styles";
@@ -84,6 +83,7 @@ function reducer(state, action) {
 
 const UserDetails = ({ uploadAvatar, updatedImg }) => {
   const classes = useStyles(); // material ui styles class
+  const url = 'http://128.199.163.240/';
 
   const { cookies, login } = useCookies();
 
@@ -100,7 +100,7 @@ const UserDetails = ({ uploadAvatar, updatedImg }) => {
     try {
       const status = await getAvatar(user_id);
       console.log("Status", status);
-      if (status === 200) setAvatar(`http://127.0.0.1:8000/avatar/${user_id}`);
+      if (status === 200) setAvatar(`${url}avatar/${user_id}`);
     } catch (err) {
       console.log("error", err);
       setAvatar(null);
@@ -142,7 +142,7 @@ const UserDetails = ({ uploadAvatar, updatedImg }) => {
   const saveHandler = async (event) => {
     event.preventDefault();
     let updateData = { username: state.updateVal, email: state.user.email };
-    const res = await EditOpr(
+    const res = await editUser(
       state.user.access_token,
       state.user.id,
       updateData

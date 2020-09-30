@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useRef, useEffect } from 'react';
 import Loader from 'react-loader-spinner';
 import HelpOutlinedIcon from '@material-ui/icons/HelpOutlined';
-import { postSongForProcess, checkTaskStatus } from '../UsersReqs/SongRequests';
+import { postSongForProcess } from '../UsersReqs/SongRequests';
 
 // Stylings for the AddSong DOM Elements
 const styles = {
@@ -118,7 +118,6 @@ export function AddSong(props) {
     const [ hover, setHover ] = useState(false);
     const [ urlHelp, setUrlHelp ] = useState(false);
     const [ titleHelp, setTitleHelp ] = useState(false);
-    const [ loading, setLoading ] = useState(false);
 
     // Reducer
     const [state, dispatch] = useReducer(reducer, init);
@@ -262,9 +261,9 @@ export function AddSong(props) {
                         onMouseOver={onHoverPostBtn}
                         onMouseLeave={onHoverPostBtn}
                         ref={postBtn}>
-                        { loading ? 
+                        {/* { loading ? 
                             <Loader type="ThreeDots" color="#00BFFF" height={10} width={10} timeout={5000}/>
-                            : "POST" }
+                            : "POST" } */}
                     </button>
                 </div>
                 <hr></hr>

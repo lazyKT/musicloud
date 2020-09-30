@@ -10,7 +10,7 @@ import { Notifications } from './Profile/Notifications';
 import { Connect } from './Profile/Connect';
 import { ChangePwd } from './Profile/ChangePwd';
 import { Button } from '@material-ui/core';
-import { uploadAvatarOpr } from '../Components/Admin/CrudFunctions/Data';
+import { uploadAvatarReq, editUser } from './UsersReqs/Users'
 
 const styles = {
     mainDiv: {
@@ -60,7 +60,7 @@ const Profile = (props) => {
 
         formData.append("image", img, img.name);
         
-        const res = await uploadAvatarOpr(cookies.access_token, formData);
+        const res = await uploadAvatarReq(cookies.access_token, formData);
         if (res.status === 201) {
             setShowUpload(prevState => !prevState);
             setUpdatedImg(img);

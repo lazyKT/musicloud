@@ -1,11 +1,13 @@
 import axios from "axios";
 
+const url = 'http://128.199.163.240/';
+
 // register new use
 export async function registerUser(data) {
   const { email, username, password, role } = data;
 
   try {
-    const response = await axios.post("http://127.0.0.1:8000/register", {
+    const response = await axios.post(`${url}register`, {
       email,
       username,
       password,
@@ -22,7 +24,7 @@ export async function registerUser(data) {
 export async function logoutUser(token) {
   //console.log("token", token);
   try {
-    const res = await axios.post("http://127.0.0.1:8000/logout", null, {
+    const res = await axios.post(`${url}logout`, null, {
       headers: { Authorization: `Bearer ${token}` }
     });
     console.log(res);
@@ -33,14 +35,41 @@ export async function logoutUser(token) {
   }
 }
 
+// edit username, email, etc ..
+export async function editUser(accessToken, id, updateData) {
+  try {
+    const response = await axios.put(`${url}/user/${id}`,
+    updateData, { headers: { "Authorization": `Bearer ${accessToken}` }});
+    console.log(response);
+    return response;
+} catch (error) {
+    console.log(error);
+    return error.response;
+}
+}
+
 // get user's avatar
 export async function getAvatar(user_id) {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/avatar/${user_id}`);
+    const response = await axios.get(`${url}avatar/${user_id}`);
     console.log(response);
     return response.status;
   } catch (err) {
     console.log("Error Encountered", err);
     return err.status;
+  }
+}
+
+// upload user's avatar
+export const uploadAvatarReq = async (accessToken, data) => {
+
+  let headers = { "Authorization": `Bearer ${accessToken}`, "Content-Type": "multipart/form-data"}
+  console.log(data);
+  try {
+      const response = await axios.put(`${url}/upload/avatar`, data, {headers});
+      console.log(response);
+      return response;
+  } catch (error) {
+      console.log(error);
   }
 }

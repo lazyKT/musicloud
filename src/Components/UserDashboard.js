@@ -149,6 +149,7 @@ export function UserDashboard() {
 
     function requestAdded(request) {
         setAdded(true);
+        console.log(request);
         setRequest(request);
         setAdding(false);
         toast.success('A new song request has been sent to server!');
@@ -325,7 +326,8 @@ export function UserDashboard() {
 
                 <div>
                     { (added && request) && 
-                        <RequestLoader title={request.title} addSong={addSongOnReq}/>
+                        <RequestLoader title={request.title} addSong={addSongOnReq} 
+                          taskID={request.task_id} token={cookies.access_token}/>
                     }
 
                     {/* If user has no songs, show default empty message */}

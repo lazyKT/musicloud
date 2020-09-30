@@ -2,6 +2,7 @@
 import React, { useEffect }  from 'react';
 import Loader from 'react-loader-spinner';
 import { FakeReq } from './Utilities';
+import { checkTaskStatus } from '../UsersReqs/SongRequests';
 
 const styles = {
     loaderContainer: {
@@ -32,7 +33,7 @@ const styles = {
 
 function RequestLoader (props) {
 
-    const { title, addSong } = props;
+    const { title, addSong, token, taskID } = props;
 
     function startProcess(title) {
         let processTime = 0;
@@ -40,11 +41,16 @@ function RequestLoader (props) {
         let processInterval = setInterval(processing, 5000);
 
         async function processing() {
+            processTime++;
             try {
-                const resp = await FakeReq();
+                const resp = await checkTaskStatus(taskID, token);
                 console.log("fetch process", resp);
-                addSong(true);
-                clearInterval(processInterval);
+                const { status } = resp.data;
+                // song is ready
+                if (status === 201) {
+                    addSong(true);
+                    clearInterval(processInterval);
+                }
             } catch (err) {
                 console.log(err);
                 if (processTime > 5) {
@@ -56,6 +62,7 @@ function RequestLoader (props) {
     }
 
     useEffect(() => {
+        console.log('Request Loader', token, taskID);
         title && startProcess(title);
     }, [title]);
 

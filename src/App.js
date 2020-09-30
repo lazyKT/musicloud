@@ -31,6 +31,10 @@ function App() {
     readCookies();
   },[auth])
 
+  useEffect(() => {
+    document.title = "MusiCloud";
+  }, [])
+
   return(
     <userContext.Provider value={{auth,setAuth}}>
       <Router>
