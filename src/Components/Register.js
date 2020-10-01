@@ -83,7 +83,7 @@ const Register = (props) => {
     } catch (error) {
       console.log("error", error);
       setSuccess(null);
-      if (error.response) setError("Non Network Error!");
+      if (error.response) setError(error.response.data.msg);
       else setError("Network Error");
     }
   };

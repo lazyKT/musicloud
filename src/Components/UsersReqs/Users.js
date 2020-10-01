@@ -3,10 +3,10 @@
  */
 import axios from "axios";
 
-// const url = 'https://www.musicloud-api.site/';
-const url = "http://127.0.0.1:8000/"
+const url = 'https://www.musicloud-api.site/';
+// const url = "http://127.0.0.1:8000/"
 
-// register new use
+// register new user
 export async function registerUser(data) {
   const { email, username, password, role } = data;
 
@@ -23,6 +23,22 @@ export async function registerUser(data) {
     return err.response;
   }
 }
+
+
+// log in user
+export async function loginUserReq(username, password) {
+
+  try {
+    const response = await axios.post(`${url}login`, {
+      username, password
+    });
+    return response;
+  } catch(error) {
+    console.log('Error Encountered', error);
+    return error.response;
+  }
+}
+
 
 // Log out user from API
 export async function logoutUser(token) {

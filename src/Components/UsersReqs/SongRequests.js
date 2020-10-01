@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const url = 'https://www.musicloud-api.site/';
+// const url = 'http://127.0.0.1:8000/';
 
 /* 
 : This is a helper function to Post a video url for the conversion of mp3
@@ -49,6 +50,7 @@ export async function fetchMySongsReq(token) {
 
     try {
         const response = await axios.get(`${url}mysongs`, { headers: { "Authorization": `Bearer ${token}` }});
+        console.log(response);
         return response;
     } catch (error) {
         return error;

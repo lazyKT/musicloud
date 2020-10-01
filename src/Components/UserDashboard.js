@@ -133,19 +133,20 @@ export function UserDashboard() {
         try {
             const response = await fetchMySongsReq(access_token);
             const { status, msg } = response.data;
+
+            // console.log(status, msg);
+            setLoaded(true);
             
             if (status === 200) {
-                setLoaded(true);
+                // console.log("message");
                 dispatch({ type: 'getSongs', songs: msg });
-                //console.log(msg.reverse());
                 // array.prototype.concat prevent mutation on original objects
                 dispatch({ type: 'assignPL', _playlist: playlist.concat(msg) });
             }
         } catch (error) {
-            // console.log("Network Error Fetching Songs");
+            console.log("Network Error Fetching Songs");
             setLoaded(false);
         }
-        setLoaded(true);
     }
 
     function requestAdded(request) {
