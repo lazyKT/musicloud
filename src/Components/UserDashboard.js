@@ -145,6 +145,7 @@ export function UserDashboard() {
             // console.log("Network Error Fetching Songs");
             setLoaded(false);
         }
+        setLoaded(true);
     }
 
     function requestAdded(request) {
