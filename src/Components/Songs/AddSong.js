@@ -82,6 +82,7 @@ const Regulations = _ => {
                 <li>Make sure the url is valid.</li>
                 <li>The song quality is based on the url provided.</li>
                 <li>Make sure you choose the correct tilte, once created, no reversing.</li>
+                <li><b>Please avoid the long video for now, I am currently working on it. Thanks for understanding.</b></li>
             </ul>
             Thanks for your supports :)
         </div>
@@ -261,6 +262,7 @@ export function AddSong(props) {
                         onMouseOver={onHoverPostBtn}
                         onMouseLeave={onHoverPostBtn}
                         ref={postBtn}>
+                        POST
                         {/* { loading ? 
                             <Loader type="ThreeDots" color="#00BFFF" height={10} width={10} timeout={5000}/>
                             : "POST" } */}

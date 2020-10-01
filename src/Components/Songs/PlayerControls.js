@@ -83,7 +83,7 @@ function PlayerControls(props) {
     }
 
     useEffect(() => {
-        console.log("current song", currentSong);
+        //console.log("current song", currentSong);
         currentSong ? toggleSkipRev_btn(true) : toggleSkipRev_btn(false);
     }, [currentSong])
 
@@ -117,7 +117,7 @@ function PlayerControls(props) {
                 (repeat%3) === 2 
                 ? <RepeatOneIcon style={styles.repeat} 
                     onClick={repeatClk}/>
-                : <RepeatIcon style={repeat ? styles.repeat : styles.norepeat} 
+                : <RepeatIcon style={(repeat%3) ? styles.repeat : styles.norepeat} 
                     onClick={repeatClk}/>
             }
         </div>

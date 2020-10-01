@@ -167,7 +167,7 @@ export function Player(props) {
     /** -- side effects on Song Card Click or Shuffle All --  */
     useEffect(() => {
 
-        console.log("pSong");
+        //console.log("pSong", allSong);
 
         if (pSong) {
             getSongData(pSong.id);

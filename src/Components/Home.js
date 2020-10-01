@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { userContext } from "../Contexts/userContext";
-import { config } from "./Conf/Config";
+// import { config } from "./Conf/Config";
 import Cookies from "js-cookie";
 import { Link, withRouter } from "react-router-dom";
 import "../App.css";
@@ -11,6 +11,11 @@ import Footer from "./Footer";
  * Styling for Home DOM Elments
  */
 const styles = {
+  loginDiv: {
+    width: "350px",
+    margin: "auto",
+    padding: "20px"
+  },
   form: {
     border: "gray solid 0.2px",
     padding: "20px",
@@ -121,10 +126,11 @@ function Home() {
    */
   return (
     <div className="mainDiv">
-      <div className="container">
+      <div style={styles.loginDiv}>
         <div className="innerDiv">
           {process.env.REACT_APP_API_URL}
-          <h4 className="registerTitle">Login</h4>
+          <h4 className="registerTitle">Welcome to MusiCloud</h4>
+          {error ? <div style={styles.error}>{error}</div> : null}
           <form style={styles.form} onSubmit={handleSubmit}>
             <p style={styles.UsernameLabel}>Username or email address</p>
             <input
@@ -153,7 +159,6 @@ function Home() {
             <pre style={styles.pre}>New to MusiCloud? </pre>
             <Link to="/register">Create Account...</Link>
           </form>
-          {error ? <div style={styles.error}>{error}</div> : null}
         </div>
       </div>
       <Footer />

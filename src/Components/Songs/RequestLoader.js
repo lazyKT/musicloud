@@ -1,7 +1,7 @@
 /** -- UI (render) part of Song Player -- */
 import React, { useEffect }  from 'react';
 import Loader from 'react-loader-spinner';
-import { FakeReq } from './Utilities';
+// import { FakeReq } from './Utilities';
 import { checkTaskStatus } from '../UsersReqs/SongRequests';
 
 const styles = {
@@ -49,6 +49,10 @@ function RequestLoader (props) {
                 // song is ready
                 if (status === 201) {
                     addSong(true);
+                    clearInterval(processInterval);
+                }
+                if (processTime > 5) {
+                    addSong(false);
                     clearInterval(processInterval);
                 }
             } catch (err) {

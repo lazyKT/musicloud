@@ -22,7 +22,7 @@ const styles = {
     width: "50%",
     height: "30px",
     margin: "10px auto",
-    background: "lightgreen",
+    background: "green",
     border: "solid 0.2px lightgreen",
     borderRadius: "5px",
     color: "#fff"
@@ -78,8 +78,8 @@ export const RegisterForm = ({ backFunc, regFunc }) => {
       regBtn.current.style.border = "none";
       regBtn.current.disabled = true;
     } else {
-      regBtn.current.style.background = "lightgreen";
-      regBtn.current.style.border = "solid 0.2px lightgreen";
+      regBtn.current.style.background = "green";
+      regBtn.current.style.border = "solid 0.2px green";
       regBtn.current.disabled = false;
     }
   };
@@ -134,10 +134,10 @@ export const RegisterForm = ({ backFunc, regFunc }) => {
           ref={regBtn}
           onClick={(e) => regFunc(e, data)}
           onMouseEnter={() =>
-            checkDataReady() && (regBtn.current.style.background = "green")
+            checkDataReady() && (regBtn.current.style.background = "lightgreen")
           }
           onMouseLeave={() =>
-            checkDataReady() && (regBtn.current.style.background = "lightgreen")
+            checkDataReady() && (regBtn.current.style.background = "green")
           }
         >
           Register

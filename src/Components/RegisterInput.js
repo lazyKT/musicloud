@@ -1,7 +1,7 @@
 /**
  * Input Component for Registeration Form
  */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { validate, Messages, checkPWDs } from "./RegisterValidation";
 
 const styles = {

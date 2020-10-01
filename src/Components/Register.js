@@ -27,7 +27,7 @@ const styles = {
   successDiv: {
     display: "block",
     width: "300px",
-    height: "30px",
+    height: "fit-content",
     margin: "10px auto",
     padding: "0px 20px",
     background: "lightgreen",
@@ -42,20 +42,20 @@ const styles = {
 // Register new user
 const Register = (props) => {
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-  const [loginOK, setLoginOK] = useState(false);
-  const [loginUser, setLoginUser] = useState(null);
-  const [loginReady, setLoginReady] = useState(false);
+  const [success, setSuccess] = useState(false);
+  // const [loginOK, setLoginOK] = useState(false);
+  // const [loginUser, setLoginUser] = useState(null);
+  // const [loginReady, setLoginReady] = useState(false);
 
   const Auth = useContext(userContext);
 
-  const setCookies = () => {
-    Auth.setAuth(true);
-    Cookies.set("user", "login");
-    Cookies.set("tokens", loginUser);
-    setLoginReady(true);
-    console.log("All cookies are set!!1");
-  };
+  // const setCookies = () => {
+  //   Auth.setAuth(true);
+  //   Cookies.set("user", "login");
+  //   Cookies.set("tokens", loginUser);
+  //   setLoginReady(true);
+  //   console.log("All cookies are set!!1");
+  // };
 
   // onClick Event on Back to Home Button
   const backBtnClick = (e) => {
@@ -74,35 +74,35 @@ const Register = (props) => {
       if (response.status === 201) {
         console.log("register ok");
         setError(null);
-        setSuccess("Successfully Registered. Please check your email to activate the account:)");
+        setSuccess(true);
       } else {
         setSuccess(null);
         response ? setError(response.data.msg) : setError("Network Error!");
       }
     } catch (error) {
       console.log("error", error);
-      setSuccess(null);
+      setSuccess(false);
       if (error.response) setError("Non Network Error!");
       else setError("Network Error");
     }
   };
 
-  useEffect(() => {
-    console.log("1st render!!");
-    const login = Cookies.get("user");
-    const tokens = Cookies.get("tokens");
-    if (login && tokens) props.history.push("/dashboard");
-  }, [loginReady]);
+  // useEffect(() => {
+  //   console.log("1st render!!");
+  //   const login = Cookies.get("user");
+  //   const tokens = Cookies.get("tokens");
+  //   if (login && tokens) props.history.push("/dashboard");
+  // }, [loginReady]);
 
-  useEffect(() => {
-    if (loginOK && loginUser) {
-      // proceed to Home Page
-      console.log("Login loz ya p!!");
-      setCookies();
-    } else {
-      console.log("Login loz mya woo");
-    }
-  }, [loginUser]);
+  // useEffect(() => {
+  //   if (loginOK && loginUser) {
+  //     // proceed to Home Page
+  //     console.log("Login loz ya p!!");
+  //     setCookies();
+  //   } else {
+  //     console.log("Login loz mya woo");
+  //   }
+  // }, [loginUser]);
 
   return (
     <>
@@ -110,13 +110,13 @@ const Register = (props) => {
         <h4 className="registerTitle">Registeration</h4>
         {error && (
           <div style={styles.errorDiv}>
-            <span style={styles.message}>{error}</span>
+            <span style={styles.message}>Error! {error}</span>
           </div>
         )}
 
         {success && (
           <div style={styles.successDiv}>
-            <span style={styles.message}>{success}</span>
+            <span style={styles.message}>Success! {success}</span>
           </div>
         )}
 

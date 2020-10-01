@@ -136,20 +136,20 @@ export function UserDashboard() {
             
             if (status === 200) {
                 setLoaded(true);
-                dispatch({ type: 'getSongs', songs: msg.reverse() });
+                dispatch({ type: 'getSongs', songs: msg });
                 //console.log(msg.reverse());
                 // array.prototype.concat prevent mutation on original objects
-                dispatch({ type: 'assignPL', _playlist: playlist.concat((msg).reverse()) });
+                dispatch({ type: 'assignPL', _playlist: playlist.concat(msg) });
             }
         } catch (error) {
-            console.log("Network Error Fetching Songs");
+            // console.log("Network Error Fetching Songs");
             setLoaded(false);
         }
     }
 
     function requestAdded(request) {
         setAdded(true);
-        console.log(request);
+        // console.log(request);
         setRequest(request);
         setAdding(false);
         toast.success('A new song request has been sent to server!');

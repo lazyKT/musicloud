@@ -1,3 +1,6 @@
+/**
+ * Network Requests related to users
+ */
 import axios from "axios";
 
 const url = 'http://128.199.163.240/';

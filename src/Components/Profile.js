@@ -10,7 +10,7 @@ import { Notifications } from './Profile/Notifications';
 import { Connect } from './Profile/Connect';
 import { ChangePwd } from './Profile/ChangePwd';
 import { Button } from '@material-ui/core';
-import { uploadAvatarReq, editUser } from './UsersReqs/Users'
+import { uploadAvatarReq } from './UsersReqs/Users'
 
 const styles = {
     mainDiv: {
