@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://128.199.163.240/';
+const url = 'https://www.musicloud-api.site/';
 
 /* 
 : This is a helper function to Post a video url for the conversion of mp3

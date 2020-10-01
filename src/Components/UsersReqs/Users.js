@@ -3,7 +3,7 @@
  */
 import axios from "axios";
 
-const url = 'http://128.199.163.240/';
+const url = 'https://www.musicloud-api.site/';
 
 // register new use
 export async function registerUser(data) {

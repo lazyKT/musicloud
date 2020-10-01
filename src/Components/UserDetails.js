@@ -83,7 +83,7 @@ function reducer(state, action) {
 
 const UserDetails = ({ uploadAvatar, updatedImg }) => {
   const classes = useStyles(); // material ui styles class
-  const url = 'http://128.199.163.240/';
+  const url = 'https://www.musicloud-api.site/';
 
   const { cookies, login } = useCookies();
 
