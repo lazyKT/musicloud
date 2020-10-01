@@ -43,6 +43,7 @@ const styles = {
 const Register = (props) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState(null);
   // const [loginOK, setLoginOK] = useState(false);
   // const [loginUser, setLoginUser] = useState(null);
   // const [loginReady, setLoginReady] = useState(false);
@@ -74,14 +75,14 @@ const Register = (props) => {
       if (response.status === 201) {
         console.log("register ok");
         setError(null);
-        setSuccess(true);
+        setSuccess(response.data.msg);
       } else {
         setSuccess(null);
         response ? setError(response.data.msg) : setError("Network Error!");
       }
     } catch (error) {
       console.log("error", error);
-      setSuccess(false);
+      setSuccess(null);
       if (error.response) setError("Non Network Error!");
       else setError("Network Error");
     }

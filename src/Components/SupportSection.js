@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -9,13 +9,28 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 function SupportSection(props) {
   const { header, name, hash } = props;
 
-  const handleExpanded = () => {
+  const [expand, setExpand] = useState(false);
+  const [click, setClick] = useState(false);
+
+  const handleExpanded = (click=false) => {
     if (!hash) return name === "about";
-    return (hash.slice(1)).toLowerCase() === name;
+
+    if ((hash.slice(1)).toLowerCase() === name) {
+      setExpand(true);
+      return true;
+    }
+    return click;
+  }
+
+  const handleOnClick = () => {
+    setExpand(!expand);
+    setClick(true);
   }
 
   return (
-    <Accordion expanded={handleExpanded()}>
+    <Accordion 
+      expanded={click ? expand : handleExpanded()} 
+      onClick={handleOnClick}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
