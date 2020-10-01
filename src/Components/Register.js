@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import Cookies from "js-cookie";
+import React, { useState, useContext } from "react";
 import { userContext } from "../Contexts/userContext";
 import { withRouter } from "react-router-dom";
 import "../App.css";
@@ -43,12 +42,11 @@ const styles = {
 const Register = (props) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  const [message, setMessage] = useState(null);
   // const [loginOK, setLoginOK] = useState(false);
   // const [loginUser, setLoginUser] = useState(null);
   // const [loginReady, setLoginReady] = useState(false);
 
-  const Auth = useContext(userContext);
+  // const Auth = useContext(userContext);
 
   // const setCookies = () => {
   //   Auth.setAuth(true);
