@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function SupportSection(props) {
-  const { header, name, hash } = props;
+  const { header, name, hash, component } = props;
 
   const [expand, setExpand] = useState(false);
   
@@ -26,7 +26,9 @@ function SupportSection(props) {
   }
 
   useEffect(() => {
-    name && handleExpanded(hash);
+    if (name) {
+      handleExpanded(hash);
+    }
   }, [hash, name]);
 
 
@@ -42,12 +44,13 @@ function SupportSection(props) {
         <Typography className="">{header}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>Later this will load from text files.</Typography>
         <Typography>
+          <b>Comming Soon</b><br/>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
           dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
           lacus ex, sit amet blandit leo lobortis eget.
+          {component}
         </Typography>
       </AccordionDetails>
     </Accordion>
