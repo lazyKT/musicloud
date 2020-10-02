@@ -21,6 +21,21 @@
 
 .options-div {
     padding: 10px;
-    background-color: aliceblue;
+    background-color: #ffffff;
     font-size: 15px;
+}
+
+.options-div p {
+    color: chocolate;
+    font-size: 14px;
+}
+
+.options-div a {
+    color: chocolate;
+    text-decoration: underline;
+}
+
+.options-div a:hover {
+    color: blue;
+    cursor: pointer;
 }

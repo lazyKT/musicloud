@@ -26,10 +26,14 @@ export default function ConnectionTimeOut() {
                 <h4>What are the options I can do?</h4>
                 <ul>
                     <li>Check the network connection.</li>
-                    <li>Refresh Page.</li>
-                    <li>Log Out the app and log in again!</li>
+                    <li>Refresh the Page.</li>
+                    <li>Log Out the App and log in again!</li>
                 </ul>
-                <p>If the above options do not solve the problem, please contact and report the problem to the site admin.</p>
+                <p>
+                    If the above options do not solve the problem, please contact and
+                    &nbsp;<a href="/support#report">report the problem </a>
+                    to the site admin.
+                </p>
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -10,26 +10,29 @@ function SupportSection(props) {
   const { header, name, hash } = props;
 
   const [expand, setExpand] = useState(false);
-  const [click, setClick] = useState(false);
-
-  const handleExpanded = (click=false) => {
-    if (!hash) return name === "about";
-
-    if ((hash.slice(1)).toLowerCase() === name) {
-      setExpand(true);
-      return true;
-    }
-    return click;
-  }
+  
 
   const handleOnClick = () => {
     setExpand(!expand);
-    setClick(true);
   }
+
+
+  const handleExpanded = (hash) => {
+    // console.log("inside handle Expanded");
+    if ((hash.slice(1)).toLowerCase() === name) {
+      //console.log("expaned");
+      setExpand(true);
+    } 
+  }
+
+  useEffect(() => {
+    name && handleExpanded(hash);
+  }, [hash, name]);
+
 
   return (
     <Accordion 
-      expanded={click ? expand : handleExpanded()} 
+      expanded={expand}
       onClick={handleOnClick}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
