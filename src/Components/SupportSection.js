@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -7,15 +7,35 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function SupportSection(props) {
-  const { header, name, hash } = props;
+  const { header, name, hash, component } = props;
 
-  const handleExpanded = () => {
-    if (!hash) return name === "about";
-    return (hash.slice(1)).toLowerCase() === name;
+  const [expand, setExpand] = useState(false);
+  
+
+  const handleOnClick = () => {
+    setExpand(!expand);
   }
 
+
+  const handleExpanded = (hash) => {
+    // console.log("inside handle Expanded");
+    if ((hash.slice(1)).toLowerCase() === name) {
+      //console.log("expaned");
+      setExpand(true);
+    } 
+  }
+
+  useEffect(() => {
+    if (name) {
+      handleExpanded(hash);
+    }
+  }, [hash, name]);
+
+
   return (
-    <Accordion expanded={handleExpanded()}>
+    <Accordion 
+      expanded={expand}
+      onClick={handleOnClick}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -24,12 +44,13 @@ function SupportSection(props) {
         <Typography className="">{header}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>Later this will load from text files.</Typography>
         <Typography>
+          <b>Comming Soon</b><br/>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum
           dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada
           lacus ex, sit amet blandit leo lobortis eget.
+          {component}
         </Typography>
       </AccordionDetails>
     </Accordion>

@@ -1,7 +1,10 @@
 /** All the user guides, user support and contact will be available in this component */
 import React from "react";
-import { withRouter, Link, useParams } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 
+import AboutApp from "./SupportContents/AboutApp";
+import Guide from "./SupportContents/Guide";
+import Rules from './SupportContents/Rules';
 import SupportSection from "./SupportSection";
 import "../Support.css";
 
@@ -9,27 +12,33 @@ import "../Support.css";
 const supportsContents = [
   {
     name: "about",
-    header: "About"
+    header: "About",
+    component: <AboutApp/>
   },
   {
     name: "guide",
-    header: "Guide"
+    header: "Guide",
+    component: <Guide/>
   },
   {
     name: "report",
-    header: "Report"
+    header: "Report",
+    component: <AboutApp/>
   },
   {
     name: "rules",
-    header: "Rules & Regulations"
+    header: "Rules & Regulations",
+    component: <Rules/>
   },
   {
     name: "terms",
-    header: "Terms & Condition"
+    header: "Terms & Condition",
+    component: <AboutApp/>
   },
   {
     name: "privacy",
-    header: "Privacy"
+    header: "Privacy",
+    component: <AboutApp/>
   },
 ]
 
@@ -43,7 +52,7 @@ function Support(props) {
         <h3>Support Contents</h3>
 
         {supportsContents.map((s, i) => (
-          <SupportSection name={s.name} header={s.header} key={i} hash={hash}/>
+          <SupportSection name={s.name} header={s.header} key={i} hash={hash} component={s.component}/>
         ))}
 
       </div>
@@ -57,10 +66,10 @@ function Support(props) {
         <div>
           <ul>
             <li><Link to="/support#About">About</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
+            <li><Link to="/support">Contact</Link></li>
             <li><Link to="/support#Guide">Guide</Link></li>
             <li><Link to="/support">Support</Link></li>
-            <li><Link to="/contact#report">Feedback & Request</Link></li>
+            <li><Link to="/support#report">Feedback & Request</Link></li>
           </ul>
         </div>
         <div>

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { userContext } from "../Contexts/userContext";
-// import { config } from "./Conf/Config";
+import { loginUserReq } from './UsersReqs/Users';
 import Cookies from "js-cookie";
 import { Link, withRouter } from "react-router-dom";
 import "../App.css";
@@ -88,37 +88,40 @@ function Home() {
     });
   };
 
+  /** Upon successful login, set cookies */
   const setCookies = () => {
     Auth.setAuth(true);
     Cookies.set("user", "login");
     Cookies.set("tokens", loginUser);
   };
 
+  /** Effect to refresh on Login Form onSubmit */
   useEffect(() => {
     console.log(loginUser);
     if (loginUser) setCookies();
   }, [loginUser]);
 
+
+  /** onSubmit Event on Login Form */
   const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .post("https://www.musicloud-api.site/login", {
-        username: user.username,
-        password: user.password
-      })
-      .then((response) => {
+
+    try {
+      const response = await loginUserReq(user.username, user.password);
+      //console.log(response);
+      if (response.status === 200) {
         const data = response.data;
+    
         setLoginUser(data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          Promise.reject(error.response);
-          setError(error.response.data.msg);
-        } else {
-          console.log("No Response");
-          setError("Failed to connect with Server!!");
-        }
-      });
+      } else {
+        response ? setError(response.data.msg) : setError("Network Error!");
+      }
+    } catch (error) {
+      // console.log("error", error);
+      
+      if (error.response) setError(error.response.data.msg);
+      else setError("Network Error");
+    }
   };
 
   /**

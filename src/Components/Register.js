@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import Cookies from "js-cookie";
+import React, { useState, useContext } from "react";
 import { userContext } from "../Contexts/userContext";
 import { withRouter } from "react-router-dom";
 import "../App.css";
@@ -47,7 +46,7 @@ const Register = (props) => {
   // const [loginUser, setLoginUser] = useState(null);
   // const [loginReady, setLoginReady] = useState(false);
 
-  const Auth = useContext(userContext);
+  // const Auth = useContext(userContext);
 
   // const setCookies = () => {
   //   Auth.setAuth(true);
@@ -74,15 +73,15 @@ const Register = (props) => {
       if (response.status === 201) {
         console.log("register ok");
         setError(null);
-        setSuccess(true);
+        setSuccess(response.data.msg);
       } else {
         setSuccess(null);
         response ? setError(response.data.msg) : setError("Network Error!");
       }
     } catch (error) {
       console.log("error", error);
-      setSuccess(false);
-      if (error.response) setError("Non Network Error!");
+      setSuccess(null);
+      if (error.response) setError(error.response.data.msg);
       else setError("Network Error");
     }
   };

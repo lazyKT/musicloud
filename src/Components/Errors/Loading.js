@@ -7,7 +7,7 @@ import ConnectionTimeOut from './408';
 
 const styles = {
     div: {
-        width: "200px",
+        width: "400px",
         display: "block",
         margin: "auto"
     },
@@ -30,7 +30,7 @@ export default function Loading({ msg }) {
         let timeout = 0;
         let func = setInterval(errorTimeout, 1000);
         function errorTimeout() {
-            if (timeout <= 5)
+            if (timeout <= 1)
                 timeout++;
             else {
                 clearInterval(func);
