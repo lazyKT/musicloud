@@ -1,16 +1,21 @@
 /** Contact Page */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { userContext } from '../../Contexts/userContext';
 import { toast, ToastContainer } from 'react-toastify';
 
 import './Contact.css';
 import ReportRequests from '../UsersReqs/SupportRequests';
 import { validate, Messages } from '../RegisterValidation';
+import { useCookies } from '../Hooks/useCookies';
 import Footer from '../Footer';
+import { withRouter } from 'react-router-dom';
 
-export default function Contact() {
+
+/** Contact Page: Report Issues and Feedback */
+function Contact() {
 
     const { auth } = useContext(userContext);
+    const { login, cookies } = useCookies();
 
     const [ report, setReport ] = useState({
         type: 'error',
@@ -80,6 +85,18 @@ export default function Contact() {
     }
 
 
+    /** Refresh effect on auth changes */
+    useEffect(() => {
+        if (login) {
+            setReport({
+                ...report,
+                email: cookies.email
+            });
+            setError(false);
+        }    
+    }, [login]);
+
+
     return (
         <div className="contactDiv">
 
@@ -135,18 +152,22 @@ export default function Contact() {
                 required/>
 
                 {/* email address */}
-                <span className="title">Email Address</span>
-                <span className="error">
-                    { (!validate('email', email) && email) && 
-                        `${Messages['email']} *`
-                    }
-                </span>
-                <input 
-                className="title-input"
-                name="email"
-                value={email}
-                onChange={handleOnChange}
-                required/>
+                { !login && 
+                    (<div>
+                        <span className="title">Email Address</span>
+                        <span className="error">
+                            { (!validate('email', email) && email) && 
+                                `${Messages['email']} *`
+                            }
+                        </span>
+                        <input 
+                        className="title-input"
+                        name="email"
+                        value={email}
+                        onChange={handleOnChange}
+                        required/>
+                    </div>)
+                }
 
                 <button className="submit-btn">{btnText}</button>
 
@@ -165,3 +186,5 @@ export default function Contact() {
         </div>
     )
 }
+
+export default withRouter(Contact);
