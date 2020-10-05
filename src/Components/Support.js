@@ -21,11 +21,6 @@ const supportsContents = [
     component: <Guide/>
   },
   {
-    name: "report",
-    header: "Report",
-    component: <AboutApp/>
-  },
-  {
     name: "rules",
     header: "Rules & Regulations",
     component: <Rules/>

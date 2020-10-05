@@ -13,6 +13,7 @@ import Register from './Components/Register';
 import Profile from './Components/Profile';
 import ForgetPassword from './Components/ForgetPassword'
 import Support from './Components/Support';
+import Contact from './Components/Contact/Contact';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
         <Route value="/home" path="/home" component={ Interchange } />
         <Route path="/forget-password" component={ ForgetPassword }/>
         <Route value="/support" exact path="/support" component={ Support }/>
+        <Route value="/contact" exact path="/contact" component={ Contact } />
 
         {/* Private (or) Protected Routes */}
         <ProtectedRoute path="/profile" component={ Profile }/>
