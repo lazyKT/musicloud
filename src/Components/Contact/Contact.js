@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import './Contact.css';
 import ReportRequests from '../UsersReqs/SupportRequests';
+import { validate, Messages } from '../RegisterValidation';
 import Footer from '../Footer';
 
 export default function Contact() {
@@ -18,21 +19,44 @@ export default function Contact() {
         email: ''
     });
     const [ btnText, setBtnText ] = useState('Submit');
+    const [ error, setError ] = useState(true);
+    const [ subjectError, setSubjectError ] = useState(null);
 
     // destructering report object
     const { title, subject, email, type } = report;
 
     /** onChange event on inputs*/
     const handleOnChange = e => {
+
+        if (e.target.name === 'email' && validate('email', e.target.value)) {
+            // go through validation
+            console.log("email", e.target.value);
+            setError(false);
+        }
+
         setReport({
             ...report,
             [e.target.name] : e.target.value
         })
     }
 
+
+    const formValidation = value => {
+        return value.split(" ").length < 5;
+    }
+
+
     /** onSubmit Event of Form */
     const handleOnSubmit = async (e) => {
         e.preventDefault();
+        
+        if (error) return;
+
+        if (formValidation(subject)) {
+            setSubjectError("Subject must contain at least 5 words!");
+            return;
+        }
+
         console.log("Form Submit", report);
         setBtnText('Loading');
         try {
@@ -52,6 +76,7 @@ export default function Contact() {
             toast.error('Something went wrong. Couldn\'t connect to server.');
             setBtnText('Submit');
         }
+        setSubjectError(null);
     }
 
 
@@ -97,7 +122,11 @@ export default function Contact() {
                 onChange={handleOnChange}
                 required/>
 
+                {/* report subject */}
                 <span className="title">Subject</span>
+                <span className="error">
+                    { subjectError && `${subjectError}*` }
+                </span>
                 <textarea 
                 className="subject"
                 value={subject}
@@ -105,7 +134,13 @@ export default function Contact() {
                 onChange={handleOnChange}
                 required/>
 
+                {/* email address */}
                 <span className="title">Email Address</span>
+                <span className="error">
+                    { (!validate('email', email) && email) && 
+                        `${Messages['email']} *`
+                    }
+                </span>
                 <input 
                 className="title-input"
                 name="email"

@@ -1,3 +1,4 @@
+/** Styling for /contact page */
 .contactDiv {
     padding-top: 80px;
     height: 100%;
@@ -17,6 +18,13 @@ form {
     padding: 20px;
     border: solid 0.2px gainsboro;
     border-radius: 5px;
+}
+
+.error {
+    color: lightcoral;
+    display: block;
+    font-size: 14px;
+    margin: 5px;
 }
 
 .title {
