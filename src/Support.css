@@ -16,7 +16,7 @@
 
 .support-footer {
   flex-shrink: 0;
-  height: 130px;
+  min-height: 130px;
   background: #f9f9f9;
   color: #000000;
   display: flex;

@@ -11,15 +11,11 @@ import Footer from "./Footer";
  * Styling for Home DOM Elments
  */
 const styles = {
-  loginDiv: {
-    width: "350px",
-    margin: "auto",
-    padding: "20px"
-  },
   form: {
     border: "gray solid 0.2px",
     padding: "20px",
-    borderRadius: "10px"
+    borderRadius: "10px",
+    width: "300px"
   },
   UsernameLabel: {
     fontSize: "15px",
@@ -129,42 +125,40 @@ function Home() {
    */
   return (
     <div className="mainDiv">
-      <div style={styles.loginDiv}>
-        <div className="innerDiv">
-          {process.env.REACT_APP_API_URL}
-          <h4 className="registerTitle">Welcome to MusiCloud</h4>
-          {error ? <div style={styles.error}>{error}</div> : null}
-          <form style={styles.form} onSubmit={handleSubmit}>
-            <p style={styles.UsernameLabel}>Username or email address</p>
-            <input
-              style={styles.input}
-              value={user.username}
-              name="username"
-              onChange={handleChange}
-              required
-            />
-            <p style={styles.PwdLabel}>Password</p>
-            <Link to="/forget-password" style={styles.ForgetPwd}>
-              Forget Password?
-            </Link>
-            <input
-              style={styles.input}
-              value={user.password}
-              type="password"
-              name="password"
-              onChange={handleChange}
-              required
-            />
-            <button className="login-button" type="submit">
-              Login
-            </button>
-            {/* Link To register */}
-            <pre style={styles.pre}>New to MusiCloud? </pre>
-            <Link to="/register">Create Account...</Link>
-          </form>
-        </div>
-      </div>
-      <Footer />
+
+            {process.env.REACT_APP_API_URL}
+            <h4 className="registerTitle">Welcome to MusiCloud</h4>
+            {error ? <div style={styles.error}>{error}</div> : null}
+            <form style={styles.form} onSubmit={handleSubmit}>
+              <p style={styles.UsernameLabel}>Username or email address</p>
+              <input
+                style={styles.input}
+                value={user.username}
+                name="username"
+                onChange={handleChange}
+                required
+              />
+              <p style={styles.PwdLabel}>Password</p>
+              <Link to="/forget-password" style={styles.ForgetPwd}>
+                Forget Password?
+              </Link>
+              <input
+                style={styles.input}
+                value={user.password}
+                type="password"
+                name="password"
+                onChange={handleChange}
+                required
+              />
+              <button className="login-button" type="submit">
+                Login
+              </button>
+              {/* Link To register */}
+              <pre style={styles.pre}>New to MusiCloud? </pre>
+              <Link to="/register">Create Account...</Link>
+            </form>
+        
+        <Footer />
     </div>
   );
 }

@@ -10,49 +10,49 @@ import Footer from './Footer'
  */
 const styles = {
     container: {
-        width: "40%",
+        width: "100%",
         height: "fit-content",
-        margin: "10% auto"
+        margin: "auto"
     },
     h1: {
         width: "fit-content",
-        margin: "10px auto",
-        color: "brown"
+        margin: "auto",
+        fontSize: "20px"
     },
     form: {
-        padding: "30px",
-        border: "brown solid 0.2px",
+        padding: "20px",
+        width: "300px",
+        border: "gainsboro solid 0.2px",
         borderRadius: "5px",
-        background: "coral"
+        background: "#f9f9f9"
     },
     input: {
         display: "block",
-        width: "70%",
-        margin: "10px auto",
+        width: "100%",
+        boxSizing: "border-box",
         lineHeight: "15px",
-        border: "coral solid 0.2px",
+        border: "gainsboro solid 0.2px",
         borderRadius: "5px",
         padding: "10px",
-        fontSize: "18px"
+        fontSize: "15px"
     },
     p: {
         display: "block",
-        width: "70%",
+        width: "fit-content",
         margin: "10px auto",
         lineHeight: "20px",
         fontSize: "18px"
     },
     button: {
         display: "block",
-        width: "70%",
+        width: "100%",
         height: "fit-content",
         margin: "20px auto",
         padding: "10px",
-        fontSize: "18px",
+        fontSize: "15px",
         border: "coral",
         borderRadius: "5px",
-        background: "brown",
-        color: "white"
+        background: "lightgreen",
     },
     success: {
         width: "fit-content",
@@ -107,8 +107,16 @@ function ForgetPassword() {
                     <h1 style={styles.h1}>Forget Password</h1>
                     <form style={styles.form}>
                         <p style={styles.p}>Enter Your Email Address</p>
+                        
                         <input style={styles.input} onChange={ emailOnChange } value={email} name={email}/>
-                        <button style={styles.button} onClick={sendResetLink}>Send Password Reset Link</button>
+                        
+                        <button 
+                          style={styles.button} 
+                          onClick={sendResetLink}
+                          onMouseEnter={e => e.target.style.background = "lawngreen"}
+                          onMouseLeave={e => e.target.style.background = "lightgreen"}>
+                              Send Password Reset Link
+                        </button>
                     </form>
                 </div>
                 {
