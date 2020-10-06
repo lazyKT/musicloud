@@ -137,6 +137,7 @@ function Contact() {
                 value={title}
                 name="title"
                 onChange={handleOnChange}
+                placeholder="Eg. Need to Improve UI!"
                 required/>
 
                 {/* report subject */}
@@ -149,6 +150,7 @@ function Contact() {
                 value={subject}
                 name="subject"
                 onChange={handleOnChange}
+                placeholder="Eg. Website Design is so boring!"
                 required/>
 
                 {/* email address */}
@@ -165,6 +167,7 @@ function Contact() {
                         name="email"
                         value={email}
                         onChange={handleOnChange}
+                        placeholder="1234@example.com"
                         required/>
                     </div>)
                 }
@@ -174,10 +177,10 @@ function Contact() {
                 {/* Toast info message */}
                 <ToastContainer/>
 
-                <div className="btm-div">
+                {/* <div className="btm-div">
                     <span>Or contact&nbsp; </span>
                     <span className="contact">support@parse.musicloud-api.site</span>
-                </div>
+                </div> */}
                 
             </form>
 
