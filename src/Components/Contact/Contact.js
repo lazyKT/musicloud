@@ -1,6 +1,5 @@
 /** Contact Page */
-import React, { useContext, useState, useEffect } from 'react';
-import { userContext } from '../../Contexts/userContext';
+import React, { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 import './Contact.css';
@@ -14,7 +13,6 @@ import { withRouter } from 'react-router-dom';
 /** Contact Page: Report Issues and Feedback */
 function Contact() {
 
-    const { auth } = useContext(userContext);
     const { login, cookies } = useCookies();
 
     const [ report, setReport ] = useState({
@@ -94,7 +92,7 @@ function Contact() {
             });
             setError(false);
         }    
-    }, [login]);
+    }, [cookies.email, login, report]);
 
 
     return (
