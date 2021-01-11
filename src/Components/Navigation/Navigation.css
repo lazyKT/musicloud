@@ -3,7 +3,6 @@
 */
 
 .navBar {
-    
     position: fixed;
     width: 100%;
 }
@@ -11,9 +10,9 @@
 .nav-container {
     background-color: #112034;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
 }
 
 .left-nav {
@@ -37,8 +36,8 @@
     color: white;
     text-decoration: none;
     font-weight: 500;
-    font-size: 1rem;
     margin: auto;
+    font-size: 1rem;
 }
 
 
@@ -66,8 +65,23 @@
 
 
 @media screen and (max-width: 767px) {
+
+    .nav-container {
+        padding: 10px;
+    }
+
     .right-nav {
         display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .right-nav.show {
+        display: flex;
+    }
+
+    .right-nav .nav-element {
+        padding: 10px;
     }
 
     .hamburger {
