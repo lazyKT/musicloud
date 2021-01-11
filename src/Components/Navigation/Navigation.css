@@ -1,0 +1,77 @@
+/** 
+* styling for navigation
+*/
+
+.navBar {
+    
+    position: fixed;
+    width: 100%;
+}
+
+.nav-container {
+    background-color: #112034;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+}
+
+.left-nav {
+    flex-grow: 1;
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+
+.right-nav {
+    flex-grow: 1;
+    list-style: none;
+}
+
+
+.right-nav .nav-element {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    margin: auto;
+}
+
+
+.right-nav .nav-element:hover {
+    color: wheat;
+}
+
+
+/*  hamburger menu */
+.hamburger {
+    display: none;
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-size: 1rem;
+}
+
+.hamburger:focus {
+    outline: none;
+}
+
+.hamburger:hover {
+    color: wheat;
+}
+
+
+@media screen and (max-width: 767px) {
+    .right-nav {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+

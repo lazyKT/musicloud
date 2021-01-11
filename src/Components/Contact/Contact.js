@@ -92,7 +92,8 @@ function Contact() {
             });
             setError(false);
         }    
-    }, [cookies.email, login, report]);
+
+    }, [cookies, login, report]);
 
 
     return (
