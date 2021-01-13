@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import Cookies from 'js-cookie';
 import { userContext } from "../../Contexts/userContext";
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
 import { AdminNav } from "./AdminNav";
-import { UesrNav } from "./UserNav";
 import './Navigation.css';
-import Cookies from "js-cookie";
 import AuthPopUp from "../Auth/AuthPopUp";
+import { logoutUser } from "../UsersReqs/Users";
 
 /**
  * Host Top Navigation Bar Component
@@ -19,9 +19,10 @@ import AuthPopUp from "../Auth/AuthPopUp";
 export const Nav = () => {
 
 
-  const Auth = useContext(userContext);
+  const {auth, setAuth} = useContext(userContext);
   const navRef = useRef();
   const [type, setType] = useState("");
+  const [token, setToken] = useState(null);
   const [showBurger, setShowBurger] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
 
@@ -34,12 +35,35 @@ export const Nav = () => {
 
   }
 
+  // handle sign out
+  async function handleSignOut() {
+    try {
+      const response = await logoutUser(token);
+
+      if (response.status === 200) {
+        Cookies.remove("user");
+        Cookies.remove("tokens");
+        setAuth(false);
+        window.location.href = "/";
+      }
+      else {
+        throw new Error("Sign Out Failed!");
+      }
+    }
+    catch(error) {
+      console.error('Sign Out Failed!', error);
+    }
+  }  
+
+
   useEffect(() => {
     const tokens = Cookies.get("tokens");
+    console.log('nav type', type);
     if (tokens) {
+      setToken(JSON.parse(tokens).access_token);
       setType(JSON.parse(tokens).role);
     }
-  }, []);
+  }, [auth, type]);
 
   return (
     <>
@@ -49,14 +73,11 @@ export const Nav = () => {
       }
       
       <nav className="navBar nav">
-        {Auth.auth ? (
+        { auth &&
           type && type === "admin" ? (
             <AdminNav />
-          ) : (
-            <UesrNav />
-          )
-        ) : (
-              // Navigation bar when the user not log in
+          ) :  (
+              // Navigation bar for normal user
               <div className="nav-container">
                   <Link className="left-nav" to="/">MusiCloud</Link>
                   <button className="hamburger" id="humburger" onClick={burgerClick}>
@@ -67,16 +88,27 @@ export const Nav = () => {
                   <ul className="right-nav nav-container" ref={navRef} id="right-nav">         
                       <Link className="nav-element" to="/"><li>Home</li></Link>
                       <Link className="nav-element" to="/contact"><li>Contact</li></Link>
-                      <Link className="nav-element" to="/support"><li>Support</li></Link>
+                      {
+                        auth && type &&
+                        <Link className="nav-element" to="/profile"><li>Profile</li></Link>
+                      }
                       <div className="btn-container">
-                        <button className="btn"
-                          onClick={() => {
-                            burgerClick();
-                            setShowSignIn(true);
-                          }}
-                        >
-                            Sign Up
-                        </button>
+                        { auth && type ?
+                          <button 
+                            className="btn"
+                            onClick={handleSignOut}>
+                            Sign Out
+                          </button>
+                          :
+                          <button className="btn"
+                            onClick={() => {
+                              burgerClick();
+                              setShowSignIn(true);
+                            }}
+                          >
+                              Sign Up
+                          </button>
+                        }
                       </div>
                   </ul>
             </div>

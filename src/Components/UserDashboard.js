@@ -13,6 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import RequestLoader from './Songs/RequestLoader';
 import Loading from './Errors/Loading';
+import Empty from './Utilities/Empty';
 
 // Styling for the DOM elements
 const styles = {
@@ -53,6 +54,7 @@ const styles = {
         height: "130px",
         width: "100%",
         position: "fixed",
+        zIndex: -10,
         top: "60px",
         background: "#fff",
         borderBottom: "solid 0.2px gainsboro"
@@ -126,28 +128,6 @@ export function UserDashboard() {
     const [ request, setRequest ] = useState(null);
 
     const { playing, pointed, empty, songs, shuffle_all, playlist } = state;
-
-    /* -- Fetch User's Songs */
-    async function fetchMySongs(cookies) {
-        const { access_token } = cookies;
-        try {
-            const response = await fetchMySongsReq(access_token);
-            const { status, msg } = response.data;
-
-            // console.log(status, msg);
-            setLoaded(true);
-            
-            if (status === 200) {
-                // console.log("message");
-                dispatch({ type: 'getSongs', songs: msg });
-                // array.prototype.concat prevent mutation on original objects
-                dispatch({ type: 'assignPL', _playlist: playlist.concat(msg) });
-            }
-        } catch (error) {
-            console.log("Network Error Fetching Songs");
-            setLoaded(false);
-        }
-    }
 
     function requestAdded(request) {
         setAdded(true);
@@ -286,24 +266,52 @@ export function UserDashboard() {
 
     /* -- Side Effects -- */
     useEffect(()=> {
-        console.log('Home Rednering!')
+        const abortController = new AbortController();
+        
         if (cookies && login) {
-            fetchMySongs(cookies);
+            (async () => {
+                console.log("Fetching My Songs!")
+                try {
+                    const response = await fetchMySongsReq(cookies.access_token, abortController.signal);
+                    console.log(response);
+                    const { status, data } = response;
+                    
+                    if (status === 200) {
+                        setLoaded(true);
+                        if (data.status === 200) {
+                            
+                            // console.log("message");
+                            dispatch({ type: 'getSongs', songs: data.msg });
+                            // array.prototype.concat prevent mutation on original objects
+                            dispatch({ type: 'assignPL', _playlist: playlist.concat(data.msg) });
+                        }
+                    }
+                    else {
+                        console.log("Failed to fetch songs!");
+                    }
+                }
+                catch(error) {
+                    console.log('Failed to fetch songs!', error);
+                }
+            })()
         }
-    },[cookies, fetchMySongs, login]);
+
+        // clean up
+        return () => { abortController.abort(); }
+
+    },[cookies, login]);
 
 
     /* -- Renders -- */
     return(
         <div className="mainDiv">
-            
+            {( !empty ) &&
             <div style={styles.headers}>
                 <h3 style={styles.heading}>My Songs</h3>
                 <ToastContainer/>
 
                 {/* display add song button above song cards */}
-                {( !empty ) &&
-                (
+                
                     <div style={styles.topASDiv}>
                         <Button
                             variant="contained" color={shuffle_all ? "primary" : "default"}
@@ -319,9 +327,8 @@ export function UserDashboard() {
                             Add Song
                         </Button>
                         
-                    </div>
-                )}
-            </div>
+                    </div>               
+            </div>}
 
             <div style={styles.songDiv}>
                 {/* Error Fetching Songs */}
@@ -335,13 +342,7 @@ export function UserDashboard() {
 
                     {/* If user has no songs, show default empty message */}
                     { (empty && loaded) ? (
-                        <div style={styles.div}>
-                            <pre style={styles.pre}>It's empty here. </pre>
-                            <p onClick={toggleAddForm} style={styles.p}
-                            onMouseOver={onHoverText} onMouseLeave={onHoverText}>
-                                Try to add something to listen.
-                            </p>
-                        </div>
+                        <Empty prop={toggleAddForm}/>
                     )
                     : (
                         songs.map( ( song, idx ) => <SongCard 

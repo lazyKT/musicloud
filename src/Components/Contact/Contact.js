@@ -1,5 +1,5 @@
 /** Contact Page */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 
 import './Contact.css';
@@ -52,19 +52,18 @@ function Contact() {
     /** onSubmit Event of Form */
     const handleOnSubmit = async (e) => {
         e.preventDefault();
+        const { title, type, subject} = report;
+        const email = login ? cookies.email : report.email;
         
-        if (error) return;
 
         if (formValidation(subject)) {
             setSubjectError("Subject must contain at least 5 words!");
             return;
         }
-
-        console.log("Form Submit", report);
+        
         setBtnText('Loading');
         try {
-            const response = await ReportRequests(report);
-            console.log(response);
+            const response = await ReportRequests(email, title, subject, type);
 
             if (response.status === 200) {
                 // success
@@ -83,24 +82,13 @@ function Contact() {
     }
 
 
-    /** Refresh effect on auth changes */
-    useEffect(() => {
-        if (login) {
-            setReport({
-                ...report,
-                email: cookies.email
-            });
-            setError(false);
-        }    
-
-    }, [cookies, login, report]);
-
-
     return (
         <div className="contactDiv">
 
             <h3 className="greeting">Hello, what can we help you?</h3>
-    
+            {
+                error
+            }
             <form onSubmit={handleOnSubmit}>
             
                 <p className="desc">Would you like to report an error or give suggesstions?</p>
@@ -183,7 +171,7 @@ function Contact() {
                 
             </form>
 
-            <Footer/>
+            {/* <Footer/> */}
         
         </div>
     )

@@ -46,12 +46,32 @@ export async function checkTaskStatus(task_id, token) {
 /**
  * Fetching User's Songs
  */
-export async function fetchMySongsReq(token) {
+export async function fetchMySongsReq(token, signal) {
 
     try {
-        const response = await axios.get(`${url}mysongs`, { headers: { "Authorization": `Bearer ${token}` }});
-        console.log(response);
-        return response;
+        // const response = await axios.get(`${url}mysongs`, 
+        //     { 
+        //         headers: { 
+        //             "Authorization": `Bearer ${token}` ,
+        //         }});
+        // console.log(response);
+        // return response;
+
+        const request = await fetch(`${url}mysongs`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json',
+                'Authorization' : `Bearer ${token}`
+            },
+            signal
+        });
+
+        const status = request.status;
+        const data = await request.json();
+
+        return { status, data };
+
     } catch (error) {
         return error;
     }

@@ -115,6 +115,7 @@
 
     .right-nav.show {
         display: flex;
+        z-index: 999;
     }
 
     .right-nav .nav-element {
