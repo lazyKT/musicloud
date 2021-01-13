@@ -7,6 +7,7 @@ import { AdminNav } from "./AdminNav";
 import { UesrNav } from "./UserNav";
 import './Navigation.css';
 import Cookies from "js-cookie";
+import AuthPopUp from "../Auth/AuthPopUp";
 
 /**
  * Host Top Navigation Bar Component
@@ -22,6 +23,7 @@ export const Nav = () => {
   const navRef = useRef();
   const [type, setType] = useState("");
   const [showBurger, setShowBurger] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
 
   // onClick event on humburger button 
   function burgerClick() {
@@ -32,7 +34,6 @@ export const Nav = () => {
 
   }
 
-
   useEffect(() => {
     const tokens = Cookies.get("tokens");
     if (tokens) {
@@ -41,29 +42,46 @@ export const Nav = () => {
   }, []);
 
   return (
-    <nav className="navBar nav">
-      {Auth.auth ? (
-        type && type === "admin" ? (
-          <AdminNav />
+    <>
+
+      {
+      showSignIn && <AuthPopUp close={() => setShowSignIn(false)} />
+      }
+      
+      <nav className="navBar nav">
+        {Auth.auth ? (
+          type && type === "admin" ? (
+            <AdminNav />
+          ) : (
+            <UesrNav />
+          )
         ) : (
-          <UesrNav />
-        )
-      ) : (
-            // Navigation bar when the user not log in
-            <div className="nav-container">
-                <Link className="left-nav" to="/">MusiCloud</Link>
-                <button className="hamburger" id="humburger" onClick={burgerClick}>
-                    {
-                      showBurger ? <CloseIcon/> : <MenuIcon/>
-                    }
-                </button>
-                <ul className="right-nav nav-container" ref={navRef} id="right-nav">         
-                    <Link className="nav-element" to="/"><li>Home</li></Link>
-                    <Link className="nav-element" to="/contact"><li>Contact</li></Link>
-                    <Link className="nav-element" to="/support"><li>Support</li></Link>
-                </ul>
-          </div>
-      )}
-    </nav>
+              // Navigation bar when the user not log in
+              <div className="nav-container">
+                  <Link className="left-nav" to="/">MusiCloud</Link>
+                  <button className="hamburger" id="humburger" onClick={burgerClick}>
+                      {
+                        showBurger ? <CloseIcon/> : <MenuIcon/>
+                      }
+                  </button>
+                  <ul className="right-nav nav-container" ref={navRef} id="right-nav">         
+                      <Link className="nav-element" to="/"><li>Home</li></Link>
+                      <Link className="nav-element" to="/contact"><li>Contact</li></Link>
+                      <Link className="nav-element" to="/support"><li>Support</li></Link>
+                      <div className="btn-container">
+                        <button className="btn"
+                          onClick={() => {
+                            burgerClick();
+                            setShowSignIn(true);
+                          }}
+                        >
+                            Sign Up
+                        </button>
+                      </div>
+                  </ul>
+            </div>
+        )}
+      </nav>
+    </>
   );
 };

@@ -4,11 +4,12 @@
 import axios from "axios";
 
 const url = 'https://musicloud-api.site/';
-// const url = "http://127.0.0.1:8000/"
+// const url = "http://127.0.0.1:5000/"
 
 // register new user
 export async function registerUser(data) {
-  const { email, username, password, role } = data;
+  const { email, username, password } = data;
+  const role = 'user';
 
   try {
     const response = await axios.post(`${url}register`, {
@@ -19,7 +20,7 @@ export async function registerUser(data) {
     });
     return response;
   } catch (err) {
-    console.log("Error Encoutered : ", err.response);
+    console.log("Error Encoutered : ", err);
     return err.response;
   }
 }

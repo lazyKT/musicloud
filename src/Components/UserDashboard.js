@@ -286,10 +286,11 @@ export function UserDashboard() {
 
     /* -- Side Effects -- */
     useEffect(()=> {
+        console.log('Home Rednering!')
         if (cookies && login) {
             fetchMySongs(cookies);
         }
-    },[cookies]);
+    },[cookies, fetchMySongs, login]);
 
 
     /* -- Renders -- */

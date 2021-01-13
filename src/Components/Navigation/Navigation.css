@@ -45,6 +45,42 @@
     color: wheat;
 }
 
+.right-nav .nav-element:target {
+    color: rgb(136, 127, 255);
+}
+
+
+.btn-container {
+    display: flex;
+    height: 30px;
+    width: 150px;
+}
+
+
+.btn {
+    margin-right: 10px;
+    font-size: 14px;
+    width: 80px;
+    height: fit-content;
+    padding: 5px;
+    margin: auto;
+    background-color: rgb(89, 98, 223);
+    color: white;
+    border: solid 0.2px rgb(89, 98, 223);
+    border-radius: 5px;
+    /* box-shadow: 1px 1px 1px 1px rgb(89, 98, 220); */
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
 
 /*  hamburger menu */
 .hamburger {
@@ -62,6 +98,7 @@
 .hamburger:hover {
     color: wheat;
 }
+
 
 
 @media screen and (max-width: 767px) {
