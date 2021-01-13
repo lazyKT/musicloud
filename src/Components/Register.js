@@ -9,7 +9,6 @@ import Footer from "./Footer";
 // styling for Register Component
 const styles = {
   registerDiv: {
-    marginTop: "70px",
     height: "100%",
     display: "flex",
     flexDirection: "column"

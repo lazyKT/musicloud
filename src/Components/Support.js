@@ -43,39 +43,7 @@ function Support(props) {
 
   return (
     <div className="sup-div">
-      <div className="support-contents">
-        <h3>Support Contents</h3>
-
-        {supportsContents.map((s, i) => (
-          <SupportSection name={s.name} header={s.header} key={i} hash={hash} component={s.component}/>
-        ))}
-
-      </div>
-
-      {/* Footer */}
-      <div className="support-footer">
-        <div className="brand">
-          <span className="app-name">MusiCloud</span>
-          <span className="version-number">&nbsp; ~ beta</span>
-        </div>
-        <div>
-          <ul>
-            <li><Link to="/support#About">About</Link></li>
-            <li><Link to="/support">Contact</Link></li>
-            <li><Link to="/support#Guide">Guide</Link></li>
-            <li><Link to="/support">Support</Link></li>
-            <li><Link to="/support#report">Feedback & Request</Link></li>
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <li><Link to="/support#rules">Rules & Regulations</Link></li>
-            <li><Link to="/support#terms">Terms & Condition</Link></li>
-            <li><Link to="/support#privacy">Privacy</Link></li>
-            <li><Link to="/support">Technical Information</Link></li>
-          </ul>
-        </div>
-      </div>
+      <h3 className="header"> User Support</h3>
     </div>
   );
 }

@@ -26,21 +26,25 @@ export default function Loading({ msg }) {
 
     const [ error, setError ] = useState(false);
 
-    const setErrorTimeOut = () => {
-        let timeout = 0;
-        let func = setInterval(errorTimeout, 1000);
-        function errorTimeout() {
-            if (timeout <= 1)
-                timeout++;
+    useEffect(()=>{
+        // setErrorTimeOut();
+        let errorTimeOut = null;
+        let timeOut = 0;
+
+        errorTimeOut = setInterval(timeoutFunc, 1000);
+        function timeoutFunc() {
+            if (timeOut <= 5)
+                timeOut++;
             else {
-                clearInterval(func);
+                clearInterval(errorTimeOut);
                 setError(true);
             }
         }
-    }
 
-    useEffect(()=>{
-        setErrorTimeOut();
+        return (
+            errorTimeOut &&
+            clearInterval(errorTimeOut)
+        );
     },[]);
 
     return (

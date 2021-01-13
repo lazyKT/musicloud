@@ -3,62 +3,14 @@
 */
 
 .sup-div {
-  margin-top: 70px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.support-contents {
-  min-height: 75vh;
-  flex: 1 0 auto;
-}
-
-.support-footer {
-  flex-shrink: 0;
-  min-height: 130px;
-  background: #f9f9f9;
-  color: #000000;
-  display: flex;
-}
-
-
-.support-footer div {
-  width: 25%;
-}
-
-.support-footer .brand {
   padding: 30px;
 }
 
-/** App Name */
-.support-footer .app-name {
-  padding: 10px 0px;
-  font-family: system-ui;
-  font-weight: 900;
-  font-size: 24px;
-}
-
-/** Version Number */
-.support-footer .version-number {
-  font-family: fantasy;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-/** support-footer Elements */
-.support-footer li {
-  list-style: none;
-  padding: 5px;
-}
-
-.support-footer a {
-  text-decoration: none;
-  color: gray;
-  font-size: 15px;
-}
-
-.support-footer a:hover {
-  color: coral;
+.header {
+  padding-top: 20px;
+  width: fit-content;
+  margin: auto;
+  font-weight: 600;
+  font-size: 1.4rem;
   text-decoration: underline;
 }

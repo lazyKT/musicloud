@@ -1,166 +1,41 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
-import { userContext } from "../Contexts/userContext";
-import { loginUserReq } from './UsersReqs/Users';
-import Cookies from "js-cookie";
-import { Link, withRouter } from "react-router-dom";
-import "../App.css";
-import Footer from "./Footer";
-
 /**
- * Styling for Home DOM Elments
+ * Home page
  */
-const styles = {
-  form: {
-    border: "gray solid 0.2px",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "300px"
-  },
-  UsernameLabel: {
-    fontSize: "15px",
-    fontWeight: "800"
-  },
-  PwdLabel: {
-    display: "inline",
-    width: "fit-content",
-    fontSize: "15px",
-    fontWeight: "800",
-    margin: "10px 0px",
-    float: "left"
-  },
-  ForgetPwd: {
-    display: "inline",
-    width: "fit-content",
-    fontSize: "15px",
-    fontWeight: "800",
-    color: "coral",
-    margin: "10px 0px",
-    float: "right"
-  },
-  input: {
-    display: "block",
-    width: "100%",
-    height: "30px",
-    lineHeight: "20px",
-    fontSize: "15px",
-    padding: "5px",
-    border: "gray solid 0.2px",
-    borderRadius: "5px",
-    boxSizing: "border-box"
-  },
-  pre: {
-    display: "inline",
-    fontSize: "15px",
-    fontFamily: "sans-serif"
-  },
-  error: {
-    margin: "10px auto",
-    height: "max-content",
-    padding: "5px 15px",
-    background: "firebrick",
-    border: "0.1px solid",
-    borderRadius: "5px",
-    color: "white",
-    fontSize: "13px",
-    width: "fit-content"
-  }
-};
+import React from 'react';
+import './Home.css';
+import home from '../Imgs/home.jpg';
+import AuthPopUp from './Auth/AuthPopUp';
 
-/**
- * Home Function. Sign In Page
- */
+
 function Home() {
-  const [user, setUser] = useState({ username: "", password: "" });
-  const [loginUser, setLoginUser] = useState(null);
-  const [error, setError] = useState(null);
 
-  const Auth = useContext(userContext);
+  // open sign in pop up
+  const [ showPopUp, setShowPopUp ] = React.useState(false);
 
-  const handleChange = (event) => {
-    setUser({
-      ...user,
-      [event.target.name]: event.target.value
-    });
-  };
-
-  /** Upon successful login, set cookies */
-  const setCookies = () => {
-    Auth.setAuth(true);
-    Cookies.set("user", "login");
-    Cookies.set("tokens", loginUser);
-  };
-
-  /** Effect to refresh on Login Form onSubmit */
-  useEffect(() => {
-    console.log(loginUser);
-    if (loginUser) setCookies();
-  }, [loginUser]);
-
-
-  /** onSubmit Event on Login Form */
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await loginUserReq(user.username, user.password);
-      //console.log(response);
-      if (response.status === 200) {
-        const data = response.data;
-    
-        setLoginUser(data);
-      } else {
-        response ? setError(response.data.msg) : setError("Network Error!");
+  return(
+    <>
+      {showPopUp &&
+        <AuthPopUp close={() => setShowPopUp(false)}/>
       }
-    } catch (error) {
-      // console.log("error", error);
-      
-      if (error.response) setError(error.response.data.msg);
-      else setError("Network Error");
-    }
-  };
+      <div className="container">
+        <div className="content">
 
-  /**
-   * Rendering
-   */
-  return (
-    <div className="mainDiv">
-
-            {process.env.REACT_APP_API_URL}
-            <h4 className="registerTitle">Welcome to MusiCloud</h4>
-            {error ? <div style={styles.error}>{error}</div> : null}
-            <form style={styles.form} onSubmit={handleSubmit}>
-              <p style={styles.UsernameLabel}>Username or email address</p>
-              <input
-                style={styles.input}
-                value={user.username}
-                name="username"
-                onChange={handleChange}
-                required
-              />
-              <p style={styles.PwdLabel}>Password</p>
-              <Link to="/forget-password" style={styles.ForgetPwd}>
-                Forget Password?
-              </Link>
-              <input
-                style={styles.input}
-                value={user.password}
-                type="password"
-                name="password"
-                onChange={handleChange}
-                required
-              />
-              <button className="login-button" type="submit">
-                Login
-              </button>
-              {/* Link To register */}
-              <pre style={styles.pre}>New to MusiCloud? </pre>
-              <Link to="/register">Create Account...</Link>
-            </form>
-        
-        <Footer />
-    </div>
-  );
+          <h3>A Place Where You Can Keep All of Your Emoticons Together</h3>
+          <img src={home} alt="home"/>
+          <p>With MusiCloud, you can import any audio files or songs from almost everywhere in mp3 format 
+            <span>(See available source).</span>&nbsp;
+            All you need is the link of the source.
+          </p>
+          <p className="content-access">
+            You can easily access MusiCloud from your Computer or Mobile.
+          </p>
+          <button onClick={() => setShowPopUp(true)}>
+            Join MusiCloud.&nbsp;It's free.
+          </button>
+        </div>
+      </div>
+    </>
+  )
 }
 
-export default withRouter(Home);
+export default Home;
