@@ -6,7 +6,6 @@ const ProtectedRoute = ({ component:Component, ...rest}) => {
 
     const Auth = useContext(userContext);
     const { auth } = Auth;
-    console.log("Protected Route", auth);
 
     return(
         <Route

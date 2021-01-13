@@ -51,14 +51,14 @@ export const Nav = () => {
       }
     }
     catch(error) {
-      console.error('Sign Out Failed!', error);
+      throw new Error(`Sign Out Failed: ${error}`);
     }
   }  
 
 
   useEffect(() => {
     const tokens = Cookies.get("tokens");
-    console.log('nav type', type);
+  
     if (tokens) {
       setToken(JSON.parse(tokens).access_token);
       setType(JSON.parse(tokens).role);
