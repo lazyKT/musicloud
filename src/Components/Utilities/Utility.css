@@ -1,16 +1,18 @@
 /** Styling for Utility Components */
 
 .empty-container {
-    width: 80vh;
+    width: 80%;
+    min-width: 250px;
+    height: 60%;
     margin: auto;
-    margin-top: -50px;
+    margin-top: -100px;
 }
 
 .empty-container img {
     display: block;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
-    height: 50%;
+    height: 80%;
     margin: auto;
 }
 

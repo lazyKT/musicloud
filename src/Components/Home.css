@@ -10,7 +10,6 @@
 }
 
 .content {
-    height: 400px;
     max-width: 600px;
     margin-top: 100px;
     animation: fadeIn ease 1.5s;
@@ -111,6 +110,7 @@
     font-size: 0.9rem;
     display: block;
     margin: 20px auto;
+    margin-bottom: 50px;
     border: solid 0.2px #112034;
     background-color: #112034;
     color: white;
